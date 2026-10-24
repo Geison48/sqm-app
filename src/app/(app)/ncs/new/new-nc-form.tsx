@@ -29,13 +29,13 @@ function Field({ label, children, optional, className }: { label: string; childr
   );
 }
 
-function Choice({ name, options, value, onChange, required, placeholder }: {
-  name: string; options: Option[]; value?: string; onChange?: (v: string) => void; required?: boolean; placeholder?: string;
+function Choice({ name, options, value, defaultValue, onChange, required, placeholder }: {
+  name: string; options: Option[]; value?: string; defaultValue?: string; onChange?: (v: string) => void; required?: boolean; placeholder?: string;
 }) {
   const t = useTranslations("common");
   const list = required ? options : [{ value: NONE, label: "—" }, ...options];
   return (
-    <Select name={name} value={value} onValueChange={onChange} required={required}>
+    <Select name={name} value={value} defaultValue={defaultValue} onValueChange={onChange} required={required}>
       <SelectTrigger className="w-full" aria-label={name}><SelectValue placeholder={placeholder ?? t("select")} /></SelectTrigger>
       <SelectContent>
         {list.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
@@ -51,16 +51,18 @@ export function NewNcForm(props: {
   severities: Option[];
   failureModes: Option[];
   dispositions: Option[];
-  defaultSupplier?: string;
+  // Vindo de uma inspeção NOK (Etapa 5): dados já preenchidos, editáveis.
+  prefill?: { supplier?: string; component?: string; origin?: string; title?: string; description?: string; sn?: string; unit?: string };
 }) {
+  const pre = props.prefill ?? {};
   const t = useTranslations();
-  const [supplierId, setSupplierId] = useState(props.defaultSupplier ?? "");
-  const [componentId, setComponentId] = useState(NONE);
+  const [supplierId, setSupplierId] = useState(pre.supplier ?? "");
+  const [componentId, setComponentId] = useState(pre.component ?? NONE);
   const [severity, setSeverity] = useState("");
   const [failureMode, setFailureMode] = useState(NONE);
   const [customer, setCustomer] = useState(false);
   const [type, setType] = useState<"simple" | "8d">("simple");
-  const [items, setItems] = useState([{ sn: "", qty: "" }]);
+  const [items, setItems] = useState([{ sn: pre.sn ?? "", qty: pre.sn ? "1" : "", unit: pre.unit ?? "" }]);
   const [suggestion, setSuggestion] = useState<SuggestionResult | null>(null);
   const [, startSuggest] = useTransition();
   const [, startSubmit] = useTransition();
@@ -100,7 +102,7 @@ export function NewNcForm(props: {
           <Choice name="component_id" options={components} value={componentId} onChange={setComponentId} />
         </Field>
         <Field label={t("ncs.origin")}>
-          <Choice name="origin_code" options={props.origins} required />
+          <Choice name="origin_code" options={props.origins} required defaultValue={pre.origin} />
         </Field>
         <Field label={t("ncs.severity")}>
           <Choice name="severity_code" options={props.severities} value={severity || undefined} onChange={setSeverity} required />
@@ -120,10 +122,10 @@ export function NewNcForm(props: {
 
       <section className="grid gap-4 rounded-lg border p-4 sm:grid-cols-2">
         <Field label={t("ncs.ncTitle")} className="sm:col-span-2">
-          <Input name="title" required maxLength={200} />
+          <Input name="title" required maxLength={200} defaultValue={pre.title} />
         </Field>
         <Field label={t("ncs.description")} className="sm:col-span-2">
-          <Textarea name="description" required rows={4} />
+          <Textarea name="description" required rows={4} defaultValue={pre.description} />
         </Field>
         <Field label={t("ncs.detectedLocation")} optional>
           <Input name="detected_location" />
@@ -135,15 +137,16 @@ export function NewNcForm(props: {
           <Label>{t("ncs.items")} <span className="font-normal text-muted-foreground">({t("common.optional")})</span></Label>
           {items.map((item, i) => (
             <div key={i} className="flex gap-2">
+              <input type="hidden" name="item_unit" value={item.unit} />
               <Input name="item_sn" placeholder={t("ncs.snOrLot")} value={item.sn}
-                onChange={(e) => setItems(items.map((x, j) => (j === i ? { ...x, sn: e.target.value } : x)))} />
+                onChange={(e) => setItems(items.map((x, j) => (j === i ? { ...x, sn: e.target.value, unit: "" } : x)))} />
               <Input name="item_qty" type="number" min={0} step="any" placeholder={t("ncs.quantity")} className="w-24" value={item.qty}
                 onChange={(e) => setItems(items.map((x, j) => (j === i ? { ...x, qty: e.target.value } : x)))} />
               <Button type="button" variant="ghost" size="icon" aria-label={t("ncs.removeItem")} disabled={items.length === 1}
                 onClick={() => setItems(items.filter((_, j) => j !== i))}><Trash2Icon /></Button>
             </div>
           ))}
-          <Button type="button" variant="outline" size="sm" onClick={() => setItems([...items, { sn: "", qty: "" }])}>
+          <Button type="button" variant="outline" size="sm" onClick={() => setItems([...items, { sn: "", qty: "", unit: "" }])}>
             <PlusIcon />{t("ncs.addItem")}
           </Button>
         </div>

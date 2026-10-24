@@ -32,6 +32,7 @@ export async function AttachmentsPanel({
     .eq("entity_table", target.entityTable)
     .eq("entity_id", target.entityId)
     .is("cancelled_at", null)
+    .filter("category", target.category ? "eq" : "is", target.category ?? null)
     .order("created_at", { ascending: false });
 
   const rows = data ?? [];

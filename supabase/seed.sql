@@ -302,3 +302,62 @@ update public.audits set template_id = '70000000-0000-4000-8000-000000000001', p
        scope_codes = '{raw_material,final_inspection}'
  where supplier_id = '10000000-0000-4000-8000-00000000000c';
 select set_config('request.jwt.claims', '', false);
+
+-- -----------------------------------------------------------------------------
+-- Etapa 5: planos de inspeção, peças, autoinspeção, reparo e concessões
+-- -----------------------------------------------------------------------------
+insert into public.inspection_plans (id, component_id, revision, notes, created_by) values
+  ('80000000-0000-4000-8000-000000000001', '30000000-0000-4000-8000-000000000001', 'C', 'Baseado no GWI-QP-001 e no PC-A-0001.', '00000000-0000-4000-8000-000000000002'),
+  ('80000000-0000-4000-8000-000000000002', '30000000-0000-4000-8000-000000000003', 'A', null, '00000000-0000-4000-8000-000000000003');
+
+insert into public.inspection_characteristics (id, plan_id, char_type_code, name_pt, name_en, specification, nominal, lower_limit, upper_limit, unit, method, instrument, sampling, aql_level, sample_size, accept_number, is_critical, sort_order, created_by) values
+  ('81000000-0000-4000-8000-000000000001', '80000000-0000-4000-8000-000000000001', 'dimensional', 'Espessura do laminado na raiz', 'Root laminate thickness', '42 ± 0,5 mm', 42, 41.5, 42.5, 'mm', 'Medição em 4 pontos', 'Ultrassom de espessura', '100', null, null, null, true, 10, '00000000-0000-4000-8000-000000000002'),
+  ('81000000-0000-4000-8000-000000000002', '80000000-0000-4000-8000-000000000001', 'visual', 'Superfície sem trincas, bolhas ou delaminação', 'Surface free of cracks, bubbles or delamination', 'GWI-QP-001 §5.1', null, null, null, null, 'Inspeção visual', 'Lanterna, lupa', '100', null, null, null, true, 20, '00000000-0000-4000-8000-000000000002'),
+  ('81000000-0000-4000-8000-000000000003', '80000000-0000-4000-8000-000000000001', 'functional', 'Ultrassom sem indicações na raiz', 'Root ultrasound without indications', 'Sem indicação > 10 mm', null, null, null, null, 'Phased array', 'PAUT', '100', null, null, null, false, 30, '00000000-0000-4000-8000-000000000002'),
+  ('81000000-0000-4000-8000-000000000004', '80000000-0000-4000-8000-000000000002', 'dimensional', 'Diâmetro do furo de fixação', 'Mounting hole diameter', 'Ø 52 +0,05/0', 52, 52.00, 52.05, 'mm', 'Medição', 'Súbito', 'aql', 'Geral II, AQL 1,0', 5, 0, true, 10, '00000000-0000-4000-8000-000000000003'),
+  ('81000000-0000-4000-8000-000000000005', '80000000-0000-4000-8000-000000000002', 'functional', 'Dureza Brinell', 'Brinell hardness', '160–200 HB', null, 160, 200, 'HB', 'Ensaio de dureza', 'Durômetro', 'aql', 'Geral II, AQL 1,0', 5, 0, false, 20, '00000000-0000-4000-8000-000000000003');
+
+insert into public.serial_units (id, supplier_id, component_id, identifier, kind, quantity, production_date, created_by) values
+  ('90000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-00000000000a', '30000000-0000-4000-8000-000000000001', 'BLD-2026-0430', 'serial', 1, current_date - 6, '00000000-0000-4000-8000-0000000000a1'),
+  ('90000000-0000-4000-8000-000000000002', '10000000-0000-4000-8000-00000000000a', '30000000-0000-4000-8000-000000000001', 'BLD-2026-0431', 'serial', 1, current_date - 5, '00000000-0000-4000-8000-0000000000a1'),
+  ('90000000-0000-4000-8000-000000000003', '10000000-0000-4000-8000-00000000000a', '30000000-0000-4000-8000-000000000001', 'BLD-2026-0432', 'serial', 1, current_date - 4, '00000000-0000-4000-8000-0000000000a1'),
+  ('90000000-0000-4000-8000-000000000004', '10000000-0000-4000-8000-00000000000a', '30000000-0000-4000-8000-000000000001', 'BLD-2026-0433', 'serial', 1, current_date - 1, '00000000-0000-4000-8000-0000000000a1'),
+  ('90000000-0000-4000-8000-000000000005', '10000000-0000-4000-8000-00000000000b', '30000000-0000-4000-8000-000000000003', 'LOT-HUB-2610', 'lot', 20, current_date - 10, '00000000-0000-4000-8000-0000000000b1');
+
+-- Autoinspeção do fornecedor A: 0430 e 0431 OK (verdes), 0432 com espessura fora (vermelha).
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-0000000000a1","role":"authenticated"}', false);
+insert into public.inspections (id, supplier_id, component_id, type_code, location, inspected_on, created_by)
+values ('91000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-00000000000a', '30000000-0000-4000-8000-000000000001',
+        'self_inspection', 'Planta Joinville — inspeção final', current_date - 3, '00000000-0000-4000-8000-0000000000a1');
+select public.add_inspection_unit('91000000-0000-4000-8000-000000000001', u)
+  from unnest(array['90000000-0000-4000-8000-000000000001', '90000000-0000-4000-8000-000000000002', '90000000-0000-4000-8000-000000000003']::uuid[]) u;
+update public.inspection_results set measured_values = case serial_unit_id
+         when '90000000-0000-4000-8000-000000000003' then array[42.1, 42.7, 42.3, 42.2]::numeric[]
+         else array[42.0, 41.9, 42.2, 42.1]::numeric[] end
+ where inspection_id = '91000000-0000-4000-8000-000000000001' and characteristic_id = '81000000-0000-4000-8000-000000000001';
+update public.inspection_results set ok = true
+ where inspection_id = '91000000-0000-4000-8000-000000000001' and characteristic_id <> '81000000-0000-4000-8000-000000000001';
+select public.complete_inspection('91000000-0000-4000-8000-000000000001');
+insert into public.repairs (serial_unit_id, description, performed_by, created_by)
+values ('90000000-0000-4000-8000-000000000003', 'Lixamento e recomposição de laminado na raiz (região 0–300 mm).', 'Equipe de reparos turno B',
+        '00000000-0000-4000-8000-0000000000a1');
+insert into public.waivers (supplier_id, component_id, characteristic_ids, description, justification, valid_until, max_quantity, created_by)
+values ('10000000-0000-4000-8000-00000000000a', '30000000-0000-4000-8000-000000000001', array['81000000-0000-4000-8000-000000000001']::uuid[],
+        'Espessura até 42,8 mm na raiz', 'Análise estrutural do cliente aprovou espessura até 42,8 mm para este lote.',
+        current_date + 30, 2, '00000000-0000-4000-8000-0000000000a1');
+
+-- Fornecedor B: lote autoinspecionado (verde) e concessão aprovada para dureza.
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-0000000000b1","role":"authenticated"}', false);
+insert into public.inspections (id, supplier_id, component_id, type_code, location, created_by)
+values ('91000000-0000-4000-8000-000000000002', '10000000-0000-4000-8000-00000000000b', '30000000-0000-4000-8000-000000000003',
+        'self_inspection', 'Foundry No. 2 QC', '00000000-0000-4000-8000-0000000000b1');
+select public.add_inspection_unit('91000000-0000-4000-8000-000000000002', '90000000-0000-4000-8000-000000000005');
+update public.inspection_results set qty_nok = 0 where inspection_id = '91000000-0000-4000-8000-000000000002';
+select public.complete_inspection('91000000-0000-4000-8000-000000000002');
+insert into public.waivers (id, supplier_id, component_id, characteristic_ids, description, justification, valid_until, max_quantity, created_by)
+values ('92000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-00000000000b', '30000000-0000-4000-8000-000000000003',
+        array['81000000-0000-4000-8000-000000000005']::uuid[], 'Dureza 155–160 HB', 'Lote com tratamento térmico no limite inferior; resistência validada por ensaio.',
+        current_date + 15, 5, '00000000-0000-4000-8000-0000000000b1');
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-000000000003","role":"authenticated"}', false);
+select public.review_waiver('92000000-0000-4000-8000-000000000001', true, 'Aprovado conforme análise de engenharia.');
+select set_config('request.jwt.claims', '', false);

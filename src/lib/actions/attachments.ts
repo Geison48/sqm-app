@@ -8,7 +8,7 @@ import type { ActionState } from "@/lib/action-state";
 
 const ENTITY_TABLES = [
   "suppliers", "certifications", "components", "standards", "qualifications", "qualification_steps", "sub_suppliers",
-  "ncs", "audits", "audit_answers", "findings",
+  "ncs", "audits", "audit_answers", "findings", "serial_units", "repairs", "inspections", "inspection_results", "waivers",
 ] as const;
 
 const registerSchema = z.object({
@@ -22,6 +22,7 @@ const registerSchema = z.object({
   internalOnly: z.boolean(),
   supersedesId: z.uuid().nullable(),
   description: z.string().nullable(),
+  category: z.string().nullish(),
   path: z.string().startsWith("/"),
 });
 
@@ -51,6 +52,7 @@ export async function registerAttachment(input: z.input<typeof registerSchema>):
     internal_only: a.internalOnly,
     supersedes_id: a.supersedesId,
     description: a.description,
+    category: a.category ?? null,
     version,
   });
   if (error) return { error: dbErrorKey(error) };

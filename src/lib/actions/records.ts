@@ -13,7 +13,8 @@ const CANCELLABLE = [
   "attachments", "qualifications", "supplier_statuses", "contact_roles", "qualification_step_types",
   "ncs", "nc_items", "containment_actions", "nc_costs", "nc_comments", "nc_origins", "nc_severities", "failure_modes",
   "dispositions", "containment_locations", "cost_types", "audits", "findings", "audit_template_items", "audit_types",
-  "audit_scopes",
+  "audit_scopes", "serial_units", "repairs", "waivers", "inspections", "inspection_plans", "inspection_characteristics",
+  "inspection_types", "characteristic_types",
 ] as const;
 
 const schema = z.object({

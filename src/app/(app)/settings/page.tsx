@@ -37,8 +37,8 @@ export default async function SettingsPage() {
       getLookup("nc_origins"), getLookup("nc_severities"), getLookup("failure_modes"), getLookup("dispositions"),
       getLookup("containment_locations"), getLookup("cost_types"), getLookup("eight_d_disciplines"),
     ]);
-  const [auditTypes, auditScopes, { data: auditSettings }] = await Promise.all([
-    getLookup("audit_types"), getLookup("audit_scopes"),
+  const [auditTypes, auditScopes, inspectionTypes, characteristicTypes, { data: auditSettings }] = await Promise.all([
+    getLookup("audit_types"), getLookup("audit_scopes"), getLookup("inspection_types"), getLookup("characteristic_types"),
     supabase.from("app_settings").select("key, value").in("key", [
       "audit_frequency_months", "vda_rules", "gwi_rules", "audit_status_suggestion", "finding_response_days",
     ]),
@@ -158,6 +158,8 @@ export default async function SettingsPage() {
       </section>
       <LookupSection table="audit_types" title={t("auditTypes")} items={auditTypes} />
       <LookupSection table="audit_scopes" title={t("auditScopes")} items={auditScopes} />
+      <LookupSection table="inspection_types" title={t("inspectionTypes")} items={inspectionTypes} />
+      <LookupSection table="characteristic_types" title={t("characteristicTypes")} items={characteristicTypes} />
       <p className="flex items-center gap-1 text-xs text-muted-foreground">
         <LockIcon className="size-3" /> {t("systemHint")}
       </p>
@@ -167,7 +169,8 @@ export default async function SettingsPage() {
 
 type LookupTable =
   | "supplier_statuses" | "contact_roles" | "qualification_step_types" | "nc_origins" | "nc_severities" | "failure_modes"
-  | "dispositions" | "containment_locations" | "cost_types" | "eight_d_disciplines" | "audit_types" | "audit_scopes";
+  | "dispositions" | "containment_locations" | "cost_types" | "eight_d_disciplines" | "audit_types" | "audit_scopes"
+  | "inspection_types" | "characteristic_types";
 type Item = (LookupItem | StatusItem) & { deadline_hours?: number };
 
 async function LookupSection({

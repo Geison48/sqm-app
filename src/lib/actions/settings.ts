@@ -11,6 +11,7 @@ import { formValues, type ActionState } from "@/lib/action-state";
 const LOOKUPS = [
   "supplier_statuses", "contact_roles", "qualification_step_types", "nc_origins", "nc_severities", "failure_modes",
   "dispositions", "containment_locations", "cost_types", "eight_d_disciplines", "audit_types", "audit_scopes",
+  "inspection_types", "characteristic_types",
 ] as const;
 const WITH_TONE = new Set(["supplier_statuses", "nc_severities"]);
 

@@ -14,6 +14,10 @@ const KNOWN = [
   "template_required", "unanswered_items", "wrong_scoring_method", "answer_snapshot_immutable", "no_pending_suggestion",
   "report_not_issued", "major_nc_via_8d", "action_plan_required", "finding_workflow_only", "finding_closed",
   "effectiveness_comment_required", "linked_nc_open", "action_not_accepted",
+  "tag_workflow_only", "unit_scrapped", "repair_workflow_only", "repair_not_open", "waiver_workflow_only", "waiver_decided",
+  "waiver_already_expired", "waiver_not_active", "waiver_not_applicable", "result_not_nok", "waiver_quantity_exceeded",
+  "inspection_plan_required", "self_inspection_by_supplier", "inspection_workflow_only", "inspection_completed",
+  "unit_mismatch", "unit_supplier_mismatch", "unit_under_repair", "unit_not_green", "inspection_no_units", "unit_not_red",
 ] as const;
 
 export function dbErrorKey(error: Pick<PostgrestError, "code" | "message"> | null | undefined): string {

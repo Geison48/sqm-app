@@ -46,7 +46,15 @@ export default async function NewNcPage({ searchParams }: PageProps<"/ncs/new">)
         severities={opts(severities)}
         failureModes={opts(failureModes)}
         dispositions={opts(dispositions)}
-        defaultSupplier={param(sp.supplier)}
+        prefill={{
+          supplier: param(sp.supplier),
+          component: param(sp.component),
+          origin: param(sp.origin),
+          title: param(sp.title),
+          description: param(sp.description),
+          sn: param(sp.sn),
+          unit: param(sp.unit),
+        }}
       />
     </div>
   );

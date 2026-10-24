@@ -204,7 +204,29 @@
     "linked_nc_open": "O 8D vinculado ainda está aberto.",
     "action_not_accepted": "Aceite o plano de ação antes de verificar a eficácia.",
     "importInvalid": "Planilha inválida: {detail}",
-    "importEmpty": "Nenhuma linha encontrada na planilha."
+    "importEmpty": "Nenhuma linha encontrada na planilha.",
+    "tag_workflow_only": "A etiqueta muda pelo fluxo (inspeção, reparo).",
+    "unit_scrapped": "Peça sucateada não volta ao fluxo.",
+    "repair_workflow_only": "Use \"Concluir reparo\".",
+    "repair_not_open": "O reparo não está aberto.",
+    "waiver_workflow_only": "Esta alteração segue o fluxo da concessão.",
+    "waiver_decided": "Concessão já decidida não é alterada.",
+    "waiver_already_expired": "A validade já passou.",
+    "waiver_not_active": "Concessão vencida, esgotada ou não aprovada.",
+    "waiver_not_applicable": "A concessão não cobre esta peça/característica.",
+    "result_not_nok": "Só resultados NOK podem ser aceitos sob concessão.",
+    "waiver_quantity_exceeded": "Quantidade da concessão insuficiente.",
+    "inspection_plan_required": "O componente não tem plano de inspeção ativo.",
+    "self_inspection_by_supplier": "Autoinspeção é registrada pelo fornecedor.",
+    "inspection_workflow_only": "Esta alteração segue o fluxo da inspeção.",
+    "inspection_completed": "Inspeção concluída não pode ser alterada.",
+    "unit_mismatch": "A peça é de outro fornecedor/componente.",
+    "unit_under_repair": "Peça em reparo (amarela): conclua o reparo antes.",
+    "unit_not_green": "Regra 9: só peças com etiqueta verde podem ser inspecionadas pelo SQE.",
+    "inspection_no_units": "Inclua ao menos uma peça.",
+    "unit_not_red": "Só peças vermelhas podem ter rejeição final.",
+    "invalidValues": "Valores medidos inválidos (use números separados por espaço ou ponto e vírgula).",
+    "unit_supplier_mismatch": "A peça informada não pertence ao fornecedor da NC."
   },
   "criticality": {
     "label": "Criticidade",
@@ -464,7 +486,11 @@
       "audit_report_available": "Relatório da auditoria {number} disponível (classificação {classification}).",
       "finding_responded": "{supplier} respondeu um achado da auditoria {number}.",
       "finding_action_accepted": "Plano de ação aceito na auditoria {number}.",
-      "finding_returned": "Plano de ação devolvido na auditoria {number}."
+      "finding_returned": "Plano de ação devolvido na auditoria {number}.",
+      "waiver_requested": "{supplier} solicitou a concessão {number}.",
+      "waiver_approved": "A concessão {number} foi aprovada.",
+      "waiver_rejected": "A concessão {number} foi reprovada.",
+      "inspection_rejected": "Inspeção {number}: {count} peça(s) reprovada(s)."
     }
   },
   "settings": {
@@ -526,7 +552,9 @@
     "gwiMajor": "NC maior limita a B",
     "suggestionMap": "Regra 3 — status sugerido para classificação",
     "none": "Nenhum",
-    "findingResponseDays": "Prazo de resposta de achado (dias)"
+    "findingResponseDays": "Prazo de resposta de achado (dias)",
+    "inspectionTypes": "Tipos de inspeção",
+    "characteristicTypes": "Tipos de característica"
   },
   "log": {
     "empty": "Nenhuma alteração registrada.",
@@ -567,7 +595,13 @@
       "audits": "Auditoria",
       "audit_answers": "Resposta de auditoria",
       "findings": "Achado",
-      "audit_plans": "Plano anual"
+      "audit_plans": "Plano anual",
+      "serial_units": "Peça (SN/lote)",
+      "repairs": "Reparo",
+      "waivers": "Concessão",
+      "inspections": "Inspeção",
+      "inspection_results": "Resultado de inspeção",
+      "controlled_shipment_periods": "Embarque controlado"
     }
   },
   "ncs": {
@@ -1118,5 +1152,207 @@
     "empty": "Nenhum modelo.",
     "readOnlyHint": "Modelo ativo/aposentado: crie uma nova versão para alterar.",
     "notes": "Observações"
+  },
+  "inspections": {
+    "title": "Inspeções",
+    "subtitle": "Autoinspeção, inspeção do SQE, peças, reparos e concessões.",
+    "new": "Nova inspeção",
+    "newSelf": "Nova autoinspeção",
+    "tabs": {
+      "inspections": "Inspeções",
+      "units": "Peças (SN/lotes)",
+      "waivers": "Concessões",
+      "plans": "Planos de inspeção",
+      "controlled": "Embarque controlado"
+    },
+    "number": "Número",
+    "type": "Tipo",
+    "supplier": "Fornecedor",
+    "component": "Componente",
+    "location": "Local",
+    "date": "Data",
+    "inspector": "Inspetor",
+    "status": "Situação",
+    "statuses": {
+      "in_progress": "Em andamento",
+      "completed": "Concluída"
+    },
+    "result": "Resultado",
+    "results": {
+      "approved": "Aprovada",
+      "rejected": "Reprovada",
+      "partial": "Parcial"
+    },
+    "empty": "Nenhuma inspeção.",
+    "units": "Peças inspecionadas",
+    "addUnit": "Incluir peça",
+    "eligibleHint": "Regra 9: só aparecem peças com etiqueta verde.",
+    "eligibleHintSelf": "Peças em reparo (amarelas) não entram.",
+    "noEligible": "Nenhuma peça elegível.",
+    "characteristic": "Característica",
+    "spec": "Especificação",
+    "measured": "Valores medidos",
+    "measuredHint": "Separe por espaço ou ;",
+    "qtyInspected": "Qtd. inspecionada",
+    "qtyNok": "Qtd. NOK",
+    "ok": "OK",
+    "nok": "NOK",
+    "auto": "Avaliado pelos limites",
+    "comment": "Comentário",
+    "photos": "Fotos",
+    "complete": "Concluir inspeção",
+    "completeDescription": "As peças com NOK ficam vermelhas; na autoinspeção, as aprovadas ficam verdes.",
+    "completed": "Inspeção concluída.",
+    "openNc": "Abrir NC",
+    "applyWaiver": "Aceitar sob concessão",
+    "waiverApplied": "Aceito sob concessão.",
+    "underWaiver": "Aceito sob concessão {number}",
+    "unitResult": {
+      "approved": "Aprovada",
+      "rejected": "Reprovada"
+    },
+    "sampling": "Amostragem",
+    "sampleInfo": "n={n}, Ac={ac}",
+    "saved": "Salvo",
+    "notes": "Observações",
+    "ncTitle": "NOK na inspeção {number}: {characteristic}"
+  },
+  "units": {
+    "title": "Peças (SN/lotes)",
+    "identifier": "SN ou lote",
+    "kind": "Tipo",
+    "kinds": {
+      "serial": "Número de série",
+      "lot": "Lote"
+    },
+    "quantity": "Quantidade",
+    "tag": "Etiqueta",
+    "tags": {
+      "green": "Verde — pronta para o SQE",
+      "yellow": "Amarela — em reparo",
+      "red": "Vermelha — rejeitada",
+      "none": "Sem etiqueta — aguardando autoinspeção",
+      "scrapped": "Rejeição final"
+    },
+    "tagShort": {
+      "green": "Verde",
+      "yellow": "Amarela",
+      "red": "Vermelha",
+      "none": "Pendente"
+    },
+    "productionDate": "Data de produção",
+    "notes": "Observações",
+    "register": "Cadastrar SN/lote",
+    "empty": "Nenhuma peça.",
+    "timeline": "Linha do tempo",
+    "documents": "Documentos (PIT/FAT, certificados, relatórios)",
+    "scrap": "Rejeição final (sucata)",
+    "scrapReason": "Motivo",
+    "scrapped": "Peça marcada como rejeição final.",
+    "events": {
+      "inspection": "Inspeção {number} ({type}): {result}",
+      "repair_open": "Reparo aberto: {description}",
+      "repair_done": "Reparo concluído: {description}",
+      "waiver": "Concessão {number}: {status}",
+      "nc": "NC {number}: {title}",
+      "created": "Peça cadastrada"
+    },
+    "searchPlaceholder": "SN ou lote"
+  },
+  "repairs": {
+    "title": "Reparos",
+    "open": "Abrir reparo",
+    "description": "Descrição do reparo",
+    "performedBy": "Quem fez",
+    "startedOn": "Início",
+    "complete": "Concluir reparo",
+    "completionNotes": "Observações de conclusão",
+    "opened": "Reparo aberto. Peça amarela.",
+    "completed": "Reparo concluído. Faça a autoinspeção para liberar (verde).",
+    "statuses": {
+      "open": "Em reparo",
+      "completed": "Concluído"
+    },
+    "before": "Fotos antes",
+    "after": "Fotos depois",
+    "empty": "Nenhum reparo."
+  },
+  "waivers": {
+    "title": "Concessões / desvios",
+    "request": "Solicitar concessão",
+    "number": "Número",
+    "description": "Desvio solicitado",
+    "justification": "Justificativa",
+    "characteristics": "Características afetadas",
+    "allCharacteristics": "Se nenhuma for marcada, vale para todas.",
+    "validUntil": "Válida até",
+    "maxQuantity": "Quantidade máxima",
+    "units": "SNs/lotes cobertos",
+    "used": "Usado",
+    "limitHint": "Informe ao menos um limite: data, quantidade ou SNs.",
+    "status": "Situação",
+    "statuses": {
+      "requested": "Aguardando decisão",
+      "approved": "Aprovada",
+      "rejected": "Reprovada",
+      "expired": "Expirada"
+    },
+    "review": "Decidir",
+    "approve": "Aprovar",
+    "reject": "Reprovar",
+    "decision": "Decisão",
+    "comment": "Comentário",
+    "requested": "Concessão solicitada.",
+    "reviewed": "Decisão registrada.",
+    "empty": "Nenhuma concessão.",
+    "rule10": "Regra 10: a concessão expira sozinha pela data ou quando a quantidade acaba."
+  },
+  "inspPlans": {
+    "title": "Planos de inspeção",
+    "component": "Componente",
+    "revision": "Revisão",
+    "characteristics": "Características",
+    "create": "Criar plano",
+    "noPlan": "Sem plano",
+    "notes": "Observações",
+    "newRevision": "Nova revisão",
+    "add": "Adicionar característica",
+    "edit": "Editar característica",
+    "type": "Tipo",
+    "namePt": "Característica (PT)",
+    "nameEn": "Característica (EN)",
+    "specification": "Especificação",
+    "nominal": "Nominal",
+    "lower": "Limite inferior",
+    "upper": "Limite superior",
+    "unit": "Unidade",
+    "method": "Método",
+    "instrument": "Instrumento",
+    "sampling": "Amostragem",
+    "samplings": {
+      "100": "100%",
+      "aql": "AQL"
+    },
+    "aqlLevel": "AQL / nível (texto)",
+    "sampleSize": "Tamanho da amostra (n)",
+    "acceptNumber": "Número de aceitação (Ac)",
+    "critical": "Característica crítica",
+    "requirement": "Requisito da biblioteca",
+    "sortOrder": "Ordem",
+    "empty": "Nenhuma característica.",
+    "created": "Plano criado.",
+    "limits": "Limites"
+  },
+  "controlled": {
+    "title": "Embarque controlado",
+    "hint": "A entrada e a saída acontecem só pela mudança manual de status do fornecedor (com justificativa).",
+    "startedAt": "Entrada",
+    "startReason": "Motivo da entrada",
+    "endedAt": "Saída",
+    "endReason": "Motivo da saída",
+    "open": "Em andamento",
+    "inspections": "Inspeções no período",
+    "empty": "Nenhum período de embarque controlado.",
+    "changeStatus": "Alterar status na ficha"
   }
 }

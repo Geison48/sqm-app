@@ -19,6 +19,8 @@ export type UploadTarget = {
   entityId: string;
   supplierId: string | null;
   path: string;
+  /** Categoria opcional (ex.: "before"/"after" nos reparos). */
+  category?: string;
 };
 
 const MAX_BYTES = 50 * 1024 * 1024;

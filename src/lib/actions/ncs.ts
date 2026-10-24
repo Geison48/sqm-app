@@ -63,6 +63,7 @@ export async function createNc(_: ActionState, formData: FormData): Promise<Acti
   const items = formData.getAll("item_sn").map((sn, i) => ({
     sn_or_lot: String(sn).trim(),
     quantity: Number(formData.getAll("item_qty")[i]) || null,
+    serial_unit_id: String(formData.getAll("item_unit")[i] ?? "") || null,
   })).filter((i) => i.sn_or_lot);
 
   const supabase = await createClient();

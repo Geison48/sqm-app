@@ -189,4 +189,22 @@ describe("isolamento entre fornecedores (RLS)", () => {
     const issued = new Set(audits!.filter((a) => ["completed", "closed"].includes(a.status)).map((a) => a.id));
     expect(answers!.every((a) => issued.has(a.audit_id))).toBe(true);
   });
+  it("Inspeções: B não vê peças, inspeções, resultados, reparos, concessões nem períodos do A", async () => {
+    for (const table of ["serial_units", "inspections", "inspection_results", "repairs", "waivers", "controlled_shipment_periods"] as const) {
+      const { data } = await userB.from(table).select("supplier_id").eq("supplier_id", SUPPLIER_A);
+      expect(data, table).toEqual([]);
+    }
+  });
+
+  it("Inspeções: fornecedor não muda etiqueta direto, não registra inspeção do SQE nem aprova concessão", async () => {
+    const { data: units } = await userA.from("serial_units").select("id").limit(1);
+    const tagUpdate = await userA.from("serial_units").update({ tag: "green" } as never).eq("id", units![0]!.id);
+    expect(tagUpdate.error?.message).toBe("tag_workflow_only");
+    const { data: comp } = await userA.from("supplier_components").select("component_id").limit(1);
+    const insp = await userA.from("inspections").insert({ supplier_id: SUPPLIER_A, component_id: comp![0]!.component_id, type_code: "final_supplier" } as never);
+    expect(insp.error).not.toBeNull();
+    const { data: waiver } = await userA.from("waivers").select("id").eq("status", "requested").limit(1);
+    const review = await userA.rpc("review_waiver", { p_waiver_id: waiver![0]!.id, p_approve: true, p_comment: null } as never);
+    expect(review.error?.message).toBe("forbidden");
+  });
 });

@@ -39,14 +39,14 @@ export type Database = {
                   ]
                 },"attachments": {
                   Row: {
-                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"description": string | null,"entity_id": string,"entity_table": string,"file_name": string,"id": string,"internal_only": boolean,"mime_type": string | null,"size_bytes": number | null,"storage_bucket": string,"storage_path": string,"supersedes_id": string | null,"supplier_id": string | null,"updated_at": string,"updated_by": string | null,"version": number
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"category": string | null,"created_at": string,"created_by": string | null,"description": string | null,"entity_id": string,"entity_table": string,"file_name": string,"id": string,"internal_only": boolean,"mime_type": string | null,"size_bytes": number | null,"storage_bucket": string,"storage_path": string,"supersedes_id": string | null,"supplier_id": string | null,"updated_at": string,"updated_by": string | null,"version": number
                   }
                   ComputedFields: never
                   Insert: {
-                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"entity_id": string,"entity_table": string,"file_name": string,"id"?: string,"internal_only"?: boolean,"mime_type"?: string | null,"size_bytes"?: number | null,"storage_bucket"?: string,"storage_path": string,"supersedes_id"?: string | null,"supplier_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"version"?: number
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"category"?: string | null,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"entity_id": string,"entity_table": string,"file_name": string,"id"?: string,"internal_only"?: boolean,"mime_type"?: string | null,"size_bytes"?: number | null,"storage_bucket"?: string,"storage_path": string,"supersedes_id"?: string | null,"supplier_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"version"?: number
                   }
                   Update: {
-                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"entity_id"?: string,"entity_table"?: string,"file_name"?: string,"id"?: string,"internal_only"?: boolean,"mime_type"?: string | null,"size_bytes"?: number | null,"storage_bucket"?: string,"storage_path"?: string,"supersedes_id"?: string | null,"supplier_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"version"?: number
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"category"?: string | null,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"entity_id"?: string,"entity_table"?: string,"file_name"?: string,"id"?: string,"internal_only"?: boolean,"mime_type"?: string | null,"size_bytes"?: number | null,"storage_bucket"?: string,"storage_path"?: string,"supersedes_id"?: string | null,"supplier_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"version"?: number
                   }
                   Relationships: [
                     {
@@ -305,6 +305,20 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"characteristic_types": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"component_standards": {
                   Row: {
                     "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"component_id": string,"created_at": string,"created_by": string | null,"id": string,"standard_id": string,"updated_at": string,"updated_by": string | null
@@ -443,6 +457,26 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"controlled_shipment_periods": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"end_reason": string | null,"ended_at": string | null,"ended_by": string | null,"id": string,"start_reason": string,"started_at": string,"started_by": string | null,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"end_reason"?: string | null,"ended_at"?: string | null,"ended_by"?: string | null,"id"?: string,"start_reason": string,"started_at"?: string,"started_by"?: string | null,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"end_reason"?: string | null,"ended_at"?: string | null,"ended_by"?: string | null,"id"?: string,"start_reason"?: string,"started_at"?: string,"started_by"?: string | null,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "controlled_shipment_periods_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"cost_types": {
                   Row: {
                     "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
@@ -467,6 +501,20 @@ isOneToOne: false
                   }
                   Update: {
                     "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"doc_counters": {
+                  Row: {
+                    "kind": string,"last_number": number,"year": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "kind": string,"last_number"?: number,"year": number
+                  }
+                  Update: {
+                    "kind"?: string,"last_number"?: number,"year"?: number
                   }
                   Relationships: [
                     
@@ -619,6 +667,198 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"inspection_characteristics": {
+                  Row: {
+                    "accept_number": number | null,"aql_level": string | null,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"char_type_code": string,"created_at": string,"created_by": string | null,"id": string,"instrument": string | null,"is_critical": boolean,"lower_limit": number | null,"method": string | null,"name_en": string,"name_pt": string,"nominal": number | null,"plan_id": string,"sample_size": number | null,"sampling": string,"sort_order": number,"specification": string | null,"standard_requirement_id": string | null,"unit": string | null,"updated_at": string,"updated_by": string | null,"upper_limit": number | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "accept_number"?: number | null,"aql_level"?: string | null,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"char_type_code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"instrument"?: string | null,"is_critical"?: boolean,"lower_limit"?: number | null,"method"?: string | null,"name_en": string,"name_pt": string,"nominal"?: number | null,"plan_id": string,"sample_size"?: number | null,"sampling"?: string,"sort_order"?: number,"specification"?: string | null,"standard_requirement_id"?: string | null,"unit"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"upper_limit"?: number | null
+                  }
+                  Update: {
+                    "accept_number"?: number | null,"aql_level"?: string | null,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"char_type_code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"instrument"?: string | null,"is_critical"?: boolean,"lower_limit"?: number | null,"method"?: string | null,"name_en"?: string,"name_pt"?: string,"nominal"?: number | null,"plan_id"?: string,"sample_size"?: number | null,"sampling"?: string,"sort_order"?: number,"specification"?: string | null,"standard_requirement_id"?: string | null,"unit"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"upper_limit"?: number | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "inspection_characteristics_char_type_code_fkey"
+      columns: ["char_type_code"]
+isOneToOne: false
+      referencedRelation: "characteristic_types"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "inspection_characteristics_plan_id_fkey"
+      columns: ["plan_id"]
+isOneToOne: false
+      referencedRelation: "inspection_plans"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inspection_characteristics_standard_requirement_id_fkey"
+      columns: ["standard_requirement_id"]
+isOneToOne: false
+      referencedRelation: "standard_requirements"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"inspection_plans": {
+                  Row: {
+                    "active": boolean,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"component_id": string,"created_at": string,"created_by": string | null,"id": string,"notes": string | null,"revision": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "active"?: boolean,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"component_id": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"notes"?: string | null,"revision"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "active"?: boolean,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"component_id"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"notes"?: string | null,"revision"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "inspection_plans_component_id_fkey"
+      columns: ["component_id"]
+isOneToOne: false
+      referencedRelation: "components"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"inspection_results": {
+                  Row: {
+                    "auto_evaluated": boolean,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"characteristic_id": string,"comment": string | null,"created_at": string,"created_by": string | null,"id": string,"inspection_id": string,"inspection_unit_id": string,"measured_text": string | null,"measured_values": (number)[],"ok": boolean | null,"qty_inspected": number | null,"qty_nok": number | null,"serial_unit_id": string,"supplier_id": string,"updated_at": string,"updated_by": string | null,"waiver_id": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "auto_evaluated"?: boolean,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"characteristic_id": string,"comment"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"inspection_id": string,"inspection_unit_id": string,"measured_text"?: string | null,"measured_values"?: (number)[],"ok"?: boolean | null,"qty_inspected"?: number | null,"qty_nok"?: number | null,"serial_unit_id": string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null,"waiver_id"?: string | null
+                  }
+                  Update: {
+                    "auto_evaluated"?: boolean,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"characteristic_id"?: string,"comment"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"inspection_id"?: string,"inspection_unit_id"?: string,"measured_text"?: string | null,"measured_values"?: (number)[],"ok"?: boolean | null,"qty_inspected"?: number | null,"qty_nok"?: number | null,"serial_unit_id"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null,"waiver_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "inspection_results_characteristic_id_fkey"
+      columns: ["characteristic_id"]
+isOneToOne: false
+      referencedRelation: "inspection_characteristics"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inspection_results_inspection_id_fkey"
+      columns: ["inspection_id"]
+isOneToOne: false
+      referencedRelation: "inspections"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inspection_results_inspection_unit_id_fkey"
+      columns: ["inspection_unit_id"]
+isOneToOne: false
+      referencedRelation: "inspection_units"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inspection_results_serial_unit_id_fkey"
+      columns: ["serial_unit_id"]
+isOneToOne: false
+      referencedRelation: "serial_units"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inspection_results_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inspection_results_waiver_id_fkey"
+      columns: ["waiver_id"]
+isOneToOne: false
+      referencedRelation: "waivers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"inspection_types": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"inspection_units": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"id": string,"inspection_id": string,"result": string | null,"serial_unit_id": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"inspection_id": string,"result"?: string | null,"serial_unit_id": string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"inspection_id"?: string,"result"?: string | null,"serial_unit_id"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "inspection_units_inspection_id_fkey"
+      columns: ["inspection_id"]
+isOneToOne: false
+      referencedRelation: "inspections"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inspection_units_serial_unit_id_fkey"
+      columns: ["serial_unit_id"]
+isOneToOne: false
+      referencedRelation: "serial_units"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inspection_units_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"inspections": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"completed_at": string | null,"component_id": string,"created_at": string,"created_by": string | null,"id": string,"inspected_on": string,"inspector_id": string | null,"location": string | null,"notes": string | null,"number": string,"plan_id": string,"result": string | null,"status": string,"supplier_id": string,"type_code": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"completed_at"?: string | null,"component_id": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"inspected_on"?: string,"inspector_id"?: string | null,"location"?: string | null,"notes"?: string | null,"number": string,"plan_id": string,"result"?: string | null,"status"?: string,"supplier_id": string,"type_code": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"completed_at"?: string | null,"component_id"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"inspected_on"?: string,"inspector_id"?: string | null,"location"?: string | null,"notes"?: string | null,"number"?: string,"plan_id"?: string,"result"?: string | null,"status"?: string,"supplier_id"?: string,"type_code"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "inspections_component_id_fkey"
+      columns: ["component_id"]
+isOneToOne: false
+      referencedRelation: "components"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inspections_inspector_id_fkey"
+      columns: ["inspector_id"]
+isOneToOne: false
+      referencedRelation: "users"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inspections_plan_id_fkey"
+      columns: ["plan_id"]
+isOneToOne: false
+      referencedRelation: "inspection_plans"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inspections_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inspections_type_code_fkey"
+      columns: ["type_code"]
+isOneToOne: false
+      referencedRelation: "inspection_types"
+      referencedColumns: ["code"]
+    }
+                  ]
                 },"lessons_learned": {
                   Row: {
                     "action": string,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"component_id": string | null,"created_at": string,"created_by": string | null,"failure": string,"failure_mode_code": string | null,"id": string,"keywords": (string)[],"nc_id": string,"root_cause": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
@@ -749,14 +989,14 @@ isOneToOne: false
                   ]
                 },"nc_items": {
                   Row: {
-                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"id": string,"nc_id": string,"notes": string | null,"quantity": number | null,"sn_or_lot": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"id": string,"nc_id": string,"notes": string | null,"quantity": number | null,"serial_unit_id": string | null,"sn_or_lot": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"nc_id": string,"notes"?: string | null,"quantity"?: number | null,"sn_or_lot": string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"nc_id": string,"notes"?: string | null,"quantity"?: number | null,"serial_unit_id"?: string | null,"sn_or_lot": string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Update: {
-                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"nc_id"?: string,"notes"?: string | null,"quantity"?: number | null,"sn_or_lot"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"nc_id"?: string,"notes"?: string | null,"quantity"?: number | null,"serial_unit_id"?: string | null,"sn_or_lot"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Relationships: [
                     {
@@ -770,6 +1010,12 @@ isOneToOne: false
       columns: ["nc_id"]
 isOneToOne: false
       referencedRelation: "ncs"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "nc_items_serial_unit_id_fkey"
+      columns: ["serial_unit_id"]
+isOneToOne: false
+      referencedRelation: "serial_units"
       referencedColumns: ["id"]
     },{
       foreignKeyName: "nc_items_supplier_id_fkey"
@@ -1013,6 +1259,58 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"repairs": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"completed_on": string | null,"completion_notes": string | null,"created_at": string,"created_by": string | null,"description": string,"id": string,"performed_by": string | null,"serial_unit_id": string,"started_on": string,"status": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"completed_on"?: string | null,"completion_notes"?: string | null,"created_at"?: string,"created_by"?: string | null,"description": string,"id"?: string,"performed_by"?: string | null,"serial_unit_id": string,"started_on"?: string,"status"?: string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"completed_on"?: string | null,"completion_notes"?: string | null,"created_at"?: string,"created_by"?: string | null,"description"?: string,"id"?: string,"performed_by"?: string | null,"serial_unit_id"?: string,"started_on"?: string,"status"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "repairs_serial_unit_id_fkey"
+      columns: ["serial_unit_id"]
+isOneToOne: false
+      referencedRelation: "serial_units"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "repairs_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"serial_units": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"component_id": string,"created_at": string,"created_by": string | null,"id": string,"identifier": string,"kind": string,"notes": string | null,"production_date": string | null,"quantity": number,"scrapped": boolean,"supplier_id": string,"tag": string | null,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"component_id": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"identifier": string,"kind"?: string,"notes"?: string | null,"production_date"?: string | null,"quantity"?: number,"scrapped"?: boolean,"supplier_id": string,"tag"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"component_id"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"identifier"?: string,"kind"?: string,"notes"?: string | null,"production_date"?: string | null,"quantity"?: number,"scrapped"?: boolean,"supplier_id"?: string,"tag"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "serial_units_component_id_fkey"
+      columns: ["component_id"]
+isOneToOne: false
+      referencedRelation: "components"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "serial_units_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"standard_requirements": {
                   Row: {
                     "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"id": string,"item_code": string,"kind": string,"sort_order": number,"standard_id": string,"text_en": string,"text_pt": string,"updated_at": string,"updated_by": string | null
@@ -1217,6 +1515,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"waivers": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"characteristic_ids": (string)[],"component_id": string,"created_at": string,"created_by": string | null,"decided_at": string | null,"decided_by": string | null,"decision_comment": string | null,"description": string,"id": string,"justification": string,"max_quantity": number | null,"number": string,"serial_unit_ids": (string)[],"status": string,"supplier_id": string,"updated_at": string,"updated_by": string | null,"used_quantity": number,"valid_until": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"characteristic_ids"?: (string)[],"component_id": string,"created_at"?: string,"created_by"?: string | null,"decided_at"?: string | null,"decided_by"?: string | null,"decision_comment"?: string | null,"description": string,"id"?: string,"justification": string,"max_quantity"?: number | null,"number": string,"serial_unit_ids"?: (string)[],"status"?: string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null,"used_quantity"?: number,"valid_until"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"characteristic_ids"?: (string)[],"component_id"?: string,"created_at"?: string,"created_by"?: string | null,"decided_at"?: string | null,"decided_by"?: string | null,"decision_comment"?: string | null,"description"?: string,"id"?: string,"justification"?: string,"max_quantity"?: number | null,"number"?: string,"serial_unit_ids"?: (string)[],"status"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null,"used_quantity"?: number,"valid_until"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "waivers_component_id_fkey"
+      columns: ["component_id"]
+isOneToOne: false
+      referencedRelation: "components"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "waivers_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Views: {
@@ -1264,6 +1588,12 @@ isOneToOne: false
             "activate_template":
 { Args: { "p_template_id": string }; Returns: undefined
                            },
+"add_inspection_unit":
+{ Args: { "p_inspection_id": string,"p_unit_id": string }; Returns: string
+                           },
+"apply_waiver":
+{ Args: { "p_result_id": string,"p_waiver_id": string }; Returns: undefined
+                           },
 "audit_report_visible":
 { Args: { "p_audit_id": string }; Returns: boolean
                            },
@@ -1275,6 +1605,9 @@ isOneToOne: false
                            },
 "can_access_supplier":
 { Args: { "p_supplier_id": string }; Returns: boolean
+                           },
+"can_edit_inspection":
+{ Args: { "p_inspection_id": string }; Returns: boolean
                            },
 "can_execute_audit":
 { Args: { "p_audit_id": string }; Returns: boolean
@@ -1299,6 +1632,12 @@ isOneToOne: false
                            },
 "complete_audit":
 { Args: { "p_audit_id": string,"p_summary"?: string }; Returns: Json
+                           },
+"complete_inspection":
+{ Args: { "p_inspection_id": string }; Returns: string
+                           },
+"complete_repair":
+{ Args: { "p_notes": string,"p_repair_id": string }; Returns: undefined
                            },
 "convert_nc_to_8d":
 { Args: { "p_nc_id": string }; Returns: undefined
@@ -1327,6 +1666,9 @@ isOneToOne: false
 "normalize_tax_id":
 { Args: { "p_country": string,"p_tax_id": string }; Returns: string
                            },
+"plan_component":
+{ Args: { "p_plan_id": string }; Returns: string
+                           },
 "resolve_audit_status_suggestion":
 { Args: { "p_apply": boolean,"p_audit_id": string,"p_justification": string }; Returns: undefined
                            },
@@ -1351,8 +1693,14 @@ isOneToOne: false
 "review_simple_nc":
 { Args: { "p_accept": boolean,"p_comment": string,"p_nc_id": string }; Returns: undefined
                            },
+"review_waiver":
+{ Args: { "p_approve": boolean,"p_comment": string,"p_waiver_id": string }; Returns: undefined
+                           },
 "save_8d_step":
 { Args: { "p_content": Json,"p_step_id": string,"p_submit": boolean }; Returns: undefined
+                           },
+"scrap_unit":
+{ Args: { "p_reason": string,"p_unit_id": string }; Returns: undefined
                            },
 "start_audit":
 { Args: { "p_audit_id": string }; Returns: undefined
@@ -1365,6 +1713,9 @@ isOneToOne: false
                            },
 "verify_finding":
 { Args: { "p_comment": string,"p_finding_id": string }; Returns: undefined
+                           },
+"waiver_is_active":
+{ Args: { "p_waiver_id": string }; Returns: boolean
                            }
           }
           Enums: {

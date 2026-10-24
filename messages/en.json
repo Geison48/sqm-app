@@ -204,7 +204,29 @@
     "linked_nc_open": "The linked 8D is still open.",
     "action_not_accepted": "Accept the action plan before verifying effectiveness.",
     "importInvalid": "Invalid spreadsheet: {detail}",
-    "importEmpty": "No rows found in the spreadsheet."
+    "importEmpty": "No rows found in the spreadsheet.",
+    "tag_workflow_only": "The tag changes through the workflow (inspection, repair).",
+    "unit_scrapped": "A scrapped part does not return to the flow.",
+    "repair_workflow_only": "Use \"Complete repair\".",
+    "repair_not_open": "The repair is not open.",
+    "waiver_workflow_only": "This change follows the waiver workflow.",
+    "waiver_decided": "A decided waiver cannot be changed.",
+    "waiver_already_expired": "The validity date has passed.",
+    "waiver_not_active": "Waiver expired, used up or not approved.",
+    "waiver_not_applicable": "The waiver does not cover this part/characteristic.",
+    "result_not_nok": "Only NOK results can be accepted under waiver.",
+    "waiver_quantity_exceeded": "Not enough waiver quantity.",
+    "inspection_plan_required": "The component has no active inspection plan.",
+    "self_inspection_by_supplier": "Self-inspection is recorded by the supplier.",
+    "inspection_workflow_only": "This change follows the inspection workflow.",
+    "inspection_completed": "A completed inspection cannot be changed.",
+    "unit_mismatch": "The part belongs to another supplier/component.",
+    "unit_under_repair": "Part under repair (yellow): complete the repair first.",
+    "unit_not_green": "Rule 9: only green-tagged parts can be inspected by the SQE.",
+    "inspection_no_units": "Add at least one part.",
+    "unit_not_red": "Only red parts can be finally rejected.",
+    "invalidValues": "Invalid measured values (use numbers separated by spaces or semicolons).",
+    "unit_supplier_mismatch": "The selected part does not belong to the NC supplier."
   },
   "criticality": {
     "label": "Criticality",
@@ -464,7 +486,11 @@
       "audit_report_available": "Report of audit {number} available (classification {classification}).",
       "finding_responded": "{supplier} answered a finding of audit {number}.",
       "finding_action_accepted": "Action plan accepted in audit {number}.",
-      "finding_returned": "Action plan returned in audit {number}."
+      "finding_returned": "Action plan returned in audit {number}.",
+      "waiver_requested": "{supplier} requested waiver {number}.",
+      "waiver_approved": "Waiver {number} was approved.",
+      "waiver_rejected": "Waiver {number} was rejected.",
+      "inspection_rejected": "Inspection {number}: {count} part(s) rejected."
     }
   },
   "settings": {
@@ -526,7 +552,9 @@
     "gwiMajor": "Major NC limits to B",
     "suggestionMap": "Rule 3 — suggested status for classification",
     "none": "None",
-    "findingResponseDays": "Finding response deadline (days)"
+    "findingResponseDays": "Finding response deadline (days)",
+    "inspectionTypes": "Inspection types",
+    "characteristicTypes": "Characteristic types"
   },
   "log": {
     "empty": "No changes recorded.",
@@ -567,7 +595,13 @@
       "audits": "Audit",
       "audit_answers": "Audit answer",
       "findings": "Finding",
-      "audit_plans": "Annual plan"
+      "audit_plans": "Annual plan",
+      "serial_units": "Part (SN/lot)",
+      "repairs": "Repair",
+      "waivers": "Waiver",
+      "inspections": "Inspection",
+      "inspection_results": "Inspection result",
+      "controlled_shipment_periods": "Controlled shipment"
     }
   },
   "ncs": {
@@ -1118,5 +1152,207 @@
     "empty": "No templates.",
     "readOnlyHint": "Active/retired template: create a new version to change it.",
     "notes": "Notes"
+  },
+  "inspections": {
+    "title": "Inspections",
+    "subtitle": "Self-inspection, SQE inspection, parts, repairs and waivers.",
+    "new": "New inspection",
+    "newSelf": "New self-inspection",
+    "tabs": {
+      "inspections": "Inspections",
+      "units": "Parts (SN/lots)",
+      "waivers": "Waivers",
+      "plans": "Inspection plans",
+      "controlled": "Controlled shipment"
+    },
+    "number": "Number",
+    "type": "Type",
+    "supplier": "Supplier",
+    "component": "Component",
+    "location": "Location",
+    "date": "Date",
+    "inspector": "Inspector",
+    "status": "Status",
+    "statuses": {
+      "in_progress": "In progress",
+      "completed": "Completed"
+    },
+    "result": "Result",
+    "results": {
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "partial": "Partial"
+    },
+    "empty": "No inspections.",
+    "units": "Inspected parts",
+    "addUnit": "Add part",
+    "eligibleHint": "Rule 9: only green-tagged parts are listed.",
+    "eligibleHintSelf": "Parts under repair (yellow) are not listed.",
+    "noEligible": "No eligible parts.",
+    "characteristic": "Characteristic",
+    "spec": "Specification",
+    "measured": "Measured values",
+    "measuredHint": "Separate with space or ;",
+    "qtyInspected": "Qty inspected",
+    "qtyNok": "Qty NOK",
+    "ok": "OK",
+    "nok": "NOK",
+    "auto": "Evaluated by limits",
+    "comment": "Comment",
+    "photos": "Photos",
+    "complete": "Complete inspection",
+    "completeDescription": "Parts with NOK turn red; in self-inspection, approved parts turn green.",
+    "completed": "Inspection completed.",
+    "openNc": "Open NC",
+    "applyWaiver": "Accept under waiver",
+    "waiverApplied": "Accepted under waiver.",
+    "underWaiver": "Accepted under waiver {number}",
+    "unitResult": {
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "sampling": "Sampling",
+    "sampleInfo": "n={n}, Ac={ac}",
+    "saved": "Saved",
+    "notes": "Notes",
+    "ncTitle": "NOK in inspection {number}: {characteristic}"
+  },
+  "units": {
+    "title": "Parts (SN/lots)",
+    "identifier": "SN or lot",
+    "kind": "Type",
+    "kinds": {
+      "serial": "Serial number",
+      "lot": "Lot"
+    },
+    "quantity": "Quantity",
+    "tag": "Tag",
+    "tags": {
+      "green": "Green — ready for SQE",
+      "yellow": "Yellow — under repair",
+      "red": "Red — rejected",
+      "none": "No tag — awaiting self-inspection",
+      "scrapped": "Final rejection"
+    },
+    "tagShort": {
+      "green": "Green",
+      "yellow": "Yellow",
+      "red": "Red",
+      "none": "Pending"
+    },
+    "productionDate": "Production date",
+    "notes": "Notes",
+    "register": "Register SN/lot",
+    "empty": "No parts.",
+    "timeline": "Timeline",
+    "documents": "Documents (PIT/FAT, certificates, reports)",
+    "scrap": "Final rejection (scrap)",
+    "scrapReason": "Reason",
+    "scrapped": "Part marked as final rejection.",
+    "events": {
+      "inspection": "Inspection {number} ({type}): {result}",
+      "repair_open": "Repair opened: {description}",
+      "repair_done": "Repair completed: {description}",
+      "waiver": "Waiver {number}: {status}",
+      "nc": "NC {number}: {title}",
+      "created": "Part registered"
+    },
+    "searchPlaceholder": "SN or lot"
+  },
+  "repairs": {
+    "title": "Repairs",
+    "open": "Open repair",
+    "description": "Repair description",
+    "performedBy": "Performed by",
+    "startedOn": "Started",
+    "complete": "Complete repair",
+    "completionNotes": "Completion notes",
+    "opened": "Repair opened. Part is yellow.",
+    "completed": "Repair completed. Run the self-inspection to release it (green).",
+    "statuses": {
+      "open": "Under repair",
+      "completed": "Completed"
+    },
+    "before": "Photos before",
+    "after": "Photos after",
+    "empty": "No repairs."
+  },
+  "waivers": {
+    "title": "Waivers / deviations",
+    "request": "Request waiver",
+    "number": "Number",
+    "description": "Requested deviation",
+    "justification": "Justification",
+    "characteristics": "Affected characteristics",
+    "allCharacteristics": "If none is selected, it applies to all.",
+    "validUntil": "Valid until",
+    "maxQuantity": "Maximum quantity",
+    "units": "Covered SNs/lots",
+    "used": "Used",
+    "limitHint": "Enter at least one limit: date, quantity or SNs.",
+    "status": "Status",
+    "statuses": {
+      "requested": "Awaiting decision",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "expired": "Expired"
+    },
+    "review": "Decide",
+    "approve": "Approve",
+    "reject": "Reject",
+    "decision": "Decision",
+    "comment": "Comment",
+    "requested": "Waiver requested.",
+    "reviewed": "Decision recorded.",
+    "empty": "No waivers.",
+    "rule10": "Rule 10: the waiver expires automatically by date or when the quantity is used up."
+  },
+  "inspPlans": {
+    "title": "Inspection plans",
+    "component": "Component",
+    "revision": "Revision",
+    "characteristics": "Characteristics",
+    "create": "Create plan",
+    "noPlan": "No plan",
+    "notes": "Notes",
+    "newRevision": "New revision",
+    "add": "Add characteristic",
+    "edit": "Edit characteristic",
+    "type": "Type",
+    "namePt": "Characteristic (PT)",
+    "nameEn": "Characteristic (EN)",
+    "specification": "Specification",
+    "nominal": "Nominal",
+    "lower": "Lower limit",
+    "upper": "Upper limit",
+    "unit": "Unit",
+    "method": "Method",
+    "instrument": "Instrument",
+    "sampling": "Sampling",
+    "samplings": {
+      "100": "100%",
+      "aql": "AQL"
+    },
+    "aqlLevel": "AQL / level (text)",
+    "sampleSize": "Sample size (n)",
+    "acceptNumber": "Acceptance number (Ac)",
+    "critical": "Critical characteristic",
+    "requirement": "Library requirement",
+    "sortOrder": "Order",
+    "empty": "No characteristics.",
+    "created": "Plan created.",
+    "limits": "Limits"
+  },
+  "controlled": {
+    "title": "Controlled shipment",
+    "hint": "Entry and exit happen only through a manual supplier status change (with justification).",
+    "startedAt": "Entry",
+    "startReason": "Entry reason",
+    "endedAt": "Exit",
+    "endReason": "Exit reason",
+    "open": "Ongoing",
+    "inspections": "Inspections in the period",
+    "empty": "No controlled shipment periods.",
+    "changeStatus": "Change status on the supplier page"
   }
 }
