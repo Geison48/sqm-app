@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Toaster } from "@/components/ui/sonner";
 import { PwaProvider } from "@/components/shared/pwa-provider";
+import { AuthHashHandler } from "@/components/auth-hash-handler";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -33,6 +34,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full bg-background font-sans text-foreground">
         <NextIntlClientProvider>
           <PwaProvider>
+            <AuthHashHandler />
             {children}
             <Toaster richColors position="top-center" />
           </PwaProvider>

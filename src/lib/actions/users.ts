@@ -45,7 +45,7 @@ export async function inviteUser(_: InviteState, formData: FormData): Promise<In
 
   const { data: invited, error: inviteError } = await admin.auth.admin.inviteUserByEmail(input.email, {
     data: { full_name: input.fullName, language: input.language },
-    redirectTo: `${SITE_URL}/auth/set-password`,
+    redirectTo: `${SITE_URL}/login`,  // o link volta com a sessão no fragmento (AuthHashHandler)
   });
   if (inviteError || !invited.user) {
     return { error: inviteError?.code === "email_exists" ? "users.errorEmailExists" : "common.genericError" };

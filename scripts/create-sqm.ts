@@ -33,7 +33,7 @@ async function main() {
 
   const { data, error } = await admin.auth.admin.inviteUserByEmail(email, {
     data: { full_name: values.name, language: values.lang },
-    redirectTo: `${site}/auth/set-password`,
+    redirectTo: `${site}/login`,  // o link volta com a sessão no fragmento (AuthHashHandler)
   });
   if (error || !data.user) throw error ?? new Error("Falha ao convidar.");
 

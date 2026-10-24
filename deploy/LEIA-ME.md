@@ -70,9 +70,7 @@ Anote num bloco de notas, ao longo do caminho: **senha do banco**, **Project URL
 2. **Authentication → URL Configuration**:
    - **Site URL:** o endereço do site na Vercel → **Save**;
    - **Redirect URLs → Add URL:** o endereço do site seguido de `/**` (ex.: `https://sqm-app-xyz.vercel.app/**`) → **Save**.
-3. **Authentication → Emails → Templates** (os modelos estão em `supabase/templates` no GitHub):
-   - **Invite user:** assunto `SQM App — Convite / Invitation`; no corpo, apague tudo e cole o conteúdo de `invite.html` → **Save**;
-   - **Reset password:** assunto `SQM App — Redefinir senha / Reset password`; corpo = conteúdo de `recovery.html` → **Save**.
+3. **Modelos de e-mail (opcional):** sem SMTP próprio o Supabase não deixa editar os modelos, e tudo bem: o app funciona com os e-mails padrão (em inglês). Depois de configurar o SMTP (ver aviso abaixo), em **Authentication → Emails → Templates** cole `supabase/templates/invite.html` em **Invite user** (assunto `SQM App — Convite / Invitation`) e `recovery.html` em **Reset Password** (assunto `SQM App — Redefinir senha / Reset password`) para ter os e-mails bilíngues.
 
 > **Limite de e-mails:** o envio padrão do Supabase permite poucos e-mails por hora e serve para testar. Para convidar o time inteiro, configure SMTP próprio em **Authentication → Emails → SMTP Settings** (o Resend fornece um, depois de verificar um domínio).
 

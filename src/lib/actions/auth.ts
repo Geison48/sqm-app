@@ -3,8 +3,9 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
-import { SITE_URL } from "@/lib/env";
+import { SITE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "@/lib/env";
 import { isLocale, LOCALE_COOKIE, type Locale } from "@/i18n/config";
 
 export type FormState = { error?: string; success?: string; email?: string } | undefined;
@@ -62,7 +63,10 @@ export async function requestPasswordReset(_: FormState, formData: FormData): Pr
 
   const supabase = await createClient();
   // Resposta sempre igual, exista ou não o e-mail (não revela quem é usuário).
-  await supabase.auth.resetPasswordForEmail(email.data, { redirectTo: `${SITE_URL}/auth/set-password` });
+  // Fluxo implícito: o link funciona em qualquer aparelho (o PKCE exigiria abrir no
+  // mesmo navegador). A sessão volta no fragmento da URL e o AuthHashHandler a recebe.
+  const implicit = createSupabaseClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, { auth: { flowType: "implicit", persistSession: false } });
+  await implicit.auth.resetPasswordForEmail(email.data, { redirectTo: `${SITE_URL}/login` });
   return { success: "auth.resetLinkSent" };
 }
 
