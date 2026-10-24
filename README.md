@@ -11,7 +11,7 @@ Sistema de gestão da qualidade de fornecedores (auditorias, inspeções, NC/8D)
 | 1 | Fundação: login, convites, perfis, menu, idiomas, RLS, audit_log, anexos | ✅ |
 | 2 | M1 Cadastros: fornecedores, status com histórico, plantas, contatos, certificados, subfornecedores, componentes, normas, qualificação inicial, alertas de vencimento, notificações in-app, configurações | ✅ |
 | 3 | M4 NC e 8D: abertura com sugestão de 8D, NC simples, 8D por disciplina com versões, contenção, RCA (Ishikawa, 5 Porquês 3 pernas, É/Não é), prazos, custos com aceite/contestação, comentários internos, fechamento com eficácia e lição aprendida, PDF PT/EN/bilíngue | ✅ |
-| 4 | M2 Auditorias | — |
+| 4 | M2 Auditorias: modelos versionados (VDA 6.3 e GWI) com importação Excel/CSV, plano anual pela criticidade com aprovação do SQM, calendário e Gantt, execução item a item no celular com fotos, cálculo de nota e classificação A/B/C, achados (NC maior → 8D), resposta do fornecedor, verificação de eficácia, sugestão de status, relatório PDF PT/EN/bilíngue | ✅ |
 | 5 | M3 Inspeções | — |
 | 6 | M5 Notificações + M10 Exportação | — |
 | 7 | PWA offline, revisão e entrega | — |
@@ -43,7 +43,7 @@ Em `.env.local`, use `API_URL` → `NEXT_PUBLIC_SUPABASE_URL`, `PUBLISHABLE_KEY`
 | `qualidade@fornecedor-a.local` | Fornecedor A | |
 | `quality@supplier-b.local` | Fornecedor B | idioma en |
 
-O seed também traz 3 NCs: um 8D do fornecedor A em andamento (D0–D2 aprovadas, D3 com o SQE, D4 em rascunho, com custo cobrável, custo interno e comentário interno), uma NC simples do fornecedor B e um 8D crítico atrasado. Também traz 3 fornecedores (A homologado, B homologado condicional, C em qualificação), 5 componentes, 3 normas com requisitos e certificados com validade relativa à data de hoje (vencendo em 25 e 55 dias e um já vencido), para exercitar os alertas.
+O seed também traz dois modelos de checklist ativos (GWI e VDA 6.3 de exemplo), o plano 2026 aprovado, a auditoria VDA do fornecedor A concluída (88,6% → B) com dois achados e a auditoria GWI do C agendada. Também traz 3 NCs: um 8D do fornecedor A em andamento (D0–D2 aprovadas, D3 com o SQE, D4 em rascunho, com custo cobrável, custo interno e comentário interno), uma NC simples do fornecedor B e um 8D crítico atrasado. Também traz 3 fornecedores (A homologado, B homologado condicional, C em qualificação), 5 componentes, 3 normas com requisitos e certificados com validade relativa à data de hoje (vencendo em 25 e 55 dias e um já vencido), para exercitar os alertas.
 
 Os e-mails enviados localmente (convites, redefinição de senha) **não saem para a internet**: abra o Mailpit em http://127.0.0.1:54324 para vê-los.
 
@@ -143,6 +143,9 @@ O tenant da Goldwind pode exigir aprovação do administrador de TI. Enquanto is
 - **CNPJ:** obrigatório e validado quando o país é BR, inclusive no formato alfanumérico (Receita Federal, a partir de 07/2026). Fica gravado sem pontuação.
 - **Alertas de vencimento:** `app.generate_certificate_expiry_alerts()` roda todo dia às 06:00 (Brasília) via pg_cron e também na hora em que um certificado é cadastrado ou alterado. Gera um alerta por faixa (padrão 60/30/7 dias, configurável) e um de vencido, para o SQE responsável e os usuários do fornecedor, sem duplicar. Em produção, confirme que a extensão **pg_cron** está ligada em **Database → Extensions** antes de rodar `db push`.
 - **NC e 8D:** status, aprovação de disciplinas, fechamento e resposta de custos só mudam pelas funções `save_8d_step`, `review_8d_step`, `close_8d`, `convert_nc_to_8d`, `respond_simple_nc`, `review_simple_nc` e `respond_nc_cost`, que aplicam as regras 5 a 8 e 12. UPDATE direto nessas colunas é bloqueado. A view `nc_overview` (com RLS do usuário) calcula o próximo prazo e com quem está a pendência.
+- **Auditorias:** nota e classificação são calculadas no banco por `audit_score()`, a mesma função usada na tela e na conclusão. Regras VDA 6.3 e GWI e o mapa da regra 3 ficam em `app_settings` (tela Configurações). Fluxos: `start_audit`, `complete_audit`, `resolve_audit_status_suggestion`, `respond_finding`, `review_finding`, `verify_finding`, `generate_audit_plan`, `submit_audit_plan` e `review_audit_plan` (somente SQM).
+- **Questionário VDA 6.3:** o seed traz só perguntas de exemplo, escritas para teste. O questionário oficial é licenciado pela VDA QMC: importe-o em **Auditorias → Modelos → Importar planilha**, a partir da planilha modelo.
+- **Planilhas:** a importação usa ExcelJS. O SheetJS da especificação só é distribuído atualizado pelo CDN próprio, bloqueado no ambiente de desenvolvimento, e a versão do npm tem falhas conhecidas.
 - **PDF:** `GET /ncs/<id>/pdf?lang=pt-BR|en|both` gera o relatório com a sessão do usuário. Para o fornecedor, custos internos e comentários internos não aparecem.
 - **Notificações:** a tabela `notifications` guarda o código do evento e os parâmetros; o texto é montado na interface no idioma de quem lê.
 - **Anexos:** bucket privado `attachments`, com caminho `<supplier_id | internal>/<uuid>/<arquivo>`. `internal_only = true` nunca aparece para o fornecedor.

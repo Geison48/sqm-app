@@ -172,4 +172,21 @@ describe("isolamento entre fornecedores (RLS)", () => {
     const { data: comments } = await sqe.from("nc_comments").select("internal");
     expect(comments!.some((c) => c.internal)).toBe(true);
   });
+
+  it("Auditorias: B não vê auditoria, respostas ou achados do A; fornecedor não vê plano nem modelos", async () => {
+    for (const table of ["audits", "audit_answers", "findings"] as const) {
+      const { data } = await userB.from(table).select("supplier_id").eq("supplier_id", SUPPLIER_A);
+      expect(data, table).toEqual([]);
+    }
+    expect((await userA.from("audit_plans").select("id")).data).toEqual([]);
+    expect((await userA.from("audit_templates").select("id")).data).toEqual([]);
+  });
+
+  it("Auditorias: fornecedor só vê respostas depois do relatório emitido", async () => {
+    const { data: audits } = await userA.from("audits").select("id, status");
+    expect(audits!.every((a) => a.status !== "planned")).toBe(true);
+    const { data: answers } = await userA.from("audit_answers").select("audit_id");
+    const issued = new Set(audits!.filter((a) => ["completed", "closed"].includes(a.status)).map((a) => a.id));
+    expect(answers!.every((a) => issued.has(a.audit_id))).toBe(true);
+  });
 });

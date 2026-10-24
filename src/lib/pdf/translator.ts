@@ -34,5 +34,5 @@ export function pdfTranslator(lang: PdfLanguage) {
         }).format(new Date(v.length === 10 ? `${v}T12:00:00` : v))
       : "—";
   const money = (v: number, currency: string) => new Intl.NumberFormat(locale, { style: "currency", currency }).format(v);
-  return { t, lookup, date, money, locale };
+  return { t, lookup, date, money, locale, lang };
 }

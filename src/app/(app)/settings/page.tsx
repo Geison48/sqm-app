@@ -12,7 +12,7 @@ import { createClient } from "@/lib/supabase/server";
 import {
   getContactRoles, getLookup, getQualificationStepTypes, getSupplierStatuses, type LookupItem, type StatusItem,
 } from "@/lib/lookups";
-import { saveGeneralSettings, saveLookupItem } from "@/lib/actions/settings";
+import { saveAuditSettings, saveGeneralSettings, saveLookupItem } from "@/lib/actions/settings";
 
 const TONES = ["neutral", "success", "warning", "danger", "info"] as const;
 
@@ -37,6 +37,19 @@ export default async function SettingsPage() {
       getLookup("nc_origins"), getLookup("nc_severities"), getLookup("failure_modes"), getLookup("dispositions"),
       getLookup("containment_locations"), getLookup("cost_types"), getLookup("eight_d_disciplines"),
     ]);
+  const [auditTypes, auditScopes, { data: auditSettings }] = await Promise.all([
+    getLookup("audit_types"), getLookup("audit_scopes"),
+    supabase.from("app_settings").select("key, value").in("key", [
+      "audit_frequency_months", "vda_rules", "gwi_rules", "audit_status_suggestion", "finding_response_days",
+    ]),
+  ]);
+  const aset = (key: string) => (auditSettings?.find((s) => s.key === key)?.value ?? {}) as Record<string, number | boolean | string>;
+  const freq = aset("audit_frequency_months");
+  const vda = aset("vda_rules");
+  const gwi = aset("gwi_rules");
+  const suggest = aset("audit_status_suggestion");
+  const findingDays = Number(auditSettings?.find((s) => s.key === "finding_response_days")?.value ?? 15);
+  const statusOptions = statuses.map((s) => ({ value: s.code, label: s.label_pt }));
   const num = (key: string, fallback: number) => {
     const n = Number(setting(key));
     return Number.isFinite(n) ? n : fallback;
@@ -104,6 +117,47 @@ export default async function SettingsPage() {
       <LookupSection table="dispositions" title={t("dispositions")} items={dispositions} />
       <LookupSection table="containment_locations" title={t("containmentLocations")} items={locations} />
       <LookupSection table="cost_types" title={t("costTypes")} items={costTypes} />
+
+      <h2 className="border-t pt-6 text-xl font-semibold">{t("auditGeneral")}</h2>
+      <section className="space-y-3 rounded-lg border p-4">
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="text-lg font-medium">{t("auditGeneral")}</h3>
+          <RecordDialog trigger={<Button variant="outline" size="sm">{tc("edit")}</Button>} title={t("auditGeneral")}
+            action={saveAuditSettings} fields={[
+              { name: "freq_A", label: `${t("auditFrequency")} — A`, type: "number", required: true, span: 1, defaultValue: Number(freq.A ?? 12) },
+              { name: "freq_B", label: `${t("auditFrequency")} — B`, type: "number", required: true, span: 1, defaultValue: Number(freq.B ?? 24) },
+              { name: "freq_C", label: `${t("auditFrequency")} — C`, type: "number", required: true, span: 1, defaultValue: Number(freq.C ?? 36) },
+              { name: "finding_response_days", label: t("findingResponseDays"), type: "number", required: true, span: 1, defaultValue: findingDays },
+              { name: "vda_a_min", label: `VDA — ${t("vdaAMin")}`, type: "number", required: true, span: 1, defaultValue: Number(vda.a_min ?? 90) },
+              { name: "vda_b_min", label: `VDA — ${t("vdaBMin")}`, type: "number", required: true, span: 1, defaultValue: Number(vda.b_min ?? 80) },
+              { name: "vda_element_to_b", label: t("vdaElementToB"), type: "number", required: true, span: 1, defaultValue: Number(vda.element_to_b ?? 80) },
+              { name: "vda_element_to_c", label: t("vdaElementToC"), type: "number", required: true, span: 1, defaultValue: Number(vda.element_to_c ?? 70) },
+              { name: "vda_star4_to_b", label: t("vdaStar4"), type: "checkbox", defaultValue: vda.star4_to_b !== false },
+              { name: "vda_any0_to_b", label: t("vdaAny0"), type: "checkbox", defaultValue: vda.any0_to_b !== false },
+              { name: "vda_star0_to_c", label: t("vdaStar0"), type: "checkbox", defaultValue: vda.star0_to_c !== false },
+              { name: "gwi_a_min", label: `GWI — ${t("gwiAMin")}`, type: "number", required: true, span: 1, defaultValue: Number(gwi.a_min ?? 90) },
+              { name: "gwi_b_min", label: `GWI — ${t("gwiBMin")}`, type: "number", required: true, span: 1, defaultValue: Number(gwi.b_min ?? 80) },
+              { name: "gwi_major_nc_limits_to_b", label: t("gwiMajor"), type: "checkbox", defaultValue: gwi.major_nc_limits_to_b !== false },
+              ...(["A", "B", "C"] as const).map((c) => ({
+                name: `suggest_${c}`, label: `${t("suggestionMap")} ${c}`, type: "select" as const, span: 1 as const,
+                options: statusOptions, defaultValue: (suggest[c] as string | undefined) ?? null,
+              })),
+            ]} />
+        </div>
+        <dl className="grid gap-4 text-sm sm:grid-cols-2">
+          <div><dt className="text-xs text-muted-foreground uppercase">{t("auditFrequency")}</dt><dd>{`${freq.A ?? 12} / ${freq.B ?? 24} / ${freq.C ?? 36}`}</dd></div>
+          <div><dt className="text-xs text-muted-foreground uppercase">{t("findingResponseDays")}</dt><dd>{findingDays}</dd></div>
+          <div className="sm:col-span-2"><dt className="text-xs text-muted-foreground uppercase">{t("vdaRules")}</dt>
+            <dd>A ≥ {String(vda.a_min ?? 90)}% · B ≥ {String(vda.b_min ?? 80)}% · {t("vdaElementToB")} {String(vda.element_to_b ?? 80)}% · {t("vdaElementToC")} {String(vda.element_to_c ?? 70)}%
+              {vda.star4_to_b !== false && <> · {t("vdaStar4")}</>}{vda.any0_to_b !== false && <> · {t("vdaAny0")}</>}{vda.star0_to_c !== false && <> · {t("vdaStar0")}</>}</dd></div>
+          <div className="sm:col-span-2"><dt className="text-xs text-muted-foreground uppercase">{t("gwiRules")}</dt>
+            <dd>A ≥ {String(gwi.a_min ?? 90)}% · B ≥ {String(gwi.b_min ?? 80)}%{gwi.major_nc_limits_to_b !== false && <> · {t("gwiMajor")}</>}</dd></div>
+          <div className="sm:col-span-2"><dt className="text-xs text-muted-foreground uppercase">{t("suggestionMap")}</dt>
+            <dd>{(["A", "B", "C"] as const).map((c) => `${c}: ${statuses.find((s) => s.code === suggest[c])?.label_pt ?? t("none")}`).join(" · ")}</dd></div>
+        </dl>
+      </section>
+      <LookupSection table="audit_types" title={t("auditTypes")} items={auditTypes} />
+      <LookupSection table="audit_scopes" title={t("auditScopes")} items={auditScopes} />
       <p className="flex items-center gap-1 text-xs text-muted-foreground">
         <LockIcon className="size-3" /> {t("systemHint")}
       </p>
@@ -113,7 +167,7 @@ export default async function SettingsPage() {
 
 type LookupTable =
   | "supplier_statuses" | "contact_roles" | "qualification_step_types" | "nc_origins" | "nc_severities" | "failure_modes"
-  | "dispositions" | "containment_locations" | "cost_types" | "eight_d_disciplines";
+  | "dispositions" | "containment_locations" | "cost_types" | "eight_d_disciplines" | "audit_types" | "audit_scopes";
 type Item = (LookupItem | StatusItem) & { deadline_hours?: number };
 
 async function LookupSection({

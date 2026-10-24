@@ -63,6 +63,52 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"audit_answers": {
+                  Row: {
+                    "answered_at": string | null,"answered_by": string | null,"audit_id": string,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"comment": string | null,"created_at": string,"created_by": string | null,"element_code": string,"element_title_en": string | null,"element_title_pt": string | null,"evidence": string | null,"id": string,"is_star": boolean,"item_code": string,"not_applicable": boolean,"question_en": string,"question_pt": string,"result": string | null,"score": number | null,"sort_order": number,"supplier_id": string,"template_item_id": string | null,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "answered_at"?: string | null,"answered_by"?: string | null,"audit_id": string,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"comment"?: string | null,"created_at"?: string,"created_by"?: string | null,"element_code": string,"element_title_en"?: string | null,"element_title_pt"?: string | null,"evidence"?: string | null,"id"?: string,"is_star"?: boolean,"item_code": string,"not_applicable"?: boolean,"question_en": string,"question_pt": string,"result"?: string | null,"score"?: number | null,"sort_order"?: number,"supplier_id": string,"template_item_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "answered_at"?: string | null,"answered_by"?: string | null,"audit_id"?: string,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"comment"?: string | null,"created_at"?: string,"created_by"?: string | null,"element_code"?: string,"element_title_en"?: string | null,"element_title_pt"?: string | null,"evidence"?: string | null,"id"?: string,"is_star"?: boolean,"item_code"?: string,"not_applicable"?: boolean,"question_en"?: string,"question_pt"?: string,"result"?: string | null,"score"?: number | null,"sort_order"?: number,"supplier_id"?: string,"template_item_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "audit_answers_audit_id_fkey"
+      columns: ["audit_id"]
+isOneToOne: false
+      referencedRelation: "audits"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "audit_answers_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "audit_answers_template_item_id_fkey"
+      columns: ["template_item_id"]
+isOneToOne: false
+      referencedRelation: "audit_template_items"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"audit_counters": {
+                  Row: {
+                    "last_number": number,"year": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "last_number"?: number,"year": number
+                  }
+                  Update: {
+                    "last_number"?: number,"year"?: number
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"audit_log": {
                   Row: {
                     "action": string,"actor_id": string | null,"actor_role": Database["public"]['Enums']["app_role"] | null,"after": Json | null,"at": string,"before": Json | null,"changed_fields": (string)[],"id": number,"record_id": string,"supplier_id": string | null,"table_name": string
@@ -76,6 +122,156 @@ isOneToOne: false
                   }
                   Relationships: [
                     
+                  ]
+                },"audit_plans": {
+                  Row: {
+                    "approved_at": string | null,"approved_by": string | null,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"id": string,"return_comment": string | null,"status": string,"submitted_at": string | null,"submitted_by": string | null,"updated_at": string,"updated_by": string | null,"year": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "approved_at"?: string | null,"approved_by"?: string | null,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"return_comment"?: string | null,"status"?: string,"submitted_at"?: string | null,"submitted_by"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"year": number
+                  }
+                  Update: {
+                    "approved_at"?: string | null,"approved_by"?: string | null,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"return_comment"?: string | null,"status"?: string,"submitted_at"?: string | null,"submitted_by"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"year"?: number
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"audit_scopes": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"audit_template_items": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"element_code": string,"element_title_en": string | null,"element_title_pt": string | null,"guidance_en": string | null,"guidance_pt": string | null,"id": string,"is_star": boolean,"item_code": string,"question_en": string,"question_pt": string,"scope_code": string | null,"sort_order": number,"standard_requirement_id": string | null,"template_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"element_code": string,"element_title_en"?: string | null,"element_title_pt"?: string | null,"guidance_en"?: string | null,"guidance_pt"?: string | null,"id"?: string,"is_star"?: boolean,"item_code": string,"question_en": string,"question_pt": string,"scope_code"?: string | null,"sort_order"?: number,"standard_requirement_id"?: string | null,"template_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"element_code"?: string,"element_title_en"?: string | null,"element_title_pt"?: string | null,"guidance_en"?: string | null,"guidance_pt"?: string | null,"id"?: string,"is_star"?: boolean,"item_code"?: string,"question_en"?: string,"question_pt"?: string,"scope_code"?: string | null,"sort_order"?: number,"standard_requirement_id"?: string | null,"template_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "audit_template_items_scope_code_fkey"
+      columns: ["scope_code"]
+isOneToOne: false
+      referencedRelation: "audit_scopes"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "audit_template_items_standard_requirement_id_fkey"
+      columns: ["standard_requirement_id"]
+isOneToOne: false
+      referencedRelation: "standard_requirements"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "audit_template_items_template_id_fkey"
+      columns: ["template_id"]
+isOneToOne: false
+      referencedRelation: "audit_templates"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"audit_templates": {
+                  Row: {
+                    "based_on_id": string | null,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"method": string,"name_en": string,"name_pt": string,"notes": string | null,"status": string,"updated_at": string,"updated_by": string | null,"version": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "based_on_id"?: string | null,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"method": string,"name_en": string,"name_pt": string,"notes"?: string | null,"status"?: string,"updated_at"?: string,"updated_by"?: string | null,"version"?: number
+                  }
+                  Update: {
+                    "based_on_id"?: string | null,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"method"?: string,"name_en"?: string,"name_pt"?: string,"notes"?: string | null,"status"?: string,"updated_at"?: string,"updated_by"?: string | null,"version"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "audit_templates_based_on_id_fkey"
+      columns: ["based_on_id"]
+isOneToOne: false
+      referencedRelation: "audit_templates"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"audit_types": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"audits": {
+                  Row: {
+                    "actual_end": string | null,"actual_start": string | null,"auditor_ids": (string)[],"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"classification": string | null,"created_at": string,"created_by": string | null,"downgrade_reasons": (string)[],"element_scores": NonNullable<Json>,"id": string,"lead_auditor_id": string | null,"number": string,"plan_id": string | null,"planned_end": string,"planned_start": string,"plant_id": string | null,"report_issued_at": string | null,"scope_codes": (string)[],"score_percent": number | null,"status": string,"status_suggestion": string | null,"status_suggestion_resolution": string | null,"summary": string | null,"supplier_id": string,"template_id": string | null,"title": string | null,"type_code": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "actual_end"?: string | null,"actual_start"?: string | null,"auditor_ids"?: (string)[],"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"classification"?: string | null,"created_at"?: string,"created_by"?: string | null,"downgrade_reasons"?: (string)[],"element_scores"?: NonNullable<Json>,"id"?: string,"lead_auditor_id"?: string | null,"number": string,"plan_id"?: string | null,"planned_end": string,"planned_start": string,"plant_id"?: string | null,"report_issued_at"?: string | null,"scope_codes"?: (string)[],"score_percent"?: number | null,"status"?: string,"status_suggestion"?: string | null,"status_suggestion_resolution"?: string | null,"summary"?: string | null,"supplier_id": string,"template_id"?: string | null,"title"?: string | null,"type_code": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "actual_end"?: string | null,"actual_start"?: string | null,"auditor_ids"?: (string)[],"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"classification"?: string | null,"created_at"?: string,"created_by"?: string | null,"downgrade_reasons"?: (string)[],"element_scores"?: NonNullable<Json>,"id"?: string,"lead_auditor_id"?: string | null,"number"?: string,"plan_id"?: string | null,"planned_end"?: string,"planned_start"?: string,"plant_id"?: string | null,"report_issued_at"?: string | null,"scope_codes"?: (string)[],"score_percent"?: number | null,"status"?: string,"status_suggestion"?: string | null,"status_suggestion_resolution"?: string | null,"summary"?: string | null,"supplier_id"?: string,"template_id"?: string | null,"title"?: string | null,"type_code"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "audits_lead_auditor_id_fkey"
+      columns: ["lead_auditor_id"]
+isOneToOne: false
+      referencedRelation: "users"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "audits_plan_id_fkey"
+      columns: ["plan_id"]
+isOneToOne: false
+      referencedRelation: "audit_plans"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "audits_plant_id_fkey"
+      columns: ["plant_id"]
+isOneToOne: false
+      referencedRelation: "plants"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "audits_status_suggestion_fkey"
+      columns: ["status_suggestion"]
+isOneToOne: false
+      referencedRelation: "supplier_statuses"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "audits_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "audits_template_id_fkey"
+      columns: ["template_id"]
+isOneToOne: false
+      referencedRelation: "audit_templates"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "audits_type_code_fkey"
+      columns: ["type_code"]
+isOneToOne: false
+      referencedRelation: "audit_types"
+      referencedColumns: ["code"]
+    }
                   ]
                 },"certifications": {
                   Row: {
@@ -379,6 +575,50 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"findings": {
+                  Row: {
+                    "action_due_date": string | null,"action_plan": string | null,"action_responsible": string | null,"answer_id": string | null,"audit_id": string,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"classification": string,"created_at": string,"created_by": string | null,"description": string,"effectiveness_comment": string | null,"id": string,"nc_id": string | null,"requirement": string | null,"responded_at": string | null,"responded_by": string | null,"response_due": string | null,"sqe_comment": string | null,"status": string,"supplier_id": string,"updated_at": string,"updated_by": string | null,"verified_at": string | null,"verified_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "action_due_date"?: string | null,"action_plan"?: string | null,"action_responsible"?: string | null,"answer_id"?: string | null,"audit_id": string,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"classification": string,"created_at"?: string,"created_by"?: string | null,"description": string,"effectiveness_comment"?: string | null,"id"?: string,"nc_id"?: string | null,"requirement"?: string | null,"responded_at"?: string | null,"responded_by"?: string | null,"response_due"?: string | null,"sqe_comment"?: string | null,"status"?: string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null,"verified_at"?: string | null,"verified_by"?: string | null
+                  }
+                  Update: {
+                    "action_due_date"?: string | null,"action_plan"?: string | null,"action_responsible"?: string | null,"answer_id"?: string | null,"audit_id"?: string,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"classification"?: string,"created_at"?: string,"created_by"?: string | null,"description"?: string,"effectiveness_comment"?: string | null,"id"?: string,"nc_id"?: string | null,"requirement"?: string | null,"responded_at"?: string | null,"responded_by"?: string | null,"response_due"?: string | null,"sqe_comment"?: string | null,"status"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null,"verified_at"?: string | null,"verified_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "findings_answer_id_fkey"
+      columns: ["answer_id"]
+isOneToOne: false
+      referencedRelation: "audit_answers"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "findings_audit_id_fkey"
+      columns: ["audit_id"]
+isOneToOne: false
+      referencedRelation: "audits"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "findings_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "nc_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "findings_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "ncs"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "findings_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"lessons_learned": {
                   Row: {
                     "action": string,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"component_id": string | null,"created_at": string,"created_by": string | null,"failure": string,"failure_mode_code": string | null,"id": string,"keywords": (string)[],"nc_id": string,"root_cause": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
@@ -597,6 +837,12 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "failure_modes"
       referencedColumns: ["code"]
+    },{
+      foreignKeyName: "ncs_finding_id_fkey"
+      columns: ["finding_id"]
+isOneToOne: false
+      referencedRelation: "findings"
+      referencedColumns: ["id"]
     },{
       foreignKeyName: "ncs_origin_code_fkey"
       columns: ["origin_code"]
@@ -1015,11 +1261,23 @@ isOneToOne: false
                 }
           }
           Functions: {
-            "can_access_component":
+            "activate_template":
+{ Args: { "p_template_id": string }; Returns: undefined
+                           },
+"audit_report_visible":
+{ Args: { "p_audit_id": string }; Returns: boolean
+                           },
+"audit_score":
+{ Args: { "p_audit_id": string }; Returns: Json
+                           },
+"can_access_component":
 { Args: { "p_component_id": string }; Returns: boolean
                            },
 "can_access_supplier":
 { Args: { "p_supplier_id": string }; Returns: boolean
+                           },
+"can_execute_audit":
+{ Args: { "p_audit_id": string }; Returns: boolean
                            },
 "can_invite":
 { Args: { "p_role": Database["public"]['Enums']["app_role"],"p_supplier_id"?: string }; Returns: boolean
@@ -1039,6 +1297,9 @@ isOneToOne: false
 "close_8d":
 { Args: { "p_action": string,"p_comment"?: string,"p_failure": string,"p_keywords": (string)[],"p_nc_id": string,"p_root_cause": string }; Returns: string
                            },
+"complete_audit":
+{ Args: { "p_audit_id": string,"p_summary"?: string }; Returns: Json
+                           },
 "convert_nc_to_8d":
 { Args: { "p_nc_id": string }; Returns: undefined
                            },
@@ -1047,6 +1308,9 @@ isOneToOne: false
                            },
 "current_supplier_id":
 { Args: Record<PropertyKey, never>; Returns: string
+                           },
+"generate_audit_plan":
+{ Args: { "p_year": number }; Returns: string
                            },
 "is_internal":
 { Args: Record<PropertyKey, never>; Returns: boolean
@@ -1057,8 +1321,17 @@ isOneToOne: false
 "is_valid_cnpj":
 { Args: { "p_cnpj": string }; Returns: boolean
                            },
+"new_template_version":
+{ Args: { "p_template_id": string }; Returns: string
+                           },
 "normalize_tax_id":
 { Args: { "p_country": string,"p_tax_id": string }; Returns: string
+                           },
+"resolve_audit_status_suggestion":
+{ Args: { "p_apply": boolean,"p_audit_id": string,"p_justification": string }; Returns: undefined
+                           },
+"respond_finding":
+{ Args: { "p_action_plan": string,"p_due": string,"p_finding_id": string,"p_responsible": string }; Returns: undefined
                            },
 "respond_nc_cost":
 { Args: { "p_accept": boolean,"p_cost_id": string,"p_justification": string }; Returns: undefined
@@ -1069,14 +1342,29 @@ isOneToOne: false
 "review_8d_step":
 { Args: { "p_approve": boolean,"p_comment": string,"p_step_id": string }; Returns: undefined
                            },
+"review_audit_plan":
+{ Args: { "p_approve": boolean,"p_comment": string,"p_plan_id": string }; Returns: undefined
+                           },
+"review_finding":
+{ Args: { "p_accept": boolean,"p_comment": string,"p_finding_id": string }; Returns: undefined
+                           },
 "review_simple_nc":
 { Args: { "p_accept": boolean,"p_comment": string,"p_nc_id": string }; Returns: undefined
                            },
 "save_8d_step":
 { Args: { "p_content": Json,"p_step_id": string,"p_submit": boolean }; Returns: undefined
                            },
+"start_audit":
+{ Args: { "p_audit_id": string }; Returns: undefined
+                           },
+"submit_audit_plan":
+{ Args: { "p_plan_id": string }; Returns: undefined
+                           },
 "suggest_8d":
 { Args: { "p_component_id": string,"p_customer_affected": boolean,"p_failure_mode": string,"p_severity": string }; Returns: Json
+                           },
+"verify_finding":
+{ Args: { "p_comment": string,"p_finding_id": string }; Returns: undefined
                            }
           }
           Enums: {

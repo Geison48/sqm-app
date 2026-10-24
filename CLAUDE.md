@@ -35,6 +35,12 @@ Stack obrigatória: Next.js (App Router) + TypeScript, Tailwind + shadcn/ui, nex
 - **NC simples:** SQE define disposição, fornecedor responde a ação, SQE aceita (fecha) ou devolve com comentário.
 - **Custos:** `chargeable = false` = custo interno, invisível ao fornecedor. Contestação → SQE revisa (volta a "lançado"), cancela ou debita com comentário. Custos continuam editáveis após fechar o 8D.
 - **Comentários de NC** podem ser internos; lições aprendidas são internas.
+- **Auditorias (etapa 4):** VDA 6.3: EG = soma ÷ (avaliadas × 10); A ≥ 90, B ≥ 80; rebaixa para B se elemento P2–P7 < 80%, pergunta * = 4 ou pergunta = 0; para C se elemento < 70% ou pergunta * = 0. GWI: Conforme/NC menor/NC maior/Obs/N/A; % = (conformes + observações) ÷ aplicáveis; NC maior limita a B. Tudo configurável em `app_settings`.
+- **Plano anual:** A 12, B 24, C 36 meses (configurável); só vale após aprovação do SQM; auditorias avulsas podem ser criadas a qualquer momento.
+- **Regra 3:** C → "embarque controlado" (mapa configurável); o SQE aplica com justificativa ou descarta.
+- **Fornecedor** vê auditorias agendadas; respostas e achados só depois do relatório emitido. NC maior fecha o achado só com o 8D fechado.
+- **Questionário VDA oficial é licenciado:** nunca incluir o texto da VDA no repositório; importar pela tela.
+- **ExcelJS** no lugar do SheetJS (CDN oficial bloqueado aqui; npm 0.18.5 vulnerável).
 - `current_app_role()` em vez de `current_role()` (palavra reservada do Postgres).
 - `cacheComponents` desligado no Next 16: todas as telas dependem do usuário logado.
 
@@ -51,5 +57,6 @@ Stack obrigatória: Next.js (App Router) + TypeScript, Tailwind + shadcn/ui, nex
 - Server actions devolvem **chaves de tradução** (`"users.errorForbidden"`), nunca texto.
 - Cliente admin (`src/lib/supabase/admin.ts`) ignora RLS: use só depois de checar a permissão com o cliente do usuário (ex.: `rpc("can_invite")`).
 - Componentes shadcn ficam em `src/components/ui`. O site do shadcn está bloqueado neste ambiente; copie do repositório oficial (`apps/v4/registry/new-york-v4/ui`) e traduza textos fixos via namespace `ui`.
+- O `next dev` às vezes mantém versão antiga de server actions/JSON em memória após muitas edições: se algo "não muda", reinicie o dev server e apague `.next/dev`.
 - Depois de mudar o schema: `npm run db:reset && npm run db:types`.
 - Antes de concluir uma etapa: `npm run test:db && npm test && npm run lint && npm run typecheck`.

@@ -18,9 +18,9 @@ import { cn } from "@/lib/utils";
 export type FieldDef = {
   name: string;
   label: string;
-  type?: "text" | "email" | "url" | "tel" | "date" | "number" | "textarea" | "select" | "checkbox";
+  type?: "text" | "email" | "url" | "tel" | "date" | "number" | "textarea" | "select" | "checkbox" | "multicheck";
   required?: boolean;
-  defaultValue?: string | number | boolean | null;
+  defaultValue?: string | number | boolean | string[] | null;
   options?: { value: string; label: string }[];
   placeholder?: string;
   hint?: string;
@@ -128,6 +128,24 @@ function Field({ field: f }: { field: FieldDef }) {
           {f.label}
         </Label>
       </div>
+    );
+  }
+
+  if (f.type === "multicheck") {
+    const selected = new Set(Array.isArray(f.defaultValue) ? f.defaultValue : []);
+    return (
+      <fieldset className={cn("space-y-2", span)}>
+        <legend className="text-sm font-medium">{f.label}</legend>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {(f.options ?? []).map((o) => (
+            <label key={o.value} className="flex items-center gap-2 text-sm">
+              <input type="checkbox" name={f.name} value={o.value} defaultChecked={selected.has(o.value)} className="size-4 accent-primary" />
+              {o.label}
+            </label>
+          ))}
+        </div>
+        {hint}
+      </fieldset>
     );
   }
 

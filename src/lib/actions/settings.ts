@@ -10,7 +10,7 @@ import { formValues, type ActionState } from "@/lib/action-state";
 
 const LOOKUPS = [
   "supplier_statuses", "contact_roles", "qualification_step_types", "nc_origins", "nc_severities", "failure_modes",
-  "dispositions", "containment_locations", "cost_types", "eight_d_disciplines",
+  "dispositions", "containment_locations", "cost_types", "eight_d_disciplines", "audit_types", "audit_scopes",
 ] as const;
 const WITH_TONE = new Set(["supplier_statuses", "nc_severities"]);
 
@@ -76,6 +76,37 @@ export async function saveGeneralSettings(_: ActionState, formData: FormData): P
     set("recurrence_window_days", Math.round(recurrence)),
   ];
   for (const result of await Promise.all(updates)) {
+    if (result.error) return { error: dbErrorKey(result.error) };
+  }
+  revalidatePath("/settings");
+  return { success: "common.saved" };
+}
+
+// Parâmetros das auditorias (frequência, regras VDA/GWI, regra 3, prazo de achado).
+export async function saveAuditSettings(_: ActionState, formData: FormData): Promise<ActionState> {
+  await requireProfile(["sqe", "sqm"]);
+  const v = formValues(formData);
+  const num = (k: string) => Number(v[k]);
+  const on = (k: string) => formData.get(k) === "on";
+  const freq = { A: num("freq_A"), B: num("freq_B"), C: num("freq_C") };
+  const vda = {
+    a_min: num("vda_a_min"), b_min: num("vda_b_min"), element_to_b: num("vda_element_to_b"), element_to_c: num("vda_element_to_c"),
+    star4_to_b: on("vda_star4_to_b"), any0_to_b: on("vda_any0_to_b"), star0_to_c: on("vda_star0_to_c"),
+  };
+  const gwi = { a_min: num("gwi_a_min"), b_min: num("gwi_b_min"), major_nc_limits_to_b: on("gwi_major_nc_limits_to_b") };
+  const numbers = [...Object.values(freq), vda.a_min, vda.b_min, vda.element_to_b, vda.element_to_c, gwi.a_min, gwi.b_min, num("finding_response_days")];
+  if (numbers.some((n) => !Number.isFinite(n) || n <= 0) || vda.b_min > vda.a_min || gwi.b_min > gwi.a_min) {
+    return { error: "settings.invalidNumber" };
+  }
+  const suggestion: Record<string, string> = {};
+  for (const c of ["A", "B", "C"]) if (v[`suggest_${c}`]) suggestion[c] = v[`suggest_${c}`]!;
+
+  const supabase = await createClient();
+  const set = (key: string, value: unknown) => supabase.from("app_settings").update({ value: value as never }).eq("key", key);
+  for (const result of await Promise.all([
+    set("audit_frequency_months", freq), set("vda_rules", vda), set("gwi_rules", gwi),
+    set("audit_status_suggestion", suggestion), set("finding_response_days", Math.round(num("finding_response_days"))),
+  ])) {
     if (result.error) return { error: dbErrorKey(result.error) };
   }
   revalidatePath("/settings");

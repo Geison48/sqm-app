@@ -219,3 +219,86 @@ update public.eight_d_steps s
    set due_at = n.opened_at + make_interval(hours => d.deadline_hours)
   from public.ncs n, public.eight_d_disciplines d
  where s.nc_id = n.id and d.code = s.discipline and n.id = '60000000-0000-4000-8000-000000000003';
+
+-- -----------------------------------------------------------------------------
+-- Etapa 4: modelos, plano 2026 e auditorias
+-- Perguntas de EXEMPLO escritas para teste. O questionário oficial VDA 6.3 é
+-- licenciado pela VDA QMC e deve ser importado pela tela de modelos.
+-- -----------------------------------------------------------------------------
+insert into public.audit_templates (id, code, name_pt, name_en, method, version, status, notes, created_by) values
+  ('70000000-0000-4000-8000-000000000001', 'GWI-PROC', 'Auditoria de processo GWI', 'GWI process audit', 'gwi', 1, 'draft',
+   'Modelo de exemplo.', '00000000-0000-4000-8000-000000000001'),
+  ('70000000-0000-4000-8000-000000000002', 'VDA63-EX', 'VDA 6.3 (exemplo de estrutura)', 'VDA 6.3 (structure example)', 'vda63', 1, 'draft',
+   'Perguntas de exemplo — importar o questionário licenciado.', '00000000-0000-4000-8000-000000000001');
+
+insert into public.audit_template_items (template_id, element_code, element_title_pt, element_title_en, item_code, question_pt, question_en, is_star, scope_code, sort_order, created_by)
+select '70000000-0000-4000-8000-000000000001', e, tp, te, c, qp, qe, false, sc, so, '00000000-0000-4000-8000-000000000001'
+from (values
+  ('G', 'Gestão', 'Management', 'G.1', 'Há indicadores de qualidade definidos e analisados mensalmente?', 'Are quality KPIs defined and reviewed monthly?', null, 10),
+  ('G', 'Gestão', 'Management', 'G.2', 'As ações corretivas de NCs anteriores estão implementadas?', 'Are corrective actions from previous NCs implemented?', null, 20),
+  ('G', 'Gestão', 'Management', 'G.3', 'Os operadores têm qualificação registrada para a operação?', 'Are operators qualified and recorded for the operation?', null, 30),
+  ('R', 'Recebimento', 'Receiving', 'R.1', 'Os certificados de material são conferidos no recebimento?', 'Are material certificates checked at receiving?', 'raw_material', 40),
+  ('R', 'Recebimento', 'Receiving', 'R.2', 'Materiais com validade (resina, adesivo) são controlados por FIFO e prazo?', 'Are shelf-life materials (resin, adhesive) controlled by FIFO and expiry?', 'raw_material', 50),
+  ('I', 'Infusão', 'Infusion', 'I.1', 'Tempo e temperatura de infusão são registrados por peça?', 'Are infusion time and temperature recorded per part?', 'infusion', 60),
+  ('I', 'Infusão', 'Infusion', 'I.2', 'O teste de vácuo é feito e registrado antes da infusão?', 'Is the vacuum test performed and recorded before infusion?', 'infusion', 70),
+  ('P', 'Reparos', 'Repairs', 'P.1', 'Reparos seguem procedimento aprovado pela GW?', 'Do repairs follow a GW-approved procedure?', 'repairs', 80),
+  ('P', 'Reparos', 'Repairs', 'P.2', 'Peças em reparo são identificadas (etiqueta amarela)?', 'Are parts under repair identified (yellow tag)?', 'repairs', 90),
+  ('F', 'Inspeção final', 'Final inspection', 'F.1', 'O plano de inspeção vigente está disponível no posto?', 'Is the current inspection plan available at the station?', 'final_inspection', 100),
+  ('F', 'Inspeção final', 'Final inspection', 'F.2', 'Os instrumentos de medição estão calibrados?', 'Are measuring instruments calibrated?', 'final_inspection', 110)
+) v(e, tp, te, c, qp, qe, sc, so);
+
+insert into public.audit_template_items (template_id, element_code, element_title_pt, element_title_en, item_code, question_pt, question_en, is_star, scope_code, sort_order, created_by)
+select '70000000-0000-4000-8000-000000000002', e, tp, te, c, qp, qe, st, null, so, '00000000-0000-4000-8000-000000000001'
+from (values
+  ('P2', 'Gestão do projeto', 'Project management', '2.1', '[Exemplo] Existe gestão de projeto com responsáveis definidos?', '[Example] Is there project management with defined responsibilities?', false, 10),
+  ('P2', 'Gestão do projeto', 'Project management', '2.2', '[Exemplo] Os recursos do projeto estão planejados?', '[Example] Are project resources planned?', false, 20),
+  ('P3', 'Planejamento do produto e processo', 'Product and process planning', '3.1', '[Exemplo] Os requisitos do cliente foram analisados?', '[Example] Have customer requirements been analysed?', true, 30),
+  ('P3', 'Planejamento do produto e processo', 'Product and process planning', '3.2', '[Exemplo] A viabilidade foi avaliada?', '[Example] Has feasibility been assessed?', false, 40),
+  ('P4', 'Realização do produto e processo', 'Product and process realisation', '4.1', '[Exemplo] A FMEA de processo está atualizada?', '[Example] Is the process FMEA up to date?', true, 50),
+  ('P4', 'Realização do produto e processo', 'Product and process realisation', '4.2', '[Exemplo] O plano de controle está liberado?', '[Example] Is the control plan released?', false, 60),
+  ('P5', 'Gestão de fornecedores', 'Supplier management', '5.1', '[Exemplo] Os subfornecedores são avaliados?', '[Example] Are sub-suppliers assessed?', false, 70),
+  ('P5', 'Gestão de fornecedores', 'Supplier management', '5.2', '[Exemplo] Os requisitos são desdobrados aos subfornecedores?', '[Example] Are requirements cascaded to sub-suppliers?', true, 80),
+  ('P6', 'Análise do processo / produção', 'Process analysis / production', '6.1', '[Exemplo] Os parâmetros de processo estão definidos e monitorados?', '[Example] Are process parameters defined and monitored?', true, 90),
+  ('P6', 'Análise do processo / produção', 'Process analysis / production', '6.2', '[Exemplo] Produtos não conformes são segregados?', '[Example] Are nonconforming products segregated?', true, 100),
+  ('P6', 'Análise do processo / produção', 'Process analysis / production', '6.3', '[Exemplo] Os meios de medição são adequados?', '[Example] Are measuring means adequate?', false, 110),
+  ('P6', 'Análise do processo / produção', 'Process analysis / production', '6.4', '[Exemplo] Embalagem e identificação estão corretas?', '[Example] Are packaging and identification correct?', false, 120),
+  ('P7', 'Suporte ao cliente', 'Customer care', '7.1', '[Exemplo] Reclamações são tratadas com método estruturado?', '[Example] Are complaints handled with a structured method?', true, 130),
+  ('P7', 'Suporte ao cliente', 'Customer care', '7.2', '[Exemplo] Os requisitos de garantia são atendidos?', '[Example] Are warranty requirements met?', false, 140)
+) v(e, tp, te, c, qp, qe, st, so);
+
+-- Ações feitas como os usuários reais (as funções checam permissão por auth.uid()).
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-000000000001","role":"authenticated"}', false);
+select public.activate_template('70000000-0000-4000-8000-000000000001');
+select public.activate_template('70000000-0000-4000-8000-000000000002');
+
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-000000000002","role":"authenticated"}', false);
+select public.generate_audit_plan(2026);
+select public.submit_audit_plan((select id from public.audit_plans where year = 2026));
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-000000000001","role":"authenticated"}', false);
+select public.review_audit_plan((select id from public.audit_plans where year = 2026), true, null);
+
+-- Auditoria do A (VDA 6.3) concluída em setembro, com dois achados.
+select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-000000000002","role":"authenticated"}', false);
+update public.audits set template_id = '70000000-0000-4000-8000-000000000002', planned_start = '2026-09-15', planned_end = '2026-09-16',
+       scope_codes = '{infusion,final_inspection}', title = 'Auditoria de processo anual — pás'
+ where supplier_id = '10000000-0000-4000-8000-00000000000a';
+select public.start_audit(id) from public.audits where supplier_id = '10000000-0000-4000-8000-00000000000a';
+update public.audit_answers set score = case item_code when '4.1' then 6 when '6.2' then 4 when '6.3' then 6 when '2.2' then 8 else 10 end,
+       comment = case item_code when '6.2' then 'Peças NOK sem identificação no pátio.' else null end
+ where audit_id = (select id from public.audits where supplier_id = '10000000-0000-4000-8000-00000000000a');
+insert into public.findings (audit_id, answer_id, classification, description, requirement)
+select a.id, x.id, 'minor_nc', 'Peças não conformes no pátio sem etiqueta vermelha.', 'VDA 6.3 6.2'
+  from public.audits a join public.audit_answers x on x.audit_id = a.id and x.item_code = '6.2'
+ where a.supplier_id = '10000000-0000-4000-8000-00000000000a';
+insert into public.findings (audit_id, classification, description)
+select id, 'improvement', 'Digitalizar o registro de temperatura da cura.' from public.audits where supplier_id = '10000000-0000-4000-8000-00000000000a';
+select public.complete_audit(id, 'Processo estável; atenção à segregação de não conformes.')
+  from public.audits where supplier_id = '10000000-0000-4000-8000-00000000000a';
+update public.audits set actual_start = '2026-09-15', actual_end = '2026-09-16'
+ where supplier_id = '10000000-0000-4000-8000-00000000000a';
+
+-- Auditoria do C (GWI) agendada para novembro.
+update public.audits set template_id = '70000000-0000-4000-8000-000000000001', planned_start = '2026-11-10', planned_end = '2026-11-11',
+       scope_codes = '{raw_material,final_inspection}'
+ where supplier_id = '10000000-0000-4000-8000-00000000000c';
+select set_config('request.jwt.claims', '', false);
