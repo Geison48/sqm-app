@@ -207,4 +207,17 @@ describe("isolamento entre fornecedores (RLS)", () => {
     const review = await userA.rpc("review_waiver", { p_waiver_id: waiver![0]!.id, p_approve: true, p_comment: null } as never);
     expect(review.error?.message).toBe("forbidden");
   });
+  it("Etapa 6: pendências, fila de e-mail e rotinas não vazam nem são disparadas pelo fornecedor", async () => {
+    const { data: mine } = await userA.rpc("my_pending_items");
+    expect(mine!.length).toBeGreaterThan(0);
+    expect(mine!.every((i) => i.supplier_id === SUPPLIER_A)).toBe(true);
+    expect((await userA.from("email_outbox").select("id")).data).toEqual([]);
+    expect((await sqe.from("email_outbox").select("id")).data).toEqual([]);
+    expect((await userA.from("escalation_rules").select("id")).data).toEqual([]);
+    for (const fn of ["run_daily_jobs", "claim_email_batch", "export_tables"] as const) {
+      const { error } = await userA.rpc(fn as never);
+      expect(error, fn).not.toBeNull();
+    }
+    expect((await sqe.rpc("export_tables")).error?.message).toBe("forbidden");
+  });
 });

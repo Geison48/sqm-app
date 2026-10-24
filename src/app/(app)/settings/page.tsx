@@ -12,7 +12,9 @@ import { createClient } from "@/lib/supabase/server";
 import {
   getContactRoles, getLookup, getQualificationStepTypes, getSupplierStatuses, type LookupItem, type StatusItem,
 } from "@/lib/lookups";
-import { saveAuditSettings, saveGeneralSettings, saveLookupItem } from "@/lib/actions/settings";
+import {
+  saveAuditSettings, saveEscalationRule, saveGeneralSettings, saveLookupItem, saveNotificationSettings,
+} from "@/lib/actions/settings";
 
 const TONES = ["neutral", "success", "warning", "danger", "info"] as const;
 
@@ -37,6 +39,24 @@ export default async function SettingsPage() {
       getLookup("nc_origins"), getLookup("nc_severities"), getLookup("failure_modes"), getLookup("dispositions"),
       getLookup("containment_locations"), getLookup("cost_types"), getLookup("eight_d_disciplines"),
     ]);
+  const tr = await getTranslations("roles");
+  const [notificationEvents, { data: rules }, { data: notifySettings }] = await Promise.all([
+    getLookup("notification_events"),
+    supabase.from("escalation_rules").select("*").is("cancelled_at", null).order("days_after_due"),
+    supabase.from("app_settings").select("key, value").in("key", ["due_soon_days", "cost_response_days", "daily_digest"]),
+  ]);
+  const nset = (key: string) => notifySettings?.find((s) => s.key === key)?.value;
+  const digest = (nset("daily_digest") ?? { enabled: true, roles: ["sqe"] }) as { enabled: boolean; roles: string[] };
+  const roleLabel = (code: string) => roles.find((r) => r.code === code)?.label_pt ?? code;
+  const ruleFields = (r?: NonNullable<typeof rules>[number]): FieldDef[] => [
+    { name: "days_after_due", label: t("daysAfterDue"), type: "number", required: true, span: 1, defaultValue: r?.days_after_due ?? 14 },
+    { name: "active", label: t("active"), type: "checkbox", span: 1, defaultValue: r?.active ?? true },
+    { name: "notify_supplier_users", label: t("notifySupplierUsers"), type: "checkbox", defaultValue: r?.notify_supplier_users },
+    { name: "notify_responsible_sqe", label: t("notifyResponsibleSqe"), type: "checkbox", defaultValue: r?.notify_responsible_sqe },
+    { name: "notify_sqm", label: t("notifySqm"), type: "checkbox", defaultValue: r?.notify_sqm },
+    { name: "contact_role_codes", label: t("contactRolesToNotify"), type: "multicheck", defaultValue: r?.contact_role_codes ?? [],
+      options: roles.map((x) => ({ value: x.code, label: x.label_pt })) },
+  ];
   const [auditTypes, auditScopes, inspectionTypes, characteristicTypes, { data: auditSettings }] = await Promise.all([
     getLookup("audit_types"), getLookup("audit_scopes"), getLookup("inspection_types"), getLookup("characteristic_types"),
     supabase.from("app_settings").select("key, value").in("key", [
@@ -160,6 +180,80 @@ export default async function SettingsPage() {
       <LookupSection table="audit_scopes" title={t("auditScopes")} items={auditScopes} />
       <LookupSection table="inspection_types" title={t("inspectionTypes")} items={inspectionTypes} />
       <LookupSection table="characteristic_types" title={t("characteristicTypes")} items={characteristicTypes} />
+
+      <section className="space-y-3 rounded-lg border p-4">
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-lg font-medium">{t("notificationsSection")}</h2>
+          <RecordDialog
+            trigger={<Button variant="outline" size="sm">{tc("edit")}</Button>}
+            title={t("notificationsSection")}
+            action={saveNotificationSettings}
+            fields={[
+              { name: "due_soon_days", label: t("dueSoonDays"), type: "number", required: true, span: 1,
+                hint: t("dueSoonDaysHint"), defaultValue: Number(nset("due_soon_days") ?? 2) },
+              { name: "cost_response_days", label: t("costResponseDays"), type: "number", required: true, span: 1,
+                defaultValue: Number(nset("cost_response_days") ?? 10) },
+              { name: "digest_enabled", label: t("digestEnabled"), type: "checkbox", defaultValue: digest.enabled },
+              { name: "digest_roles", label: t("digestRoles"), type: "multicheck", defaultValue: digest.roles,
+                options: (["sqe", "sqm"] as const).map((r) => ({ value: r, label: tr(r) })) },
+            ]}
+          />
+        </div>
+        <dl className="grid gap-4 text-sm sm:grid-cols-3">
+          <div><dt className="text-xs text-muted-foreground uppercase">{t("dueSoonDays")}</dt><dd>{String(nset("due_soon_days") ?? 2)}</dd></div>
+          <div><dt className="text-xs text-muted-foreground uppercase">{t("costResponseDays")}</dt><dd>{String(nset("cost_response_days") ?? 10)}</dd></div>
+          <div><dt className="text-xs text-muted-foreground uppercase">{t("digestRoles")}</dt>
+            <dd>{digest.enabled ? digest.roles.map((r) => tr(r as "sqe")).join(", ") || t("none") : tc("no")}</dd></div>
+        </dl>
+      </section>
+
+      <section className="space-y-3">
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <h2 className="text-lg font-medium">{t("escalationRules")}</h2>
+            <p className="text-sm text-muted-foreground">{t("escalationHint")}</p>
+          </div>
+          <RecordDialog trigger={<AddButton label={t("addRule")} />} title={t("addRule")} fields={ruleFields()} action={saveEscalationRule} />
+        </div>
+        <div className="rounded-lg border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>{t("daysAfterDue")}</TableHead>
+                <TableHead>{t("recipients")}</TableHead>
+                <TableHead className="w-0" />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {(rules ?? []).map((r) => (
+                <TableRow key={r.id} className={r.active ? undefined : "opacity-60"}>
+                  <TableCell className="whitespace-nowrap">
+                    {t("level", { days: r.days_after_due })}
+                    {!r.active && <ToneBadge tone="neutral" className="ml-2">{t("inactive")}</ToneBadge>}
+                  </TableCell>
+                  <TableCell className="whitespace-normal">
+                    {[
+                      r.notify_supplier_users && t("notifySupplierUsers"),
+                      r.notify_responsible_sqe && t("notifyResponsibleSqe"),
+                      r.notify_sqm && t("notifySqm"),
+                      ...r.contact_role_codes.map((c: string) => `${t("contactPrefix")}: ${roleLabel(c)}`),
+                    ].filter(Boolean).join(" · ")}
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap justify-end">
+                      <RecordDialog trigger={<EditButton label={t("editRule")} />} title={t("editRule")} fields={ruleFields(r)}
+                        hidden={{ id: r.id }} action={saveEscalationRule} />
+                      <CancelRecordButton table="escalation_rules" id={r.id} path="/settings" />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </section>
+      <LookupSection table="notification_events" title={t("notificationEvents")} items={notificationEvents} withEmail fixed
+        description={t("notificationEventsHint")} />
       <p className="flex items-center gap-1 text-xs text-muted-foreground">
         <LockIcon className="size-3" /> {t("systemHint")}
       </p>
@@ -170,11 +264,11 @@ export default async function SettingsPage() {
 type LookupTable =
   | "supplier_statuses" | "contact_roles" | "qualification_step_types" | "nc_origins" | "nc_severities" | "failure_modes"
   | "dispositions" | "containment_locations" | "cost_types" | "eight_d_disciplines" | "audit_types" | "audit_scopes"
-  | "inspection_types" | "characteristic_types";
-type Item = (LookupItem | StatusItem) & { deadline_hours?: number };
+  | "inspection_types" | "characteristic_types" | "notification_events";
+type Item = (LookupItem | StatusItem) & { deadline_hours?: number; send_email?: boolean };
 
 async function LookupSection({
-  table, title, items, withTone, withDeadline, fixed,
+  table, title, items, withTone, withDeadline, withEmail, fixed, description,
 }: {
   table: LookupTable;
   title: string;
@@ -184,8 +278,12 @@ async function LookupSection({
   withDeadline?: boolean;
   /** Lista fechada: sem adicionar itens. */
   fixed?: boolean;
+  /** Eventos de notificação: liga/desliga o e-mail. */
+  withEmail?: boolean;
+  description?: string;
 }) {
   const t = await getTranslations("settings");
+  const tc = await getTranslations("common");
   const fields = (item?: Item): FieldDef[] => {
     const list: FieldDef[] = [];
     if (!item) list.push({ name: "code", label: t("code"), required: true, hint: t("codeHint") });
@@ -199,6 +297,9 @@ async function LookupSection({
       list.push({ name: "deadline_hours", label: t("deadlineHours"), type: "number", required: true, span: 1,
         defaultValue: item?.deadline_hours });
     }
+    if (withEmail) {
+      list.push({ name: "send_email", label: t("sendEmail"), type: "checkbox", defaultValue: item?.send_email ?? true });
+    }
     if (withTone) {
       list.push({ name: "tone", label: t("tone"), type: "select", required: true, span: 1,
         options: TONES.map((x) => ({ value: x, label: t(`tones.${x}`) })),
@@ -209,7 +310,10 @@ async function LookupSection({
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-lg font-medium">{title}</h2>
+        <div>
+          <h2 className="text-lg font-medium">{title}</h2>
+          {description && <p className="text-sm text-muted-foreground">{description}</p>}
+        </div>
         {!fixed && (
           <RecordDialog trigger={<AddButton label={t("addItem")} />} title={`${title} — ${t("addItem")}`}
             fields={fields()} hidden={{ table }} action={saveLookupItem} />
@@ -223,6 +327,7 @@ async function LookupSection({
               <TableHead>{t("labelPt")}</TableHead>
               <TableHead className="hidden sm:table-cell">{t("labelEn")}</TableHead>
               {withDeadline && <TableHead>{t("deadlineHours")}</TableHead>}
+              {withEmail && <TableHead>{t("email")}</TableHead>}
               <TableHead className="w-0" />
             </TableRow>
           </TableHeader>
@@ -240,11 +345,12 @@ async function LookupSection({
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">{item.label_en}</TableCell>
                 {withDeadline && <TableCell>{item.deadline_hours} h</TableCell>}
+                {withEmail && <TableCell>{item.send_email ? <ToneBadge tone="success">{tc("yes")}</ToneBadge> : <ToneBadge tone="neutral">{tc("no")}</ToneBadge>}</TableCell>}
                 <TableCell>
                   <div className="flex flex-wrap justify-end">
                     <RecordDialog trigger={<EditButton label={t("editItem")} />} title={`${title} — ${t("editItem")}`}
                       fields={fields(item)} hidden={{ table, id: item.id }} action={saveLookupItem} />
-                    {!item.is_system && table !== "eight_d_disciplines" && (
+                    {!item.is_system && table !== "eight_d_disciplines" && table !== "notification_events" && (
                       <CancelRecordButton table={table} id={item.id} path="/settings" />
                     )}
                   </div>

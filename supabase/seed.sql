@@ -361,3 +361,12 @@ values ('92000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-0000000
 select set_config('request.jwt.claims', '{"sub":"00000000-0000-4000-8000-000000000003","role":"authenticated"}', false);
 select public.review_waiver('92000000-0000-4000-8000-000000000001', true, 'Aprovado conforme análise de engenharia.');
 select set_config('request.jwt.claims', '', false);
+
+-- =============================================================================
+-- Etapa 6: pg_cron → Edge Function "notifications" (somente ambiente local).
+-- A chave abaixo é a chave de demonstração pública do Supabase local.
+-- Em produção, crie os dois segredos no Vault com os valores do projeto (README).
+-- =============================================================================
+select vault.create_secret('http://kong:8000', 'project_url');
+select vault.create_secret('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU',
+                           'service_role_key');

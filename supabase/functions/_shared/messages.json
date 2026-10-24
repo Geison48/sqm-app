@@ -1,0 +1,144 @@
+{
+  "pt-BR": {
+    "notifications": {
+      "events": {
+        "certificate_expiring": "O certificado {certificate} de {supplier} vence em {days, plural, one {# dia} other {# dias}} ({validUntil}).",
+        "certificate_expired": "O certificado {certificate} de {supplier} venceu em {validUntil}.",
+        "certificate_updated_by_supplier": "{supplier} atualizou o certificado {certificate} (validade: {validUntil}).",
+        "nc_opened": "Nova NC {number} aberta para {supplier}: {title}.",
+        "nc_converted_8d": "A NC {number} foi convertida em 8D.",
+        "eight_d_submitted": "{supplier} enviou a {discipline} da NC {number}.",
+        "eight_d_approved": "A {discipline} da NC {number} foi aprovada.",
+        "eight_d_rejected": "A {discipline} da NC {number} foi reprovada. Veja o comentário do SQE.",
+        "simple_nc_responded": "{supplier} respondeu a NC {number}.",
+        "simple_nc_returned": "A resposta da NC {number} foi devolvida pelo SQE.",
+        "nc_closed": "A NC {number} foi fechada.",
+        "nc_cost_launched": "Custo lançado na NC {number}: {description}.",
+        "nc_cost_accepted": "{supplier} aceitou o custo da NC {number}: {description}.",
+        "nc_cost_contested": "{supplier} contestou o custo da NC {number}: {description}.",
+        "audit_plan_submitted": "O plano de auditorias {year} aguarda sua aprovação.",
+        "audit_scheduled": "Auditoria {number} agendada para {date}.",
+        "audit_report_available": "Relatório da auditoria {number} disponível (classificação {classification}).",
+        "finding_responded": "{supplier} respondeu um achado da auditoria {number}.",
+        "finding_action_accepted": "Plano de ação aceito na auditoria {number}.",
+        "finding_returned": "Plano de ação devolvido na auditoria {number}.",
+        "waiver_requested": "{supplier} solicitou a concessão {number}.",
+        "waiver_approved": "A concessão {number} foi aprovada.",
+        "waiver_rejected": "A concessão {number} foi reprovada.",
+        "inspection_rejected": "Inspeção {number}: {count} peça(s) reprovada(s).",
+        "deadline_overdue": "{daysLate, plural, =0 {Vence hoje} one {Atrasado há # dia} other {Atrasado há # dias}}: {kind, select, eight_d_step {{detail} da NC {ref}} simple_nc {resposta da NC {ref}} finding {plano de ação da auditoria {ref}} nc_cost {resposta ao custo da NC {ref}} other {{ref}}} — {supplier} (prazo {due}).",
+        "deadline_soon": "{days, plural, one {Falta # dia} other {Faltam # dias}} para o prazo: {kind, select, eight_d_step {{detail} da NC {ref}} simple_nc {resposta da NC {ref}} finding {plano de ação da auditoria {ref}} nc_cost {resposta ao custo da NC {ref}} other {{ref}}} — {supplier} (prazo {due}).",
+        "daily_digest": "Resumo diário de {date}: {count} pendências."
+      }
+    },
+    "pending": {
+      "groups": {
+        "review": "Aguardando sua análise",
+        "overdue": "Atrasados",
+        "due": "A entregar",
+        "week": "Agenda",
+        "expiring": "Vencimentos"
+      },
+      "kinds": {
+        "eight_d_step": "Disciplina do 8D",
+        "simple_nc": "Resposta de NC simples",
+        "finding": "Plano de ação de achado",
+        "nc_cost": "Resposta a custo de NC",
+        "eight_d_review": "D enviada para análise",
+        "simple_nc_review": "NC simples respondida",
+        "effectiveness_check": "Verificação de eficácia do 8D",
+        "finding_review": "Plano de ação para analisar",
+        "finding_verify": "Achado para verificar eficácia",
+        "waiver_review": "Concessão para decidir",
+        "cost_contested": "Custo contestado",
+        "audit": "Auditoria",
+        "inspection": "Inspeção em andamento",
+        "certificate": "Certificado",
+        "waiver": "Concessão vencendo"
+      }
+    },
+    "emails": {
+      "brand": "SQM App",
+      "greeting": "Olá, {name}!",
+      "open": "Abrir no SQM App",
+      "footerUser": "Você recebe estes e-mails porque tem acesso ao SQM App. Para parar, desligue os e-mails na tela Notificações.",
+      "footerContact": "Você recebeu este aviso como contato de {supplier} cadastrado no SQM App.",
+      "escalationContact": "Pedimos seu apoio para regularizar esta pendência com o time responsável.",
+      "digestSubject": "Resumo diário: {count, plural, one {# pendência} other {# pendências}}",
+      "digestIntro": "Suas pendências em {date}:",
+      "due": "prazo {date}",
+      "since": "desde {date}"
+    }
+  },
+  "en": {
+    "notifications": {
+      "events": {
+        "certificate_expiring": "Certificate {certificate} of {supplier} expires in {days, plural, one {# day} other {# days}} ({validUntil}).",
+        "certificate_expired": "Certificate {certificate} of {supplier} expired on {validUntil}.",
+        "certificate_updated_by_supplier": "{supplier} updated certificate {certificate} (valid until: {validUntil}).",
+        "nc_opened": "New NC {number} opened for {supplier}: {title}.",
+        "nc_converted_8d": "NC {number} was converted to 8D.",
+        "eight_d_submitted": "{supplier} submitted {discipline} of NC {number}.",
+        "eight_d_approved": "{discipline} of NC {number} was approved.",
+        "eight_d_rejected": "{discipline} of NC {number} was rejected. See the SQE comment.",
+        "simple_nc_responded": "{supplier} answered NC {number}.",
+        "simple_nc_returned": "The response to NC {number} was returned by the SQE.",
+        "nc_closed": "NC {number} was closed.",
+        "nc_cost_launched": "Cost recorded on NC {number}: {description}.",
+        "nc_cost_accepted": "{supplier} accepted the cost of NC {number}: {description}.",
+        "nc_cost_contested": "{supplier} disputed the cost of NC {number}: {description}.",
+        "audit_plan_submitted": "The {year} audit plan awaits your approval.",
+        "audit_scheduled": "Audit {number} scheduled for {date}.",
+        "audit_report_available": "Report of audit {number} available (classification {classification}).",
+        "finding_responded": "{supplier} answered a finding of audit {number}.",
+        "finding_action_accepted": "Action plan accepted in audit {number}.",
+        "finding_returned": "Action plan returned in audit {number}.",
+        "waiver_requested": "{supplier} requested waiver {number}.",
+        "waiver_approved": "Waiver {number} was approved.",
+        "waiver_rejected": "Waiver {number} was rejected.",
+        "inspection_rejected": "Inspection {number}: {count} part(s) rejected.",
+        "deadline_overdue": "{daysLate, plural, =0 {Due today} one {# day overdue} other {# days overdue}}: {kind, select, eight_d_step {{detail} of NC {ref}} simple_nc {answer to NC {ref}} finding {action plan for audit {ref}} nc_cost {answer to the cost on NC {ref}} other {{ref}}} — {supplier} (due {due}).",
+        "deadline_soon": "{days, plural, one {# day left} other {# days left}} until the deadline: {kind, select, eight_d_step {{detail} of NC {ref}} simple_nc {answer to NC {ref}} finding {action plan for audit {ref}} nc_cost {answer to the cost on NC {ref}} other {{ref}}} — {supplier} (due {due}).",
+        "daily_digest": "Daily digest for {date}: {count} pending items."
+      }
+    },
+    "pending": {
+      "groups": {
+        "review": "Waiting for your review",
+        "overdue": "Overdue",
+        "due": "To deliver",
+        "week": "Schedule",
+        "expiring": "Expirations"
+      },
+      "kinds": {
+        "eight_d_step": "8D discipline",
+        "simple_nc": "Simple NC answer",
+        "finding": "Finding action plan",
+        "nc_cost": "NC cost answer",
+        "eight_d_review": "D submitted for review",
+        "simple_nc_review": "Simple NC answered",
+        "effectiveness_check": "8D effectiveness check",
+        "finding_review": "Action plan to review",
+        "finding_verify": "Finding to verify",
+        "waiver_review": "Waiver to decide",
+        "cost_contested": "Contested cost",
+        "audit": "Audit",
+        "inspection": "Inspection in progress",
+        "certificate": "Certificate",
+        "waiver": "Waiver expiring"
+      }
+    },
+    "emails": {
+      "brand": "SQM App",
+      "greeting": "Hello, {name}!",
+      "open": "Open in SQM App",
+      "footerUser": "You receive these e-mails because you have access to SQM App. To stop, turn e-mails off on the Notifications page.",
+      "footerContact": "You received this notice as a contact of {supplier} registered in SQM App.",
+      "escalationContact": "We kindly ask for your support to resolve this pending item with the responsible team.",
+      "digestSubject": "Daily digest: {count, plural, one {# pending item} other {# pending items}}",
+      "digestIntro": "Your pending items on {date}:",
+      "due": "due {date}",
+      "since": "since {date}"
+    }
+  }
+}

@@ -13,7 +13,7 @@ Sistema de gestão da qualidade de fornecedores (auditorias, inspeções, NC/8D)
 | 3 | M4 NC e 8D: abertura com sugestão de 8D, NC simples, 8D por disciplina com versões, contenção, RCA (Ishikawa, 5 Porquês 3 pernas, É/Não é), prazos, custos com aceite/contestação, comentários internos, fechamento com eficácia e lição aprendida, PDF PT/EN/bilíngue | ✅ |
 | 4 | M2 Auditorias: modelos versionados (VDA 6.3 e GWI) com importação Excel/CSV, plano anual pela criticidade com aprovação do SQM, calendário e Gantt, execução item a item no celular com fotos, cálculo de nota e classificação A/B/C, achados (NC maior → 8D), resposta do fornecedor, verificação de eficácia, sugestão de status, relatório PDF PT/EN/bilíngue | ✅ |
 | 5 | M3 Inspeções: planos de inspeção por componente (limites, 100% ou AQL manual), SN/lotes com etiqueta verde/amarela/vermelha (regra 9), autoinspeção do fornecedor, inspeção do SQE e de recebimento, NOK automático pelos limites, fotos por característica, NC pré-preenchida a partir do NOK, reparos com fotos antes/depois, rejeição final, concessões/desvios que expiram sozinhos (regra 10), períodos de embarque controlado, linha do tempo do SN | ✅ |
-| 6 | M5 Notificações + M10 Exportação | — |
+| 6 | M5 Notificações e escalonamento: e-mail por evento no idioma do destinatário (Resend; Mailpit no local), fila `email_outbox`, prazo chegando, escalonamento configurável (vencimento → fornecedor; +3 → SQE e contato de Qualidade; +7 → SQM e contato de Direção, um aviso por nível, regra 8), resumo diário do SQE, preferência de e-mail; "Minhas pendências" por perfil com carga por SQE. M10: ZIP fornecedor › componente › SN › tipo com índice em PDF e relatórios (NC, auditoria, inspeção); base completa em JSON/CSV (só SQM) | ✅ |
 | 7 | PWA offline, revisão e entrega | — |
 
 ---
@@ -45,13 +45,19 @@ Em `.env.local`, use `API_URL` → `NEXT_PUBLIC_SUPABASE_URL`, `PUBLISHABLE_KEY`
 
 O seed também traz planos de inspeção para GW-BLD-0001 e GW-CST-0101, as pás BLD-2026-0430/0431 (verdes), 0432 (amarela, em reparo) e 0433 (aguardando autoinspeção), o lote LOT-HUB-2610 do B, uma concessão do A aguardando decisão e uma aprovada do B. Também traz dois modelos de checklist ativos (GWI e VDA 6.3 de exemplo), o plano 2026 aprovado, a auditoria VDA do fornecedor A concluída (88,6% → B) com dois achados e a auditoria GWI do C agendada. Também traz 3 NCs: um 8D do fornecedor A em andamento (D0–D2 aprovadas, D3 com o SQE, D4 em rascunho, com custo cobrável, custo interno e comentário interno), uma NC simples do fornecedor B e um 8D crítico atrasado. Também traz 3 fornecedores (A homologado, B homologado condicional, C em qualificação), 5 componentes, 3 normas com requisitos e certificados com validade relativa à data de hoje (vencendo em 25 e 55 dias e um já vencido), para exercitar os alertas.
 
-Os e-mails enviados localmente (convites, redefinição de senha) **não saem para a internet**: abra o Mailpit em http://127.0.0.1:54324 para vê-los.
+Os e-mails enviados localmente (convites, redefinição de senha e os avisos do app) **não saem para a internet**: abra o Mailpit em http://127.0.0.1:54324 para vê-los. No ambiente local, o pg_cron já chama a Edge Function `notifications` (os segredos do Vault vêm do seed). Para rodar a rotina diária na hora:
+
+```bash
+curl -X POST http://127.0.0.1:54321/functions/v1/notifications \
+  -H "Authorization: Bearer $(npx supabase status -o env | grep ^SERVICE_ROLE_KEY | cut -d'"' -f2)" \
+  -d '{"task":"daily"}'
+```
 
 ### Testes
 
 ```bash
 npm run test:db     # pgTAP: RLS, isolamento A×B, proibição de DELETE, audit_log (dentro do banco)
-npm test            # Vitest: isolamento A×B pela API e Storage + paridade das traduções
+npm test            # Vitest: isolamento A×B pela API e Storage, paridade das traduções e e-mails
 npm run lint
 npm run typecheck
 ```
@@ -70,7 +76,7 @@ Os testes usam os dados do seed. Rode `npm run db:reset` antes se o banco tiver 
 | `NEXT_PUBLIC_SITE_URL` | Vercel + local | URL pública do app, ex.: `https://sqm-app.vercel.app`. Usada nos links de e-mail. |
 | `NEXT_PUBLIC_AUTH_AZURE_ENABLED` | Vercel + local | `true` mostra o botão "Entrar com Microsoft". Ligue só depois de configurar o provedor Azure. |
 
-Variáveis que entram nas próximas etapas: `RESEND_API_KEY` e `EMAIL_FROM` (etapa 6).
+Os e-mails do app (eventos, escalonamento, resumo diário) saem pela Edge Function `notifications`, que tem os próprios segredos no Supabase (veja o passo 7 do deploy): `RESEND_API_KEY`, `EMAIL_FROM` e `SITE_URL`.
 
 ---
 
@@ -97,6 +103,18 @@ Variáveis que entram nas próximas etapas: `RESEND_API_KEY` e `EMAIL_FROM` (eta
    - `supabase/templates/recovery.html` em **Reset password** (assunto: `SQM App — Redefinir senha / Reset password`).
    Os templates escolhem PT ou EN pelo idioma definido no convite.
 6. **E-mail:** o envio padrão do Supabase tem limite baixo (poucos e-mails por hora) e serve só para testes. Para produção, configure SMTP próprio em **Authentication → Emails → SMTP Settings**. O Resend entra aqui quando houver um domínio verificado.
+
+7. **E-mails do app (Edge Function + pg_cron):**
+   ```bash
+   npx supabase functions deploy notifications
+   npx supabase secrets set RESEND_API_KEY=re_xxx EMAIL_FROM="SQM App <sqm@seudominio.com>" SITE_URL=https://sqm-app.vercel.app
+   ```
+   No **SQL Editor**, guarde no Vault a URL do projeto e a service key, que o pg_cron usa para chamar a função:
+   ```sql
+   select vault.create_secret('https://<ref>.supabase.co', 'project_url');
+   select vault.create_secret('<service_role key ou secret key>', 'service_role_key');
+   ```
+   Confirme também que as extensões **pg_cron** e **pg_net** estão ligadas. As rotinas ficam assim: `daily-notifications` às 06:00 de Brasília (escalonamento, prazo chegando e resumo diário) e `send-emails` a cada 5 minutos (envio da fila). Sem `RESEND_API_KEY`, os e-mails ficam na fila com erro e são reenviados quando a chave for configurada.
 
 ### 2. Vercel
 
@@ -144,6 +162,10 @@ O tenant da Goldwind pode exigir aprovação do administrador de TI. Enquanto is
 - **Alertas de vencimento:** `app.generate_certificate_expiry_alerts()` roda todo dia às 06:00 (Brasília) via pg_cron e também na hora em que um certificado é cadastrado ou alterado. Gera um alerta por faixa (padrão 60/30/7 dias, configurável) e um de vencido, para o SQE responsável e os usuários do fornecedor, sem duplicar. Em produção, confirme que a extensão **pg_cron** está ligada em **Database → Extensions** antes de rodar `db push`.
 - **NC e 8D:** status, aprovação de disciplinas, fechamento e resposta de custos só mudam pelas funções `save_8d_step`, `review_8d_step`, `close_8d`, `convert_nc_to_8d`, `respond_simple_nc`, `review_simple_nc` e `respond_nc_cost`, que aplicam as regras 5 a 8 e 12. UPDATE direto nessas colunas é bloqueado. A view `nc_overview` (com RLS do usuário) calcula o próximo prazo e com quem está a pendência.
 - **Auditorias:** nota e classificação são calculadas no banco por `audit_score()`, a mesma função usada na tela e na conclusão. Regras VDA 6.3 e GWI e o mapa da regra 3 ficam em `app_settings` (tela Configurações). Fluxos: `start_audit`, `complete_audit`, `resolve_audit_status_suggestion`, `respond_finding`, `review_finding`, `verify_finding`, `generate_audit_plan`, `submit_audit_plan` e `review_audit_plan` (somente SQM).
+- **Notificações e e-mail:** `app.notify()` grava o aviso no app; um gatilho coloca na fila `email_outbox` quando o evento tem e-mail ligado (`notification_events`) e o usuário não desligou os e-mails. Contatos do fornecedor sem login (Qualidade, Direção) entram na fila direto, no idioma do país do fornecedor. A Edge Function `supabase/functions/notifications` monta o texto com as mesmas traduções da interface (`npm run sync:messages` copia `messages/*.json` para `_shared/messages.json`; o teste acusa se esquecer) e envia por Resend ou, no local, pelo Mailpit.
+- **Escalonamento (regra 8):** `app.supplier_owed_items()` lista só o que está com o fornecedor (Ds não enviadas ou reprovadas, NC simples sem resposta, plano de ação de achado, custo lançado). O que aguarda o SQE nunca escala. Os níveis ficam em `escalation_rules` (tela Configurações) e cada nível dispara uma vez por pendência e prazo (prazo prorrogado começa de novo).
+- **Minhas pendências e resumo diário:** usam a mesma função `app.pending_items_for(usuário)`. SQE vê os fornecedores sob sua responsabilidade, SQM vê todos (com carga por SQE) e o fornecedor vê só o que deve.
+- **Exportação:** `/exports/zip` monta o pacote com o cliente do usuário (RLS) e as funções de `src/lib/pdf/reports.ts`, as mesmas das telas. `/exports/database` só funciona para o SQM (checado no banco por `export_tables()`). Ela lê com o cliente admin para incluir tudo, inclusive notificações de outros usuários. Os arquivos anexados não entram nesse backup; para eles, use o ZIP.
 - **Inspeções (regras 9 e 10):** a etiqueta do SN (`serial_units.tag`) só muda pelas funções do banco. Abrir reparo deixa a peça amarela, e concluir o reparo deixa sem etiqueta. A autoinspeção aprovada deixa verde, e qualquer NOK sem concessão deixa vermelha. O SQE só inclui peças verdes (`add_inspection_unit`). As funções são `complete_inspection`, `complete_repair`, `scrap_unit`, `review_waiver` e `apply_waiver`, que consome a quantidade da concessão. `app.expire_waivers()` roda todo dia às 00:05 (Brasília) e expira concessões vencidas. A NC aberta a partir de um NOK guarda o vínculo com a peça (`nc_items.serial_unit_id`).
 - **Embarque controlado:** os períodos (`controlled_shipment_periods`) abrem e fecham sozinhos quando o status do fornecedor entra ou sai de `controlled_shipment` por `change_supplier_status`, com a mesma justificativa. Não há outra forma de criar período.
 - **Numeração:** `app.next_number('INS'|'WVR')` gera números sequenciais por ano (INS-2026-0001), sem buracos por concorrência.

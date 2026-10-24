@@ -42,6 +42,8 @@ Stack obrigatória: Next.js (App Router) + TypeScript, Tailwind + shadcn/ui, nex
 - **Questionário VDA oficial é licenciado:** nunca incluir o texto da VDA no repositório; importar pela tela.
 - **Inspeções (etapa 5):** peça vermelha pode ir a reparo (vermelha → amarela → sem etiqueta → autoinspeção → verde). AQL é manual (tamanho de amostra e Ac por característica, sem tabela ISO 2859). O embarque controlado é o próprio status do fornecedor: entrar/sair muda o status e abre/fecha o período numa ação só. A concessão é consumida a cada uso em inspeção (1 por peça; lote consome a quantidade NOK) e expira por data, quantidade ou cancelamento.
 - **Autoinspeção** só o fornecedor registra; o SQE registra final no fornecedor, recebimento, embarque controlado e reinspeção.
+- **Escalonamento (etapa 6):** escala tudo que o fornecedor deve (Ds, NC simples, plano de ação de achado, resposta a custo). "Qualidade" e "Direção" do fornecedor = contatos cadastrados com esse papel, mesmo sem login (só e-mail). Um e-mail por nível (vencimento, +3, +7), não diário. "Documento reprovado" = D reprovada, resposta de NC simples devolvida, plano de ação devolvido e concessão reprovada.
+- **Resumo diário** por padrão só para SQE (`app_settings.daily_digest`). Contato sem login recebe no idioma do país do fornecedor (BR → PT, demais → EN).
 - **ExcelJS** no lugar do SheetJS (CDN oficial bloqueado aqui; npm 0.18.5 vulnerável).
 - `current_app_role()` em vez de `current_role()` (palavra reservada do Postgres).
 - `cacheComponents` desligado no Next 16: todas as telas dependem do usuário logado.
@@ -58,6 +60,9 @@ Stack obrigatória: Next.js (App Router) + TypeScript, Tailwind + shadcn/ui, nex
 - Formulários das disciplinas do 8D são declarativos em `src/lib/eight-d.ts` (tela, validação e PDF usam a mesma definição).
 - Função de fluxo que chama outra função de fluxo: guarde e **restaure** o valor anterior da flag (`app.set_unit_tag` é o exemplo), senão a flag desliga no meio da função de fora.
 - Na tela de inspeção, ao mudar OK/NOK, `router.refresh()` atualiza os botões que dependem do servidor (concessão, NC).
+- Texto de e-mail = mesma chave de `notifications.events.*` da tela. Depois de mudar `messages/*.json`, rode `npm run sync:messages` (a Edge Function não enxerga `messages/`). O formatador ICU da função (`_shared/icu.ts`) é testado contra o next-intl.
+- Parâmetros de notificação: datas em ISO (`AAAA-MM-DD`) e números de plural (`days`, `count`, `daysLate`). Use `notificationValues()` na tela.
+- Edge Function em Deno: fora do `tsconfig` do Next (`supabase/functions/notifications`); `_shared/` é TS puro, testado pelo Vitest. Depois de mudar a função localmente, `docker restart supabase_edge_runtime_user` se ela não recarregar.
 - Server actions devolvem **chaves de tradução** (`"users.errorForbidden"`), nunca texto.
 - Cliente admin (`src/lib/supabase/admin.ts`) ignora RLS: use só depois de checar a permissão com o cliente do usuário (ex.: `rpc("can_invite")`).
 - Componentes shadcn ficam em `src/components/ui`. O site do shadcn está bloqueado neste ambiente; copie do repositório oficial (`apps/v4/registry/new-york-v4/ui`) e traduza textos fixos via namespace `ui`.

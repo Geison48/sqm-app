@@ -52,7 +52,7 @@ const SECTIONS: NavSection[] = [
     key: "sectionAdmin",
     items: [
       { key: "users", href: "/users", icon: "users", roles: INTERNAL, ready: true },
-      { key: "exports", href: "/exports", icon: "download", roles: INTERNAL, ready: false },
+      { key: "exports", href: "/exports", icon: "download", roles: INTERNAL, ready: true },
       { key: "settings", href: "/settings", icon: "settings", roles: INTERNAL, ready: true },
     ],
   },

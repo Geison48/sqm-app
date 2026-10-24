@@ -609,6 +609,46 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"email_outbox": {
+                  Row: {
+                    "attempts": number,"created_at": string,"dedupe_key": string | null,"event_code": string,"id": string,"last_error": string | null,"link_path": string | null,"locale": string,"notification_id": string | null,"params": NonNullable<Json>,"recipient_email": string,"recipient_name": string | null,"recipient_user_id": string | null,"sent_at": string | null,"status": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "attempts"?: number,"created_at"?: string,"dedupe_key"?: string | null,"event_code": string,"id"?: string,"last_error"?: string | null,"link_path"?: string | null,"locale"?: string,"notification_id"?: string | null,"params"?: NonNullable<Json>,"recipient_email": string,"recipient_name"?: string | null,"recipient_user_id"?: string | null,"sent_at"?: string | null,"status"?: string
+                  }
+                  Update: {
+                    "attempts"?: number,"created_at"?: string,"dedupe_key"?: string | null,"event_code"?: string,"id"?: string,"last_error"?: string | null,"link_path"?: string | null,"locale"?: string,"notification_id"?: string | null,"params"?: NonNullable<Json>,"recipient_email"?: string,"recipient_name"?: string | null,"recipient_user_id"?: string | null,"sent_at"?: string | null,"status"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "email_outbox_notification_id_fkey"
+      columns: ["notification_id"]
+isOneToOne: false
+      referencedRelation: "notifications"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "email_outbox_recipient_user_id_fkey"
+      columns: ["recipient_user_id"]
+isOneToOne: false
+      referencedRelation: "users"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"escalation_rules": {
+                  Row: {
+                    "active": boolean,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"contact_role_codes": (string)[],"created_at": string,"created_by": string | null,"days_after_due": number,"id": string,"notify_responsible_sqe": boolean,"notify_sqm": boolean,"notify_supplier_users": boolean,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "active"?: boolean,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"contact_role_codes"?: (string)[],"created_at"?: string,"created_by"?: string | null,"days_after_due": number,"id"?: string,"notify_responsible_sqe"?: boolean,"notify_sqm"?: boolean,"notify_supplier_users"?: boolean,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "active"?: boolean,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"contact_role_codes"?: (string)[],"created_at"?: string,"created_by"?: string | null,"days_after_due"?: number,"id"?: string,"notify_responsible_sqe"?: boolean,"notify_sqm"?: boolean,"notify_supplier_users"?: boolean,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"failure_modes": {
                   Row: {
                     "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
@@ -1109,6 +1149,20 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"notification_events": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"send_email": boolean,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"send_email"?: boolean,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"send_email"?: boolean,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"notifications": {
                   Row: {
                     "created_at": string,"dedupe_key": string | null,"email_sent_at": string | null,"entity_id": string | null,"entity_table": string | null,"event_code": string,"id": string,"link_path": string | null,"params": NonNullable<Json>,"read_at": string | null,"recipient_id": string,"supplier_id": string | null
@@ -1497,14 +1551,14 @@ isOneToOne: false
                   ]
                 },"users": {
                   Row: {
-                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"email": string,"full_name": string,"id": string,"invited_at": string | null,"invited_by": string | null,"language": Database["public"]['Enums']["app_language"],"role": Database["public"]['Enums']["app_role"],"supplier_id": string | null,"updated_at": string,"updated_by": string | null
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"email": string,"email_notifications": boolean,"full_name": string,"id": string,"invited_at": string | null,"invited_by": string | null,"language": Database["public"]['Enums']["app_language"],"role": Database["public"]['Enums']["app_role"],"supplier_id": string | null,"updated_at": string,"updated_by": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"email": string,"full_name": string,"id": string,"invited_at"?: string | null,"invited_by"?: string | null,"language"?: Database["public"]['Enums']["app_language"],"role": Database["public"]['Enums']["app_role"],"supplier_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"email": string,"email_notifications"?: boolean,"full_name": string,"id": string,"invited_at"?: string | null,"invited_by"?: string | null,"language"?: Database["public"]['Enums']["app_language"],"role": Database["public"]['Enums']["app_role"],"supplier_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Update: {
-                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"email"?: string,"full_name"?: string,"id"?: string,"invited_at"?: string | null,"invited_by"?: string | null,"language"?: Database["public"]['Enums']["app_language"],"role"?: Database["public"]['Enums']["app_role"],"supplier_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"email"?: string,"email_notifications"?: boolean,"full_name"?: string,"id"?: string,"invited_at"?: string | null,"invited_by"?: string | null,"language"?: Database["public"]['Enums']["app_language"],"role"?: Database["public"]['Enums']["app_role"],"supplier_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Relationships: [
                     {
@@ -1627,6 +1681,30 @@ isOneToOne: false
 "change_supplier_status":
 { Args: { "p_justification": string,"p_status": string,"p_supplier_id": string }; Returns: undefined
                            },
+"claim_email_batch":
+{ Args: { "p_limit"?: number }; Returns: {
+              "attempts": number,
+"created_at": string,
+"dedupe_key": string | null,
+"event_code": string,
+"id": string,
+"last_error": string | null,
+"link_path": string | null,
+"locale": string,
+"notification_id": string | null,
+"params": NonNullable<Json>,
+"recipient_email": string,
+"recipient_name": string | null,
+"recipient_user_id": string | null,
+"sent_at": string | null,
+"status": string
+            }[]
+                          SetofOptions: {
+        from: "*"
+        to: "email_outbox"
+        isOneToOne: false
+        isSetofReturn: true
+      } },
 "close_8d":
 { Args: { "p_action": string,"p_comment"?: string,"p_failure": string,"p_keywords": (string)[],"p_nc_id": string,"p_root_cause": string }; Returns: string
                            },
@@ -1648,6 +1726,9 @@ isOneToOne: false
 "current_supplier_id":
 { Args: Record<PropertyKey, never>; Returns: string
                            },
+"export_tables":
+{ Args: Record<PropertyKey, never>; Returns: string[]
+                           },
 "generate_audit_plan":
 { Args: { "p_year": number }; Returns: string
                            },
@@ -1659,6 +1740,14 @@ isOneToOne: false
                            },
 "is_valid_cnpj":
 { Args: { "p_cnpj": string }; Returns: boolean
+                           },
+"mark_email_result":
+{ Args: { "p_error"?: string,"p_id": string,"p_ok": boolean }; Returns: undefined
+                           },
+"my_pending_items":
+{ Args: Record<PropertyKey, never>; Returns: {
+              "days_left": number,"detail": string,"due_at": string,"due_on": string,"entity_id": string,"entity_table": string,"grp": string,"kind": string,"link": string,"ref": string,"responsible_sqe_id": string,"supplier_id": string,"supplier_name": string
+            }[]
                            },
 "new_template_version":
 { Args: { "p_template_id": string }; Returns: string
@@ -1695,6 +1784,9 @@ isOneToOne: false
                            },
 "review_waiver":
 { Args: { "p_approve": boolean,"p_comment": string,"p_waiver_id": string }; Returns: undefined
+                           },
+"run_daily_jobs":
+{ Args: Record<PropertyKey, never>; Returns: Json
                            },
 "save_8d_step":
 { Args: { "p_content": Json,"p_step_id": string,"p_submit": boolean }; Returns: undefined
