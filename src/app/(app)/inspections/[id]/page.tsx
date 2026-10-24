@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { TakeOfflineButton } from "@/components/offline/take-offline-button";
 import { notFound } from "next/navigation";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { AlertTriangleIcon } from "lucide-react";
@@ -95,6 +96,7 @@ export default async function InspectionPage({ params }: PageProps<"/inspections
         </div>
       </PageHeader>
       {insp.notes && <p className="text-sm text-muted-foreground">{insp.notes}</p>}
+      {editable && (units ?? []).length > 0 && <TakeOfflineButton kind="inspection" id={id} userId={profile.id} />}
 
       {editable && (
         <AddUnit inspectionId={id} units={(eligible ?? []).filter((u) => !inInspection.has(u.id))}

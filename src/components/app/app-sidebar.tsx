@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import {
   AlertTriangleIcon, BellIcon, BookOpenIcon, BoxIcon, Building2Icon, ClipboardCheckIcon,
-  DownloadIcon, HomeIcon, ScanSearchIcon, SettingsIcon, ShieldCheckIcon, UsersIcon,
+  DownloadIcon, HomeIcon, ScanSearchIcon, SettingsIcon, ShieldCheckIcon, SmartphoneIcon, UsersIcon,
   type LucideIcon,
 } from "lucide-react";
 import {
@@ -18,7 +18,7 @@ import { UserMenu } from "./user-menu";
 const ICONS: Record<NavIcon, LucideIcon> = {
   home: HomeIcon, building: Building2Icon, box: BoxIcon, book: BookOpenIcon,
   clipboard: ClipboardCheckIcon, search: ScanSearchIcon, alert: AlertTriangleIcon,
-  bell: BellIcon, download: DownloadIcon, users: UsersIcon, settings: SettingsIcon,
+  bell: BellIcon, download: DownloadIcon, users: UsersIcon, settings: SettingsIcon, device: SmartphoneIcon,
 };
 
 export function AppSidebar({

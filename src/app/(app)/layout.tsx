@@ -3,6 +3,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { AppSidebar } from "@/components/app/app-sidebar";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { NotificationBell } from "@/components/app/notification-bell";
+import { SyncStatus } from "@/components/offline/sync-status";
 import { requireProfile } from "@/lib/auth";
 import { navigationFor } from "@/lib/navigation";
 
@@ -25,6 +26,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
         <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-background/95 px-4 backdrop-blur">
           <SidebarTrigger className="-ml-1" />
           <div className="flex-1" />
+          <SyncStatus userId={profile.id} />
           <NotificationBell userId={profile.id} />
           <LanguageSwitcher />
         </header>

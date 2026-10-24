@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Toaster } from "@/components/ui/sonner";
+import { PwaProvider } from "@/components/shared/pwa-provider";
 import "./globals.css";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -13,12 +14,16 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: { default: t("appName"), template: `%s · ${t("appName")}` },
     description: t("appTagline"),
+    applicationName: t("appName"),
+    appleWebApp: { capable: true, title: t("appName"), statusBarStyle: "default" },
+    icons: { icon: "/icons/icon-192.png", apple: "/icons/apple-touch-icon.png" },
   };
 }
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#171717",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
@@ -27,8 +32,10 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html lang={locale} className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full bg-background font-sans text-foreground">
         <NextIntlClientProvider>
-          {children}
-          <Toaster richColors position="top-center" />
+          <PwaProvider>
+            {children}
+            <Toaster richColors position="top-center" />
+          </PwaProvider>
         </NextIntlClientProvider>
       </body>
     </html>

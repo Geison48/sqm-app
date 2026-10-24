@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { TakeOfflineButton } from "@/components/offline/take-offline-button";
 import { notFound } from "next/navigation";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
 import { ClipboardCheckIcon, FileDownIcon, PencilIcon } from "lucide-react";
@@ -114,6 +115,8 @@ export default async function AuditPage({ params, searchParams }: PageProps<"/au
           {internal && <Link href={`/suppliers/${audit.supplier_id}`} className="text-sm text-muted-foreground hover:underline">{audit.suppliers?.legal_name}</Link>}
         </div>
       </PageHeader>
+
+      {canExecute && audit.status === "in_progress" && <TakeOfflineButton kind="audit" id={id} userId={profile.id} />}
 
       {audit.status === "planned" && <p className="rounded-md bg-muted p-3 text-sm">{t("audits.planNotApprovedHint")} {t("plan.rule14")}</p>}
 

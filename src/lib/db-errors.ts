@@ -17,7 +17,7 @@ const KNOWN = [
   "tag_workflow_only", "unit_scrapped", "repair_workflow_only", "repair_not_open", "waiver_workflow_only", "waiver_decided",
   "waiver_already_expired", "waiver_not_active", "waiver_not_applicable", "result_not_nok", "waiver_quantity_exceeded",
   "inspection_plan_required", "self_inspection_by_supplier", "inspection_workflow_only", "inspection_completed",
-  "unit_mismatch", "unit_supplier_mismatch", "unit_under_repair", "unit_not_green", "inspection_no_units", "unit_not_red",
+  "unit_mismatch", "unit_supplier_mismatch", "attachment_new_version_required", "unit_under_repair", "unit_not_green", "inspection_no_units", "unit_not_red",
 ] as const;
 
 export function dbErrorKey(error: Pick<PostgrestError, "code" | "message"> | null | undefined): string {

@@ -96,7 +96,8 @@
     "notifications": "Notificações",
     "exports": "Exportações",
     "users": "Usuários",
-    "settings": "Configurações"
+    "settings": "Configurações",
+    "offline": "No aparelho (offline)"
   },
   "home": {
     "title": "Minhas pendências",
@@ -226,7 +227,8 @@
     "inspection_no_units": "Inclua ao menos uma peça.",
     "unit_not_red": "Só peças vermelhas podem ter rejeição final.",
     "invalidValues": "Valores medidos inválidos (use números separados por espaço ou ponto e vírgula).",
-    "unit_supplier_mismatch": "A peça informada não pertence ao fornecedor da NC."
+    "unit_supplier_mismatch": "A peça informada não pertence ao fornecedor da NC.",
+    "attachment_new_version_required": "Para alterar um documento, envie uma nova versão (regra 13)."
   },
   "criticality": {
     "label": "Criticidade",
@@ -1490,5 +1492,42 @@
       "photo": "Foto",
       "waiver": "Concessão"
     }
+  },
+  "offline": {
+    "title": "No aparelho",
+    "subtitle": "Auditorias e inspeções disponíveis sem sinal.",
+    "empty": "Nada no aparelho. Abra uma auditoria ou inspeção em andamento e toque em “Levar offline”.",
+    "hint": "Sem sinal você preenche os itens e tira fotos. Iniciar, incluir peça e concluir exigem conexão.",
+    "takeOffline": "Levar offline",
+    "refresh": "Atualizar no aparelho",
+    "openOffline": "Abrir offline",
+    "available": "Disponível offline · baixado em {date}",
+    "downloading": "Baixando…",
+    "downloaded": "Pronto para usar sem sinal.",
+    "notAvailable": "Só auditorias e inspeções em andamento podem ir para o aparelho.",
+    "remove": "Remover do aparelho",
+    "removed": "Removido do aparelho.",
+    "removeBlocked": "Há dados pendentes de envio. Sincronize antes de remover.",
+    "pending": "{count, plural, one {# pendente de envio} other {# pendentes de envio}}",
+    "syncing": "Enviando…",
+    "synced": "Tudo enviado.",
+    "syncNow": "Enviar agora",
+    "offlineNow": "Sem conexão: as alterações ficam guardadas no aparelho.",
+    "conflictToast": "{count, plural, one {# item tinha sido alterado por outra pessoa; a sua versão foi salva.} other {# itens tinham sido alterados por outra pessoa; a sua versão foi salva.}}",
+    "conflictsTitle": "Itens sobrescritos",
+    "conflictLine": "{number} · {item}: alterado por {by} em {at}. A sua versão foi salva (a anterior está no log).",
+    "dismiss": "Ok, entendi",
+    "itemPending": "Pendente",
+    "notSent": "Não enviado: {error}",
+    "backToList": "Voltar à lista",
+    "openOnline": "Abrir versão online",
+    "localPreview": "prévia local",
+    "photoPending": "Foto aguardando envio",
+    "kinds": {
+      "audit": "Auditoria",
+      "inspection": "Inspeção"
+    },
+    "notFound": "Este item não está no aparelho.",
+    "items": "{done} de {total} respondidos"
   }
 }

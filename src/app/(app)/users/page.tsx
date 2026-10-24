@@ -21,8 +21,10 @@ export default async function UsersPage() {
       .from("users")
       .select("id, full_name, email, role, language, invited_at, cancelled_at, suppliers!users_supplier_id_fkey(legal_name)")
       .order("full_name"),
-    supabase.from("suppliers").select("id, legal_name").is("cancelled_at", null).order("legal_name"),
+    supabase.from("suppliers").select("id, legal_name, responsible_sqe_id").is("cancelled_at", null).order("legal_name"),
   ]);
+  // SQE convida só para os fornecedores sob sua responsabilidade (can_invite confere no banco).
+  const invitable = (suppliers ?? []).filter((s) => profile.role === "sqm" || s.responsible_sqe_id === profile.id);
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -35,7 +37,7 @@ export default async function UsersPage() {
         </div>
         <InviteUserDialog
           allowedRoles={profile.role === "sqm" ? ["sqe", "sqm", "supplier"] : ["supplier"]}
-          suppliers={(suppliers ?? []).map((s) => ({ id: s.id, name: s.legal_name }))}
+          suppliers={invitable.map((s) => ({ id: s.id, name: s.legal_name }))}
         />
       </div>
 

@@ -96,7 +96,8 @@
     "notifications": "Notifications",
     "exports": "Exports",
     "users": "Users",
-    "settings": "Settings"
+    "settings": "Settings",
+    "offline": "On this device (offline)"
   },
   "home": {
     "title": "My tasks",
@@ -226,7 +227,8 @@
     "inspection_no_units": "Add at least one part.",
     "unit_not_red": "Only red parts can be finally rejected.",
     "invalidValues": "Invalid measured values (use numbers separated by spaces or semicolons).",
-    "unit_supplier_mismatch": "The selected part does not belong to the NC supplier."
+    "unit_supplier_mismatch": "The selected part does not belong to the NC supplier.",
+    "attachment_new_version_required": "To change a document, upload a new version (rule 13)."
   },
   "criticality": {
     "label": "Criticality",
@@ -1490,5 +1492,42 @@
       "photo": "Photo",
       "waiver": "Waiver"
     }
+  },
+  "offline": {
+    "title": "On this device",
+    "subtitle": "Audits and inspections available without signal.",
+    "empty": "Nothing on this device. Open an audit or inspection in progress and tap “Take offline”.",
+    "hint": "Without signal you can fill in items and take photos. Starting, adding parts and completing need a connection.",
+    "takeOffline": "Take offline",
+    "refresh": "Update on device",
+    "openOffline": "Open offline",
+    "available": "Available offline · downloaded {date}",
+    "downloading": "Downloading…",
+    "downloaded": "Ready to use without signal.",
+    "notAvailable": "Only audits and inspections in progress can go to the device.",
+    "remove": "Remove from device",
+    "removed": "Removed from device.",
+    "removeBlocked": "There is data waiting to be sent. Sync before removing.",
+    "pending": "{count, plural, one {# waiting to send} other {# waiting to send}}",
+    "syncing": "Sending…",
+    "synced": "Everything sent.",
+    "syncNow": "Send now",
+    "offlineNow": "No connection: changes are kept on this device.",
+    "conflictToast": "{count, plural, one {# item had been changed by someone else; your version was saved.} other {# items had been changed by someone else; your version was saved.}}",
+    "conflictsTitle": "Overwritten items",
+    "conflictLine": "{number} · {item}: changed by {by} on {at}. Your version was saved (the previous one is in the log).",
+    "dismiss": "OK, got it",
+    "itemPending": "Pending",
+    "notSent": "Not sent: {error}",
+    "backToList": "Back to list",
+    "openOnline": "Open online version",
+    "localPreview": "local preview",
+    "photoPending": "Photo waiting to send",
+    "kinds": {
+      "audit": "Audit",
+      "inspection": "Inspection"
+    },
+    "notFound": "This item is not on the device.",
+    "items": "{done} of {total} answered"
   }
 }

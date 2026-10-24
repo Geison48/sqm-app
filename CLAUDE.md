@@ -44,6 +44,9 @@ Stack obrigatória: Next.js (App Router) + TypeScript, Tailwind + shadcn/ui, nex
 - **Autoinspeção** só o fornecedor registra; o SQE registra final no fornecedor, recebimento, embarque controlado e reinspeção.
 - **Escalonamento (etapa 6):** escala tudo que o fornecedor deve (Ds, NC simples, plano de ação de achado, resposta a custo). "Qualidade" e "Direção" do fornecedor = contatos cadastrados com esse papel, mesmo sem login (só e-mail). Um e-mail por nível (vencimento, +3, +7), não diário. "Documento reprovado" = D reprovada, resposta de NC simples devolvida, plano de ação devolvido e concessão reprovada.
 - **Resumo diário** por padrão só para SQE (`app_settings.daily_digest`). Contato sem login recebe no idioma do país do fornecedor (BR → PT, demais → EN).
+- **Offline (etapa 7):** botão "Levar offline" (não automático); sem sinal só preencher itens, medições e fotos (iniciar, incluir peça e concluir exigem conexão); conflito por item, o último a salvar vence com aviso.
+- **SQE só escreve nos fornecedores sob sua responsabilidade**, inclusive usuários (convite/edição) e anexos.
+- **Regras 13 e 15** completas são da fase 2 (PPAP e IA); no MVP: anexo imutável (nova versão) e importação com pré-visualização.
 - **ExcelJS** no lugar do SheetJS (CDN oficial bloqueado aqui; npm 0.18.5 vulnerável).
 - `current_app_role()` em vez de `current_role()` (palavra reservada do Postgres).
 - `cacheComponents` desligado no Next 16: todas as telas dependem do usuário logado.
@@ -63,6 +66,8 @@ Stack obrigatória: Next.js (App Router) + TypeScript, Tailwind + shadcn/ui, nex
 - Texto de e-mail = mesma chave de `notifications.events.*` da tela. Depois de mudar `messages/*.json`, rode `npm run sync:messages` (a Edge Function não enxerga `messages/`). O formatador ICU da função (`_shared/icu.ts`) é testado contra o next-intl.
 - Parâmetros de notificação: datas em ISO (`AAAA-MM-DD`) e números de plural (`days`, `count`, `daysLate`). Use `notificationValues()` na tela.
 - Edge Function em Deno: fora do `tsconfig` do Next (`supabase/functions/notifications`); `_shared/` é TS puro, testado pelo Vitest. Depois de mudar a função localmente, `docker restart supabase_edge_runtime_user` se ela não recarregar.
+- Offline: a execução sem sinal usa só `src/lib/offline/*` e a página `/offline` (client, sem navegação do Next). Mudou a regra de OK/NOK no banco? Atualize `src/lib/offline/evaluate.ts`. O service worker só roda em produção (`npm run build && npm start`).
+- Tabela nova: o teste `08_rls_review` já cobre leitura/escrita entre fornecedores, DELETE e audit_log automaticamente.
 - Server actions devolvem **chaves de tradução** (`"users.errorForbidden"`), nunca texto.
 - Cliente admin (`src/lib/supabase/admin.ts`) ignora RLS: use só depois de checar a permissão com o cliente do usuário (ex.: `rpc("can_invite")`).
 - Componentes shadcn ficam em `src/components/ui`. O site do shadcn está bloqueado neste ambiente; copie do repositório oficial (`apps/v4/registry/new-york-v4/ui`) e traduza textos fixos via namespace `ui`.

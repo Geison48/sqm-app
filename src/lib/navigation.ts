@@ -4,11 +4,11 @@ import type { AppRole } from "@/lib/auth";
 // etapa correspondente do SPEC ser entregue.
 export type NavIcon =
   | "home" | "building" | "box" | "book" | "clipboard" | "search" | "alert"
-  | "bell" | "download" | "users" | "settings";
+  | "bell" | "download" | "users" | "settings" | "device";
 
 export type NavItem = {
   key: "myTasks" | "suppliers" | "mySupplier" | "components" | "standards" | "audits"
-     | "inspections" | "ncs" | "notifications" | "exports" | "users" | "settings";
+     | "inspections" | "ncs" | "notifications" | "offline" | "exports" | "users" | "settings";
   href: string;
   icon: NavIcon;
   roles: AppRole[];
@@ -29,6 +29,7 @@ const SECTIONS: NavSection[] = [
     items: [
       { key: "myTasks", href: "/", icon: "home", roles: ALL, ready: true },
       { key: "notifications", href: "/notifications", icon: "bell", roles: ALL, ready: true },
+      { key: "offline", href: "/offline", icon: "device", roles: ALL, ready: true },
     ],
   },
   {
