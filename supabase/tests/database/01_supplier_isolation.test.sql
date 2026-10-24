@@ -83,7 +83,7 @@ select pg_temp.logout();
 
 -- ---------------------------------------------------------------- SQE e SQM
 select pg_temp.login_as('00000000-0000-4000-8000-000000000002');
-select is((select count(*)::int from public.suppliers), 2, 'SQE: lê todos os fornecedores');
+select is((select count(*)::int from public.suppliers), 3, 'SQE: lê todos os fornecedores');
 select is((select count(*)::int from public.attachments), 3, 'SQE: vê anexos internos');
 
 -- SQE edita só os fornecedores sob sua responsabilidade (A é dele, B não).

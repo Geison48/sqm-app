@@ -9,7 +9,7 @@ Sistema de gestão da qualidade de fornecedores (auditorias, inspeções, NC/8D)
 | Etapa | Conteúdo | Situação |
 |---|---|---|
 | 1 | Fundação: login, convites, perfis, menu, idiomas, RLS, audit_log, anexos | ✅ |
-| 2 | M1 Cadastros | — |
+| 2 | M1 Cadastros: fornecedores, status com histórico, plantas, contatos, certificados, subfornecedores, componentes, normas, qualificação inicial, alertas de vencimento, notificações in-app, configurações | ✅ |
 | 3 | M4 NC e 8D | — |
 | 4 | M2 Auditorias | — |
 | 5 | M3 Inspeções | — |
@@ -42,6 +42,8 @@ Em `.env.local`, use `API_URL` → `NEXT_PUBLIC_SUPABASE_URL`, `PUBLISHABLE_KEY`
 | `sqe2@sqm.local` | SQE | responsável pelo Supplier B (idioma en) |
 | `qualidade@fornecedor-a.local` | Fornecedor A | |
 | `quality@supplier-b.local` | Fornecedor B | idioma en |
+
+O seed também traz 3 fornecedores (A homologado, B homologado condicional, C em qualificação), 5 componentes, 3 normas com requisitos e certificados com validade relativa à data de hoje (vencendo em 25 e 55 dias e um já vencido), para exercitar os alertas.
 
 Os e-mails enviados localmente (convites, redefinição de senha) **não saem para a internet**: abra o Mailpit em http://127.0.0.1:54324 para vê-los.
 
@@ -137,4 +139,8 @@ O tenant da Goldwind pode exigir aprovação do administrador de TI. Enquanto is
 - **Nada é apagado:** cancelar = `cancelled_at` + `cancel_reason` (mínimo 3 caracteres). Registro cancelado fica congelado.
 - **Textos:** todos em `messages/pt-BR.json` e `messages/en.json`. O teste `tests/i18n.test.ts` falha se faltar chave em um dos idiomas.
 - **Configurações** ficam em tabelas (`app_settings` e as próximas), editáveis por SQE/SQM.
+- **Status do fornecedor:** só muda pela função `change_supplier_status` (justificativa obrigatória, histórico em `supplier_status_history`). UPDATE direto na coluna é bloqueado.
+- **CNPJ:** obrigatório e validado quando o país é BR, inclusive no formato alfanumérico (Receita Federal, a partir de 07/2026). Fica gravado sem pontuação.
+- **Alertas de vencimento:** `app.generate_certificate_expiry_alerts()` roda todo dia às 06:00 (Brasília) via pg_cron e também na hora em que um certificado é cadastrado ou alterado. Gera um alerta por faixa (padrão 60/30/7 dias, configurável) e um de vencido, para o SQE responsável e os usuários do fornecedor, sem duplicar. Em produção, confirme que a extensão **pg_cron** está ligada em **Database → Extensions** antes de rodar `db push`.
+- **Notificações:** a tabela `notifications` guarda o código do evento e os parâmetros; o texto é montado na interface no idioma de quem lê.
 - **Anexos:** bucket privado `attachments`, com caminho `<supplier_id | internal>/<uuid>/<arquivo>`. `internal_only = true` nunca aparece para o fornecedor.

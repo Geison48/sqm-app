@@ -28,16 +28,16 @@ const SECTIONS: NavSection[] = [
     key: "sectionMain",
     items: [
       { key: "myTasks", href: "/", icon: "home", roles: ALL, ready: true },
-      { key: "notifications", href: "/notifications", icon: "bell", roles: ALL, ready: false },
+      { key: "notifications", href: "/notifications", icon: "bell", roles: ALL, ready: true },
     ],
   },
   {
     key: "sectionRecords",
     items: [
-      { key: "suppliers", href: "/suppliers", icon: "building", roles: INTERNAL, ready: false },
-      { key: "mySupplier", href: "/my-supplier", icon: "building", roles: ["supplier"], ready: false },
-      { key: "components", href: "/components", icon: "box", roles: INTERNAL, ready: false },
-      { key: "standards", href: "/standards", icon: "book", roles: INTERNAL, ready: false },
+      { key: "suppliers", href: "/suppliers", icon: "building", roles: INTERNAL, ready: true },
+      { key: "mySupplier", href: "/my-supplier", icon: "building", roles: ["supplier"], ready: true },
+      { key: "components", href: "/components", icon: "box", roles: INTERNAL, ready: true },
+      { key: "standards", href: "/standards", icon: "book", roles: INTERNAL, ready: true },
     ],
   },
   {
@@ -53,7 +53,7 @@ const SECTIONS: NavSection[] = [
     items: [
       { key: "users", href: "/users", icon: "users", roles: INTERNAL, ready: true },
       { key: "exports", href: "/exports", icon: "download", roles: INTERNAL, ready: false },
-      { key: "settings", href: "/settings", icon: "settings", roles: INTERNAL, ready: false },
+      { key: "settings", href: "/settings", icon: "settings", roles: INTERNAL, ready: true },
     ],
   },
 ];

@@ -116,7 +116,7 @@ describe("isolamento entre fornecedores (RLS)", () => {
 
   it("SQE lê todos os fornecedores", async () => {
     const { data } = await sqe.from("suppliers").select("id");
-    expect(data!.map((s) => s.id).sort()).toEqual([SUPPLIER_A, SUPPLIER_B]);
+    expect(data!.map((s) => s.id)).toEqual(expect.arrayContaining([SUPPLIER_A, SUPPLIER_B]));
   });
 
   it("ninguém apaga registros (regra 16)", async () => {
@@ -124,5 +124,32 @@ describe("isolamento entre fornecedores (RLS)", () => {
     expect(error).not.toBeNull();
     const { data } = await sqe.from("suppliers").select("id").eq("id", SUPPLIER_A);
     expect(data!.length).toBe(1);
+  });
+
+  it("A não lê contatos, certificados, plantas nem subfornecedores de B", async () => {
+    for (const table of ["contacts", "certifications", "plants", "sub_suppliers", "supplier_status_history"] as const) {
+      const { data } = await userA.from(table).select("supplier_id").eq("supplier_id", SUPPLIER_B);
+      expect(data, table).toEqual([]);
+    }
+  });
+
+  it("A não vê normas, qualificação nem componentes de B", async () => {
+    expect((await userA.from("standards").select("id")).data).toEqual([]);
+    expect((await userA.from("qualifications").select("id")).data).toEqual([]);
+    const { data } = await userA.from("components").select("gw_code");
+    expect(data!.every((c) => c.gw_code.startsWith("GW-BLD"))).toBe(true);
+  });
+
+  it("A só vê as próprias notificações e não muda o próprio status", async () => {
+    const { data: me } = await userA.auth.getUser();
+    const { data } = await userA.from("notifications").select("recipient_id");
+    expect(data!.length).toBeGreaterThan(0);
+    expect(data!.every((n) => n.recipient_id === me.user!.id)).toBe(true);
+    const { error } = await userA.rpc("change_supplier_status", {
+      p_supplier_id: SUPPLIER_A,
+      p_status: "approved",
+      p_justification: "tentativa do fornecedor",
+    });
+    expect(error?.code).toBe("42501");
   });
 });

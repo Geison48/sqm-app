@@ -77,16 +77,404 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
-                },"suppliers": {
+                },"certifications": {
                   Row: {
-                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"country_code": string,"created_at": string,"created_by": string | null,"id": string,"legal_name": string,"responsible_sqe_id": string | null,"tax_id": string | null,"updated_at": string,"updated_by": string | null
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"certificate_number": string | null,"created_at": string,"created_by": string | null,"id": string,"issued_on": string | null,"issuer": string | null,"scope": string | null,"standard_id": string | null,"standard_name": string,"sub_supplier_id": string | null,"supplier_id": string,"updated_at": string,"updated_by": string | null,"valid_until": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"country_code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"legal_name": string,"responsible_sqe_id"?: string | null,"tax_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"certificate_number"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"issued_on"?: string | null,"issuer"?: string | null,"scope"?: string | null,"standard_id"?: string | null,"standard_name": string,"sub_supplier_id"?: string | null,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null,"valid_until"?: string | null
                   }
                   Update: {
-                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"country_code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"legal_name"?: string,"responsible_sqe_id"?: string | null,"tax_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"certificate_number"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"issued_on"?: string | null,"issuer"?: string | null,"scope"?: string | null,"standard_id"?: string | null,"standard_name"?: string,"sub_supplier_id"?: string | null,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null,"valid_until"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "certifications_standard_id_fkey"
+      columns: ["standard_id"]
+isOneToOne: false
+      referencedRelation: "standards"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "certifications_sub_supplier_id_fkey"
+      columns: ["sub_supplier_id"]
+isOneToOne: false
+      referencedRelation: "sub_suppliers"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "certifications_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"component_standards": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"component_id": string,"created_at": string,"created_by": string | null,"id": string,"standard_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"component_id": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"standard_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"component_id"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"standard_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "component_standards_component_id_fkey"
+      columns: ["component_id"]
+isOneToOne: false
+      referencedRelation: "components"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "component_standards_standard_id_fkey"
+      columns: ["standard_id"]
+isOneToOne: false
+      referencedRelation: "standards"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"components": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"control_plan_ref": string | null,"created_at": string,"created_by": string | null,"criticality": string,"description": string,"drawing_revision": string | null,"gw_code": string,"id": string,"notes": string | null,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"control_plan_ref"?: string | null,"created_at"?: string,"created_by"?: string | null,"criticality"?: string,"description": string,"drawing_revision"?: string | null,"gw_code": string,"id"?: string,"notes"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"control_plan_ref"?: string | null,"created_at"?: string,"created_by"?: string | null,"criticality"?: string,"description"?: string,"drawing_revision"?: string | null,"gw_code"?: string,"id"?: string,"notes"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"contact_roles": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"contacts": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"email": string | null,"full_name": string,"id": string,"is_primary": boolean,"job_title": string | null,"phone": string | null,"plant_id": string | null,"role_code": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"email"?: string | null,"full_name": string,"id"?: string,"is_primary"?: boolean,"job_title"?: string | null,"phone"?: string | null,"plant_id"?: string | null,"role_code": string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"email"?: string | null,"full_name"?: string,"id"?: string,"is_primary"?: boolean,"job_title"?: string | null,"phone"?: string | null,"plant_id"?: string | null,"role_code"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "contacts_plant_id_fkey"
+      columns: ["plant_id"]
+isOneToOne: false
+      referencedRelation: "plants"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "contacts_role_code_fkey"
+      columns: ["role_code"]
+isOneToOne: false
+      referencedRelation: "contact_roles"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "contacts_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"notifications": {
+                  Row: {
+                    "created_at": string,"dedupe_key": string | null,"email_sent_at": string | null,"entity_id": string | null,"entity_table": string | null,"event_code": string,"id": string,"link_path": string | null,"params": NonNullable<Json>,"read_at": string | null,"recipient_id": string,"supplier_id": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"dedupe_key"?: string | null,"email_sent_at"?: string | null,"entity_id"?: string | null,"entity_table"?: string | null,"event_code": string,"id"?: string,"link_path"?: string | null,"params"?: NonNullable<Json>,"read_at"?: string | null,"recipient_id": string,"supplier_id"?: string | null
+                  }
+                  Update: {
+                    "created_at"?: string,"dedupe_key"?: string | null,"email_sent_at"?: string | null,"entity_id"?: string | null,"entity_table"?: string | null,"event_code"?: string,"id"?: string,"link_path"?: string | null,"params"?: NonNullable<Json>,"read_at"?: string | null,"recipient_id"?: string,"supplier_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "notifications_recipient_id_fkey"
+      columns: ["recipient_id"]
+isOneToOne: false
+      referencedRelation: "users"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "notifications_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"plants": {
+                  Row: {
+                    "address_line": string | null,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"city": string | null,"country_code": string,"created_at": string,"created_by": string | null,"id": string,"is_main": boolean,"name": string,"notes": string | null,"postal_code": string | null,"state": string | null,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "address_line"?: string | null,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"city"?: string | null,"country_code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_main"?: boolean,"name": string,"notes"?: string | null,"postal_code"?: string | null,"state"?: string | null,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "address_line"?: string | null,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"city"?: string | null,"country_code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_main"?: boolean,"name"?: string,"notes"?: string | null,"postal_code"?: string | null,"state"?: string | null,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "plants_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"qualification_step_types": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"qualification_steps": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"comments": string | null,"created_at": string,"created_by": string | null,"id": string,"performed_on": string | null,"qualification_id": string,"result": string,"score": number | null,"step_code": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"comments"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"performed_on"?: string | null,"qualification_id": string,"result"?: string,"score"?: number | null,"step_code": string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"comments"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"performed_on"?: string | null,"qualification_id"?: string,"result"?: string,"score"?: number | null,"step_code"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "qualification_steps_qualification_id_fkey"
+      columns: ["qualification_id"]
+isOneToOne: false
+      referencedRelation: "qualifications"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "qualification_steps_step_code_fkey"
+      columns: ["step_code"]
+isOneToOne: false
+      referencedRelation: "qualification_step_types"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "qualification_steps_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"qualifications": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"concluded_on": string | null,"created_at": string,"created_by": string | null,"final_opinion": string | null,"id": string,"purchasing_contact": string | null,"status": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"concluded_on"?: string | null,"created_at"?: string,"created_by"?: string | null,"final_opinion"?: string | null,"id"?: string,"purchasing_contact"?: string | null,"status"?: string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"concluded_on"?: string | null,"created_at"?: string,"created_by"?: string | null,"final_opinion"?: string | null,"id"?: string,"purchasing_contact"?: string | null,"status"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "qualifications_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"standard_requirements": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"id": string,"item_code": string,"kind": string,"sort_order": number,"standard_id": string,"text_en": string,"text_pt": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"item_code": string,"kind"?: string,"sort_order"?: number,"standard_id": string,"text_en": string,"text_pt": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"item_code"?: string,"kind"?: string,"sort_order"?: number,"standard_id"?: string,"text_en"?: string,"text_pt"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "standard_requirements_standard_id_fkey"
+      columns: ["standard_id"]
+isOneToOne: false
+      referencedRelation: "standards"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"standards": {
+                  Row: {
+                    "application": string,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"issuer": string | null,"notes": string | null,"revision": string | null,"title_en": string,"title_pt": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "application": string,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"issuer"?: string | null,"notes"?: string | null,"revision"?: string | null,"title_en": string,"title_pt": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "application"?: string,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"issuer"?: string | null,"notes"?: string | null,"revision"?: string | null,"title_en"?: string,"title_pt"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"sub_supplier_components": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"component_id": string,"created_at": string,"created_by": string | null,"id": string,"sub_supplier_id": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"component_id": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"sub_supplier_id": string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"component_id"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"sub_supplier_id"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sub_supplier_components_component_id_fkey"
+      columns: ["component_id"]
+isOneToOne: false
+      referencedRelation: "components"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "sub_supplier_components_sub_supplier_id_fkey"
+      columns: ["sub_supplier_id"]
+isOneToOne: false
+      referencedRelation: "sub_suppliers"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "sub_supplier_components_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"sub_suppliers": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"country_code": string | null,"created_at": string,"created_by": string | null,"id": string,"material": string | null,"name": string,"notes": string | null,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"country_code"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"material"?: string | null,"name": string,"notes"?: string | null,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"country_code"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"material"?: string | null,"name"?: string,"notes"?: string | null,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sub_suppliers_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"supplier_components": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"component_id": string,"created_at": string,"created_by": string | null,"id": string,"supplier_id": string,"supplier_part_number": string | null,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"component_id": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"supplier_id": string,"supplier_part_number"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"component_id"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"supplier_id"?: string,"supplier_part_number"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "supplier_components_component_id_fkey"
+      columns: ["component_id"]
+isOneToOne: false
+      referencedRelation: "components"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "supplier_components_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"supplier_status_history": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"from_status": string | null,"id": string,"justification": string | null,"supplier_id": string,"to_status": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"from_status"?: string | null,"id"?: string,"justification"?: string | null,"supplier_id": string,"to_status": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"from_status"?: string | null,"id"?: string,"justification"?: string | null,"supplier_id"?: string,"to_status"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "supplier_status_history_from_status_fkey"
+      columns: ["from_status"]
+isOneToOne: false
+      referencedRelation: "supplier_statuses"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "supplier_status_history_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "supplier_status_history_to_status_fkey"
+      columns: ["to_status"]
+isOneToOne: false
+      referencedRelation: "supplier_statuses"
+      referencedColumns: ["code"]
+    }
+                  ]
+                },"supplier_statuses": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"tone": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"tone"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"tone"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"suppliers": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"country_code": string,"created_at": string,"created_by": string | null,"criticality": string,"id": string,"legal_name": string,"notes": string | null,"responsible_sqe_id": string | null,"status_code": string,"tax_id": string | null,"trade_name": string | null,"updated_at": string,"updated_by": string | null,"website": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"country_code"?: string,"created_at"?: string,"created_by"?: string | null,"criticality"?: string,"id"?: string,"legal_name": string,"notes"?: string | null,"responsible_sqe_id"?: string | null,"status_code"?: string,"tax_id"?: string | null,"trade_name"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"website"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"country_code"?: string,"created_at"?: string,"created_by"?: string | null,"criticality"?: string,"id"?: string,"legal_name"?: string,"notes"?: string | null,"responsible_sqe_id"?: string | null,"status_code"?: string,"tax_id"?: string | null,"trade_name"?: string | null,"updated_at"?: string,"updated_by"?: string | null,"website"?: string | null
                   }
                   Relationships: [
                     {
@@ -95,6 +483,12 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "users"
       referencedColumns: ["id"]
+    },{
+      foreignKeyName: "suppliers_status_code_fkey"
+      columns: ["status_code"]
+isOneToOne: false
+      referencedRelation: "supplier_statuses"
+      referencedColumns: ["code"]
     }
                   ]
                 },"users": {
@@ -123,17 +517,26 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            "can_access_supplier":
+            "can_access_component":
+{ Args: { "p_component_id": string }; Returns: boolean
+                           },
+"can_access_supplier":
 { Args: { "p_supplier_id": string }; Returns: boolean
                            },
 "can_invite":
 { Args: { "p_role": Database["public"]['Enums']["app_role"],"p_supplier_id"?: string }; Returns: boolean
+                           },
+"can_manage_component":
+{ Args: { "p_component_id": string }; Returns: boolean
                            },
 "can_manage_supplier":
 { Args: { "p_supplier_id": string }; Returns: boolean
                            },
 "can_write_supplier_row":
 { Args: { "p_supplier_id": string }; Returns: boolean
+                           },
+"change_supplier_status":
+{ Args: { "p_justification": string,"p_status": string,"p_supplier_id": string }; Returns: undefined
                            },
 "current_app_role":
 { Args: Record<PropertyKey, never>; Returns: Database["public"]['Enums']["app_role"]
@@ -146,6 +549,12 @@ isOneToOne: false
                            },
 "is_sqm":
 { Args: Record<PropertyKey, never>; Returns: boolean
+                           },
+"is_valid_cnpj":
+{ Args: { "p_cnpj": string }; Returns: boolean
+                           },
+"normalize_tax_id":
+{ Args: { "p_country": string,"p_tax_id": string }; Returns: string
                            }
           }
           Enums: {
