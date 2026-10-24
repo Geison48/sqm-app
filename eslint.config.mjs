@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Arquivos gerados para o deploy pelo painel (npm run build:deploy).
+    "deploy/**",
   ]),
 ]);
 

@@ -68,6 +68,7 @@ Stack obrigatória: Next.js (App Router) + TypeScript, Tailwind + shadcn/ui, nex
 - Edge Function em Deno: fora do `tsconfig` do Next (`supabase/functions/notifications`); `_shared/` é TS puro, testado pelo Vitest. Depois de mudar a função localmente, `docker restart supabase_edge_runtime_user` se ela não recarregar.
 - Offline: a execução sem sinal usa só `src/lib/offline/*` e a página `/offline` (client, sem navegação do Next). Mudou a regra de OK/NOK no banco? Atualize `src/lib/offline/evaluate.ts`. O service worker só roda em produção (`npm run build && npm start`).
 - Tabela nova: o teste `08_rls_review` já cobre leitura/escrita entre fornecedores, DELETE e audit_log automaticamente.
+- Mudou migration ou a Edge Function? Rode `npm run build:deploy` e faça commit da pasta `deploy/` (o usuário publica pelo painel, sem CLI).
 - Server actions devolvem **chaves de tradução** (`"users.errorForbidden"`), nunca texto.
 - Cliente admin (`src/lib/supabase/admin.ts`) ignora RLS: use só depois de checar a permissão com o cliente do usuário (ex.: `rpc("can_invite")`).
 - Componentes shadcn ficam em `src/components/ui`. O site do shadcn está bloqueado neste ambiente; copie do repositório oficial (`apps/v4/registry/new-york-v4/ui`) e traduza textos fixos via namespace `ui`.

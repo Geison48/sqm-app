@@ -92,6 +92,8 @@ Os e-mails do app (eventos, escalonamento, resumo diário) saem pela Edge Functi
 
 ## Deploy (Supabase na nuvem + Vercel)
 
+**Sem linha de comando:** siga [`deploy/LEIA-ME.md`](deploy/LEIA-ME.md). É um passo a passo clique a clique que usa arquivos prontos para colar no painel do Supabase (`npm run build:deploy` regenera esses arquivos depois de mudar migrations ou a Edge Function). Abaixo está o caminho com a CLI, para quem prefere.
+
 ### 1. Supabase
 
 1. Crie um projeto em https://supabase.com/dashboard. Escolha a região **South America (São Paulo)** e guarde a senha do banco.

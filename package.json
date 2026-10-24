@@ -14,7 +14,8 @@
     "db:reset": "supabase db reset",
     "db:types": "supabase gen types typescript --local > src/lib/database.types.ts",
     "create-sqm": "tsx scripts/create-sqm.ts",
-    "sync:messages": "node scripts/sync-function-messages.mjs"
+    "sync:messages": "node scripts/sync-function-messages.mjs",
+    "build:deploy": "node scripts/build-deploy.mjs"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.9.0",
