@@ -10,7 +10,7 @@ import { ToneBadge } from "@/components/shared/badges";
 import { requireProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import {
-  getContactRoles, getQualificationStepTypes, getSupplierStatuses, type LookupItem, type StatusItem,
+  getContactRoles, getLookup, getQualificationStepTypes, getSupplierStatuses, type LookupItem, type StatusItem,
 } from "@/lib/lookups";
 import { saveGeneralSettings, saveLookupItem } from "@/lib/actions/settings";
 
@@ -26,12 +26,21 @@ export default async function SettingsPage() {
   const t = await getTranslations("settings");
   const tc = await getTranslations("common");
   const supabase = await createClient();
-  const [statuses, roles, steps, { data: settings }] = await Promise.all([
-    getSupplierStatuses(),
-    getContactRoles(),
-    getQualificationStepTypes(),
-    supabase.from("app_settings").select("key, value").in("key", ["certificate_alert_days", "timezone"]),
-  ]);
+  const [statuses, roles, steps, { data: settings }, origins, severities, failureModes, dispositions, locations, costTypes, disciplines] =
+    await Promise.all([
+      getSupplierStatuses(),
+      getContactRoles(),
+      getQualificationStepTypes(),
+      supabase.from("app_settings").select("key, value").in("key", [
+        "certificate_alert_days", "timezone", "deadline_warning_ratio", "simple_nc_response_days", "recurrence_window_days",
+      ]),
+      getLookup("nc_origins"), getLookup("nc_severities"), getLookup("failure_modes"), getLookup("dispositions"),
+      getLookup("containment_locations"), getLookup("cost_types"), getLookup("eight_d_disciplines"),
+    ]);
+  const num = (key: string, fallback: number) => {
+    const n = Number(setting(key));
+    return Number.isFinite(n) ? n : fallback;
+  };
   const setting = (key: string) => settings?.find((s) => s.key === key)?.value;
 
   const alertDays = Array.isArray(setting("certificate_alert_days")) ? (setting("certificate_alert_days") as number[]).join(", ") : "60, 30, 7";
@@ -51,6 +60,12 @@ export default async function SettingsPage() {
               { name: "certificate_alert_days", label: t("certificateAlertDays"), required: true,
                 hint: t("certificateAlertDaysHint"), defaultValue: alertDays },
               { name: "timezone", label: t("timezone"), required: true, defaultValue: String(setting("timezone") ?? "America/Sao_Paulo") },
+              { name: "deadline_warning_ratio", label: t("deadlineWarningRatio"), type: "number", required: true, span: 1,
+                defaultValue: Math.round(num("deadline_warning_ratio", 0.25) * 100) },
+              { name: "simple_nc_response_days", label: t("simpleNcResponseDays"), type: "number", required: true, span: 1,
+                defaultValue: num("simple_nc_response_days", 10) },
+              { name: "recurrence_window_days", label: t("recurrenceWindowDays"), type: "number", required: true, span: 1,
+                defaultValue: num("recurrence_window_days", 365) },
             ]}
           />
         </div>
@@ -63,12 +78,32 @@ export default async function SettingsPage() {
             <dt className="text-xs text-muted-foreground uppercase">{t("timezone")}</dt>
             <dd>{String(setting("timezone") ?? "—")}</dd>
           </div>
+          <div>
+            <dt className="text-xs text-muted-foreground uppercase">{t("deadlineWarningRatio")}</dt>
+            <dd>{Math.round(num("deadline_warning_ratio", 0.25) * 100)}%</dd>
+          </div>
+          <div>
+            <dt className="text-xs text-muted-foreground uppercase">{t("simpleNcResponseDays")}</dt>
+            <dd>{num("simple_nc_response_days", 10)}</dd>
+          </div>
+          <div>
+            <dt className="text-xs text-muted-foreground uppercase">{t("recurrenceWindowDays")}</dt>
+            <dd>{num("recurrence_window_days", 365)}</dd>
+          </div>
         </dl>
       </section>
 
       <LookupSection table="supplier_statuses" title={t("supplierStatuses")} items={statuses} withTone />
       <LookupSection table="contact_roles" title={t("contactRoles")} items={roles} />
       <LookupSection table="qualification_step_types" title={t("qualificationSteps")} items={steps} />
+      <h2 className="border-t pt-6 text-xl font-semibold">{t("ncGeneral")}</h2>
+      <LookupSection table="eight_d_disciplines" title={t("eightD")} items={disciplines} withDeadline fixed />
+      <LookupSection table="nc_origins" title={t("ncOrigins")} items={origins} />
+      <LookupSection table="nc_severities" title={t("ncSeverities")} items={severities} withTone />
+      <LookupSection table="failure_modes" title={t("failureModes")} items={failureModes} />
+      <LookupSection table="dispositions" title={t("dispositions")} items={dispositions} />
+      <LookupSection table="containment_locations" title={t("containmentLocations")} items={locations} />
+      <LookupSection table="cost_types" title={t("costTypes")} items={costTypes} />
       <p className="flex items-center gap-1 text-xs text-muted-foreground">
         <LockIcon className="size-3" /> {t("systemHint")}
       </p>
@@ -76,16 +111,25 @@ export default async function SettingsPage() {
   );
 }
 
+type LookupTable =
+  | "supplier_statuses" | "contact_roles" | "qualification_step_types" | "nc_origins" | "nc_severities" | "failure_modes"
+  | "dispositions" | "containment_locations" | "cost_types" | "eight_d_disciplines";
+type Item = (LookupItem | StatusItem) & { deadline_hours?: number };
+
 async function LookupSection({
-table, title, items, withTone,
+  table, title, items, withTone, withDeadline, fixed,
 }: {
-  table: "supplier_statuses" | "contact_roles" | "qualification_step_types";
+  table: LookupTable;
   title: string;
-  items: (LookupItem | StatusItem)[];
-withTone?: boolean;
+  items: Item[];
+  withTone?: boolean;
+  /** Prazo em horas (disciplinas do 8D). */
+  withDeadline?: boolean;
+  /** Lista fechada: sem adicionar itens. */
+  fixed?: boolean;
 }) {
-const t = await getTranslations("settings");
-  const fields = (item?: LookupItem | StatusItem): FieldDef[] => {
+  const t = await getTranslations("settings");
+  const fields = (item?: Item): FieldDef[] => {
     const list: FieldDef[] = [];
     if (!item) list.push({ name: "code", label: t("code"), required: true, hint: t("codeHint") });
     list.push(
@@ -94,6 +138,10 @@ const t = await getTranslations("settings");
       { name: "sort_order", label: t("sortOrder"), type: "number", span: 1,
         defaultValue: item?.sort_order ?? (items.length + 1) * 10 },
     );
+    if (withDeadline) {
+      list.push({ name: "deadline_hours", label: t("deadlineHours"), type: "number", required: true, span: 1,
+        defaultValue: item?.deadline_hours });
+    }
     if (withTone) {
       list.push({ name: "tone", label: t("tone"), type: "select", required: true, span: 1,
         options: TONES.map((x) => ({ value: x, label: t(`tones.${x}`) })),
@@ -105,8 +153,10 @@ const t = await getTranslations("settings");
     <section className="space-y-3">
       <div className="flex items-center justify-between gap-2">
         <h2 className="text-lg font-medium">{title}</h2>
-        <RecordDialog trigger={<AddButton label={t("addItem")} />} title={`${title} — ${t("addItem")}`}
-          fields={fields()} hidden={{ table }} action={saveLookupItem} />
+        {!fixed && (
+          <RecordDialog trigger={<AddButton label={t("addItem")} />} title={`${title} — ${t("addItem")}`}
+            fields={fields()} hidden={{ table }} action={saveLookupItem} />
+        )}
       </div>
       <div className="rounded-lg border">
         <Table>
@@ -115,6 +165,7 @@ const t = await getTranslations("settings");
               <TableHead>{t("code")}</TableHead>
               <TableHead>{t("labelPt")}</TableHead>
               <TableHead className="hidden sm:table-cell">{t("labelEn")}</TableHead>
+              {withDeadline && <TableHead>{t("deadlineHours")}</TableHead>}
               <TableHead className="w-0" />
             </TableRow>
           </TableHeader>
@@ -131,11 +182,14 @@ const t = await getTranslations("settings");
                   {withTone ? <ToneBadge tone={(item as StatusItem).tone}>{item.label_pt}</ToneBadge> : item.label_pt}
                 </TableCell>
                 <TableCell className="hidden sm:table-cell">{item.label_en}</TableCell>
+                {withDeadline && <TableCell>{item.deadline_hours} h</TableCell>}
                 <TableCell>
                   <div className="flex flex-wrap justify-end">
                     <RecordDialog trigger={<EditButton label={t("editItem")} />} title={`${title} — ${t("editItem")}`}
                       fields={fields(item)} hidden={{ table, id: item.id }} action={saveLookupItem} />
-                    {!item.is_system && <CancelRecordButton table={table} id={item.id} path="/settings" />}
+                    {!item.is_system && table !== "eight_d_disciplines" && (
+                      <CancelRecordButton table={table} id={item.id} path="/settings" />
+                    )}
                   </div>
                 </TableCell>
               </TableRow>

@@ -43,7 +43,7 @@ const SECTIONS: NavSection[] = [
   {
     key: "sectionQuality",
     items: [
-      { key: "ncs", href: "/ncs", icon: "alert", roles: ALL, ready: false },
+      { key: "ncs", href: "/ncs", icon: "alert", roles: ALL, ready: true },
       { key: "audits", href: "/audits", icon: "clipboard", roles: ALL, ready: false },
       { key: "inspections", href: "/inspections", icon: "search", roles: ALL, ready: false },
     ],

@@ -33,12 +33,10 @@ export default async function NotificationsPage() {
     const validUntil = typeof params.validUntil === "string"
       ? format.dateTime(new Date(`${params.validUntil}T12:00:00`), { dateStyle: "short" })
       : "—";
-    return t(key, {
-      supplier: String(params.supplier ?? ""),
-      certificate: String(params.certificate ?? ""),
-      days: Number(params.days ?? 0),
-      validUntil,
-    } as never);
+    // Repassa todos os parâmetros do evento (texto) + os que precisam de formatação.
+    const values: Record<string, string | number> = {};
+    for (const [k, v] of Object.entries(params)) values[k] = typeof v === "number" ? v : String(v ?? "");
+    return t(key, { ...values, days: Number(params.days ?? 0), validUntil } as never);
   }
 
   return (

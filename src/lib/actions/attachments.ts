@@ -8,6 +8,7 @@ import type { ActionState } from "@/lib/action-state";
 
 const ENTITY_TABLES = [
   "suppliers", "certifications", "components", "standards", "qualifications", "qualification_steps", "sub_suppliers",
+  "ncs",
 ] as const;
 
 const registerSchema = z.object({

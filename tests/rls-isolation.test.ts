@@ -152,4 +152,24 @@ describe("isolamento entre fornecedores (RLS)", () => {
     });
     expect(error?.code).toBe("42501");
   });
+
+  it("NC: A não vê NCs, 8D, custos ou comentários do B, nem custos e comentários internos", async () => {
+    for (const table of ["ncs", "eight_d_steps", "nc_costs", "nc_comments", "nc_items"] as const) {
+      const { data } = await userA.from(table).select("supplier_id").eq("supplier_id", SUPPLIER_B);
+      expect(data, table).toEqual([]);
+    }
+    const { data: costs } = await userA.from("nc_costs").select("chargeable");
+    expect(costs!.length).toBeGreaterThan(0);
+    expect(costs!.every((c) => c.chargeable)).toBe(true);
+    const { data: comments } = await userA.from("nc_comments").select("internal");
+    expect(comments!.every((c) => !c.internal)).toBe(true);
+    expect((await userA.from("lessons_learned").select("id")).data).toEqual([]);
+  });
+
+  it("NC: SQE vê o custo interno e o comentário interno", async () => {
+    const { data: costs } = await sqe.from("nc_costs").select("chargeable");
+    expect(costs!.some((c) => !c.chargeable)).toBe(true);
+    const { data: comments } = await sqe.from("nc_comments").select("internal");
+    expect(comments!.some((c) => c.internal)).toBe(true);
+  });
 });

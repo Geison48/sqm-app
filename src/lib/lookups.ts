@@ -49,3 +49,22 @@ export const getInternalUsers = cache(async () => {
     .order("full_name");
   return data ?? [];
 });
+
+// Listas da etapa 3 (mesmo formato; status de severidade tem cor).
+type LookupTable =
+  | "nc_origins" | "nc_severities" | "failure_modes" | "dispositions" | "containment_locations" | "cost_types"
+  | "eight_d_disciplines";
+
+export const getLookup = cache(async (table: LookupTable, includeCancelled = false) => {
+  const supabase = await createClient();
+  let q = supabase.from(table).select("*").order("sort_order");
+  if (!includeCancelled) q = q.is("cancelled_at", null);
+  return ((await q).data ?? []) as (StatusItem & { deadline_hours?: number })[];
+});
+
+export const getNumericSetting = cache(async (key: string, fallback: number) => {
+  const supabase = await createClient();
+  const { data } = await supabase.from("app_settings").select("value").eq("key", key).maybeSingle();
+  const n = Number(data?.value);
+  return Number.isFinite(n) ? n : fallback;
+});

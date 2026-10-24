@@ -195,6 +195,428 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"containment_actions": {
+                  Row: {
+                    "action_taken": string | null,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"done_on": string | null,"id": string,"location_code": string,"nc_id": string,"qty_checked": number,"qty_nok": number,"qty_ok": number,"responsible": string | null,"sn_or_lot": string | null,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "action_taken"?: string | null,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"done_on"?: string | null,"id"?: string,"location_code": string,"nc_id": string,"qty_checked"?: number,"qty_nok"?: number,"qty_ok"?: number,"responsible"?: string | null,"sn_or_lot"?: string | null,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "action_taken"?: string | null,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"done_on"?: string | null,"id"?: string,"location_code"?: string,"nc_id"?: string,"qty_checked"?: number,"qty_nok"?: number,"qty_ok"?: number,"responsible"?: string | null,"sn_or_lot"?: string | null,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "containment_actions_location_code_fkey"
+      columns: ["location_code"]
+isOneToOne: false
+      referencedRelation: "containment_locations"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "containment_actions_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "nc_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "containment_actions_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "ncs"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "containment_actions_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"containment_locations": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"cost_types": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"dispositions": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"eight_d_disciplines": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"deadline_hours": number,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"deadline_hours": number,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"deadline_hours"?: number,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"eight_d_step_versions": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"content": NonNullable<Json>,"created_at": string,"created_by": string | null,"decision": string | null,"discipline": string,"id": string,"nc_id": string,"review_comment": string | null,"reviewed_at": string | null,"reviewed_by": string | null,"step_id": string,"submitted_at": string,"submitted_by": string | null,"supplier_id": string,"updated_at": string,"updated_by": string | null,"version": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"content": NonNullable<Json>,"created_at"?: string,"created_by"?: string | null,"decision"?: string | null,"discipline": string,"id"?: string,"nc_id": string,"review_comment"?: string | null,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"step_id": string,"submitted_at"?: string,"submitted_by"?: string | null,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null,"version": number
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"content"?: NonNullable<Json>,"created_at"?: string,"created_by"?: string | null,"decision"?: string | null,"discipline"?: string,"id"?: string,"nc_id"?: string,"review_comment"?: string | null,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"step_id"?: string,"submitted_at"?: string,"submitted_by"?: string | null,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null,"version"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "eight_d_step_versions_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "nc_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "eight_d_step_versions_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "ncs"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "eight_d_step_versions_step_id_fkey"
+      columns: ["step_id"]
+isOneToOne: false
+      referencedRelation: "eight_d_steps"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "eight_d_step_versions_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"eight_d_steps": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"content": NonNullable<Json>,"created_at": string,"created_by": string | null,"current_version": number,"discipline": string,"due_at": string,"id": string,"nc_id": string,"review_comment": string | null,"reviewed_at": string | null,"reviewed_by": string | null,"status": string,"submitted_at": string | null,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"content"?: NonNullable<Json>,"created_at"?: string,"created_by"?: string | null,"current_version"?: number,"discipline": string,"due_at": string,"id"?: string,"nc_id": string,"review_comment"?: string | null,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"status"?: string,"submitted_at"?: string | null,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"content"?: NonNullable<Json>,"created_at"?: string,"created_by"?: string | null,"current_version"?: number,"discipline"?: string,"due_at"?: string,"id"?: string,"nc_id"?: string,"review_comment"?: string | null,"reviewed_at"?: string | null,"reviewed_by"?: string | null,"status"?: string,"submitted_at"?: string | null,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "eight_d_steps_discipline_fkey"
+      columns: ["discipline"]
+isOneToOne: false
+      referencedRelation: "eight_d_disciplines"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "eight_d_steps_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "nc_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "eight_d_steps_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "ncs"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "eight_d_steps_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"failure_modes": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"lessons_learned": {
+                  Row: {
+                    "action": string,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"component_id": string | null,"created_at": string,"created_by": string | null,"failure": string,"failure_mode_code": string | null,"id": string,"keywords": (string)[],"nc_id": string,"root_cause": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "action": string,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"component_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"failure": string,"failure_mode_code"?: string | null,"id"?: string,"keywords"?: (string)[],"nc_id": string,"root_cause": string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "action"?: string,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"component_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"failure"?: string,"failure_mode_code"?: string | null,"id"?: string,"keywords"?: (string)[],"nc_id"?: string,"root_cause"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "lessons_learned_component_id_fkey"
+      columns: ["component_id"]
+isOneToOne: false
+      referencedRelation: "components"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "lessons_learned_failure_mode_code_fkey"
+      columns: ["failure_mode_code"]
+isOneToOne: false
+      referencedRelation: "failure_modes"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "lessons_learned_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "nc_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "lessons_learned_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "ncs"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "lessons_learned_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"nc_comments": {
+                  Row: {
+                    "body": string,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"id": string,"internal": boolean,"nc_id": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "body": string,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"internal"?: boolean,"nc_id": string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "body"?: string,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"internal"?: boolean,"nc_id"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "nc_comments_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "nc_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "nc_comments_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "ncs"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "nc_comments_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"nc_costs": {
+                  Row: {
+                    "amount": number | null,"cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"chargeable": boolean,"cost_type_code": string,"created_at": string,"created_by": string | null,"currency": string,"description": string,"id": string,"nc_id": string,"quantity": number,"responded_at": string | null,"responded_by": string | null,"sqe_decision_comment": string | null,"status": string,"supplier_id": string,"supplier_response": string | null,"unit_amount": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "amount"?: never,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"chargeable"?: boolean,"cost_type_code": string,"created_at"?: string,"created_by"?: string | null,"currency"?: string,"description": string,"id"?: string,"nc_id": string,"quantity"?: number,"responded_at"?: string | null,"responded_by"?: string | null,"sqe_decision_comment"?: string | null,"status"?: string,"supplier_id": string,"supplier_response"?: string | null,"unit_amount": number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "amount"?: never,"cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"chargeable"?: boolean,"cost_type_code"?: string,"created_at"?: string,"created_by"?: string | null,"currency"?: string,"description"?: string,"id"?: string,"nc_id"?: string,"quantity"?: number,"responded_at"?: string | null,"responded_by"?: string | null,"sqe_decision_comment"?: string | null,"status"?: string,"supplier_id"?: string,"supplier_response"?: string | null,"unit_amount"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "nc_costs_cost_type_code_fkey"
+      columns: ["cost_type_code"]
+isOneToOne: false
+      referencedRelation: "cost_types"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "nc_costs_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "nc_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "nc_costs_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "ncs"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "nc_costs_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"nc_counters": {
+                  Row: {
+                    "last_number": number,"year": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "last_number"?: number,"year": number
+                  }
+                  Update: {
+                    "last_number"?: number,"year"?: number
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"nc_items": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"id": string,"nc_id": string,"notes": string | null,"quantity": number | null,"sn_or_lot": string,"supplier_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"nc_id": string,"notes"?: string | null,"quantity"?: number | null,"sn_or_lot": string,"supplier_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"id"?: string,"nc_id"?: string,"notes"?: string | null,"quantity"?: number | null,"sn_or_lot"?: string,"supplier_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "nc_items_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "nc_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "nc_items_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "ncs"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "nc_items_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"nc_origins": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"nc_severities": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"code": string,"created_at": string,"created_by": string | null,"id": string,"is_system": boolean,"label_en": string,"label_pt": string,"sort_order": number,"tone": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en": string,"label_pt": string,"sort_order"?: number,"tone"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"code"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"is_system"?: boolean,"label_en"?: string,"label_pt"?: string,"sort_order"?: number,"tone"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"ncs": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"closed_at": string | null,"closed_by": string | null,"closure_comment": string | null,"component_id": string | null,"created_at": string,"created_by": string | null,"customer_affected": boolean,"description": string,"detected_location": string | null,"detected_on": string,"disposition_code": string | null,"disposition_notes": string | null,"effectiveness_method": string | null,"effectiveness_result": string | null,"effectiveness_target": string | null,"effectiveness_verified": boolean,"effectiveness_verified_at": string | null,"effectiveness_verified_by": string | null,"failure_mode_code": string | null,"finding_id": string | null,"id": string,"number": string,"opened_at": string,"origin_code": string,"quantity_affected": number | null,"response_due_at": string | null,"severity_code": string,"sqe_review_comment": string | null,"status": string,"suggested_8d": boolean,"suggestion_reasons": (string)[],"supplier_action": string | null,"supplier_id": string,"supplier_responded_at": string | null,"title": string,"type": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"closed_at"?: string | null,"closed_by"?: string | null,"closure_comment"?: string | null,"component_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"customer_affected"?: boolean,"description": string,"detected_location"?: string | null,"detected_on"?: string,"disposition_code"?: string | null,"disposition_notes"?: string | null,"effectiveness_method"?: string | null,"effectiveness_result"?: string | null,"effectiveness_target"?: string | null,"effectiveness_verified"?: boolean,"effectiveness_verified_at"?: string | null,"effectiveness_verified_by"?: string | null,"failure_mode_code"?: string | null,"finding_id"?: string | null,"id"?: string,"number": string,"opened_at"?: string,"origin_code": string,"quantity_affected"?: number | null,"response_due_at"?: string | null,"severity_code": string,"sqe_review_comment"?: string | null,"status"?: string,"suggested_8d"?: boolean,"suggestion_reasons"?: (string)[],"supplier_action"?: string | null,"supplier_id": string,"supplier_responded_at"?: string | null,"title": string,"type": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"closed_at"?: string | null,"closed_by"?: string | null,"closure_comment"?: string | null,"component_id"?: string | null,"created_at"?: string,"created_by"?: string | null,"customer_affected"?: boolean,"description"?: string,"detected_location"?: string | null,"detected_on"?: string,"disposition_code"?: string | null,"disposition_notes"?: string | null,"effectiveness_method"?: string | null,"effectiveness_result"?: string | null,"effectiveness_target"?: string | null,"effectiveness_verified"?: boolean,"effectiveness_verified_at"?: string | null,"effectiveness_verified_by"?: string | null,"failure_mode_code"?: string | null,"finding_id"?: string | null,"id"?: string,"number"?: string,"opened_at"?: string,"origin_code"?: string,"quantity_affected"?: number | null,"response_due_at"?: string | null,"severity_code"?: string,"sqe_review_comment"?: string | null,"status"?: string,"suggested_8d"?: boolean,"suggestion_reasons"?: (string)[],"supplier_action"?: string | null,"supplier_id"?: string,"supplier_responded_at"?: string | null,"title"?: string,"type"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "ncs_component_id_fkey"
+      columns: ["component_id"]
+isOneToOne: false
+      referencedRelation: "components"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "ncs_disposition_code_fkey"
+      columns: ["disposition_code"]
+isOneToOne: false
+      referencedRelation: "dispositions"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "ncs_failure_mode_code_fkey"
+      columns: ["failure_mode_code"]
+isOneToOne: false
+      referencedRelation: "failure_modes"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "ncs_origin_code_fkey"
+      columns: ["origin_code"]
+isOneToOne: false
+      referencedRelation: "nc_origins"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "ncs_severity_code_fkey"
+      columns: ["severity_code"]
+isOneToOne: false
+      referencedRelation: "nc_severities"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "ncs_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"notifications": {
                   Row: {
                     "created_at": string,"dedupe_key": string | null,"email_sent_at": string | null,"entity_id": string | null,"entity_table": string | null,"event_code": string,"id": string,"link_path": string | null,"params": NonNullable<Json>,"read_at": string | null,"recipient_id": string,"supplier_id": string | null
@@ -301,6 +723,44 @@ isOneToOne: false
                   Relationships: [
                     {
       foreignKeyName: "qualifications_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"rca_tools": {
+                  Row: {
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"content": NonNullable<Json>,"created_at": string,"created_by": string | null,"eight_d_step_id": string,"id": string,"nc_id": string,"supplier_id": string,"tool_type": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"content"?: NonNullable<Json>,"created_at"?: string,"created_by"?: string | null,"eight_d_step_id": string,"id"?: string,"nc_id": string,"supplier_id": string,"tool_type": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"content"?: NonNullable<Json>,"created_at"?: string,"created_by"?: string | null,"eight_d_step_id"?: string,"id"?: string,"nc_id"?: string,"supplier_id"?: string,"tool_type"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "rca_tools_eight_d_step_id_fkey"
+      columns: ["eight_d_step_id"]
+isOneToOne: false
+      referencedRelation: "eight_d_steps"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "rca_tools_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "nc_overview"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "rca_tools_nc_id_fkey"
+      columns: ["nc_id"]
+isOneToOne: false
+      referencedRelation: "ncs"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "rca_tools_supplier_id_fkey"
       columns: ["supplier_id"]
 isOneToOne: false
       referencedRelation: "suppliers"
@@ -514,7 +974,45 @@ isOneToOne: false
                 }
           }
           Views: {
-            [_ in never]: never
+            "nc_overview": {
+                  Row: {
+                    "approved_steps": number | null,"cancelled_at": string | null,"closed_at": string | null,"component_id": string | null,"failure_mode_code": string | null,"gw_code": string | null,"id": string,"next_due_at": string | null,"number": string,"opened_at": string,"origin_code": string,"pending_with": string | null,"severity_code": string,"status": string,"suggested_8d": boolean,"supplier_id": string,"supplier_name": string,"title": string,"type": string
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "ncs_component_id_fkey"
+      columns: ["component_id"]
+isOneToOne: false
+      referencedRelation: "components"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "ncs_failure_mode_code_fkey"
+      columns: ["failure_mode_code"]
+isOneToOne: false
+      referencedRelation: "failure_modes"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "ncs_origin_code_fkey"
+      columns: ["origin_code"]
+isOneToOne: false
+      referencedRelation: "nc_origins"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "ncs_severity_code_fkey"
+      columns: ["severity_code"]
+isOneToOne: false
+      referencedRelation: "nc_severities"
+      referencedColumns: ["code"]
+    },{
+      foreignKeyName: "ncs_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                }
           }
           Functions: {
             "can_access_component":
@@ -538,6 +1036,12 @@ isOneToOne: false
 "change_supplier_status":
 { Args: { "p_justification": string,"p_status": string,"p_supplier_id": string }; Returns: undefined
                            },
+"close_8d":
+{ Args: { "p_action": string,"p_comment"?: string,"p_failure": string,"p_keywords": (string)[],"p_nc_id": string,"p_root_cause": string }; Returns: string
+                           },
+"convert_nc_to_8d":
+{ Args: { "p_nc_id": string }; Returns: undefined
+                           },
 "current_app_role":
 { Args: Record<PropertyKey, never>; Returns: Database["public"]['Enums']["app_role"]
                            },
@@ -555,6 +1059,24 @@ isOneToOne: false
                            },
 "normalize_tax_id":
 { Args: { "p_country": string,"p_tax_id": string }; Returns: string
+                           },
+"respond_nc_cost":
+{ Args: { "p_accept": boolean,"p_cost_id": string,"p_justification": string }; Returns: undefined
+                           },
+"respond_simple_nc":
+{ Args: { "p_action": string,"p_nc_id": string }; Returns: undefined
+                           },
+"review_8d_step":
+{ Args: { "p_approve": boolean,"p_comment": string,"p_step_id": string }; Returns: undefined
+                           },
+"review_simple_nc":
+{ Args: { "p_accept": boolean,"p_comment": string,"p_nc_id": string }; Returns: undefined
+                           },
+"save_8d_step":
+{ Args: { "p_content": Json,"p_step_id": string,"p_submit": boolean }; Returns: undefined
+                           },
+"suggest_8d":
+{ Args: { "p_component_id": string,"p_customer_affected": boolean,"p_failure_mode": string,"p_severity": string }; Returns: Json
                            }
           }
           Enums: {

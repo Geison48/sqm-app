@@ -30,6 +30,11 @@ Stack obrigatória: Next.js (App Router) + TypeScript, Tailwind + shadcn/ui, nex
 - **Componentes:** editam o SQM e o SQE responsável por algum fornecedor vinculado; sem vínculo, quem criou.
 - **Alertas de vencimento de certificados:** SQE responsável + usuários do fornecedor.
 - **Normas e qualificação são internas:** anexos dessas entidades são forçados `internal_only` no banco.
+- **8D (etapa 3):** fornecedor preenche e envia Ds livremente (rascunho); SQE aprova em ordem. Prazos D0–D3 48 h, D4 10 d, D5–D6 20 d, D7–D8 30 d (tabela `eight_d_disciplines`). Só o fornecedor responde as Ds.
+- **Modo de falha** é catálogo configurável (`failure_modes`); reincidência = mesmo PN + mesmo modo em `recurrence_window_days`.
+- **NC simples:** SQE define disposição, fornecedor responde a ação, SQE aceita (fecha) ou devolve com comentário.
+- **Custos:** `chargeable = false` = custo interno, invisível ao fornecedor. Contestação → SQE revisa (volta a "lançado"), cancela ou debita com comentário. Custos continuam editáveis após fechar o 8D.
+- **Comentários de NC** podem ser internos; lições aprendidas são internas.
 - `current_app_role()` em vez de `current_role()` (palavra reservada do Postgres).
 - `cacheComponents` desligado no Next 16: todas as telas dependem do usuário logado.
 
@@ -41,6 +46,8 @@ Stack obrigatória: Next.js (App Router) + TypeScript, Tailwind + shadcn/ui, nex
 - Índices que usam `created_at`/`cancelled_at` vêm **depois** de `setup_business_table` (é ela que cria as colunas).
 - Zod nas actions: use `.nullish()` para campos opcionais (campo ausente do formulário chega `undefined`).
 - Formulários: `RecordDialog` (campos declarativos, rótulos já traduzidos) + `CancelRecordButton`; anexos com `AttachmentsPanel`.
+- Fluxos com regra (status, aprovação) ficam em funções `security definer` com flag `app.nc_workflow`/`app.status_change`; triggers bloqueiam UPDATE direto. Siga esse padrão.
+- Formulários das disciplinas do 8D são declarativos em `src/lib/eight-d.ts` (tela, validação e PDF usam a mesma definição).
 - Server actions devolvem **chaves de tradução** (`"users.errorForbidden"`), nunca texto.
 - Cliente admin (`src/lib/supabase/admin.ts`) ignora RLS: use só depois de checar a permissão com o cliente do usuário (ex.: `rpc("can_invite")`).
 - Componentes shadcn ficam em `src/components/ui`. O site do shadcn está bloqueado neste ambiente; copie do repositório oficial (`apps/v4/registry/new-york-v4/ui`) e traduza textos fixos via namespace `ui`.

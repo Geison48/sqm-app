@@ -137,3 +137,85 @@ update public.qualification_steps
    set result = 'approved', performed_on = current_date - 20, score = 82, comments = 'Autoavaliação recebida e revisada.',
        updated_by = '00000000-0000-4000-8000-000000000002'
  where qualification_id = '50000000-0000-4000-8000-000000000001' and step_code = 'self_assessment';
+
+-- -----------------------------------------------------------------------------
+-- Etapa 3: NCs e 8D
+-- -----------------------------------------------------------------------------
+-- NC 1: 8D em andamento no fornecedor A (D0–D2 aprovadas, D3 com o SQE, D4 em rascunho)
+insert into public.ncs (id, supplier_id, component_id, type, origin_code, severity_code, failure_mode_code, title, description,
+                        detected_on, detected_location, quantity_affected, created_by)
+values ('60000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-00000000000a', '30000000-0000-4000-8000-000000000001',
+        '8d', 'receiving_plant', 'major', 'delamination', 'Delaminação na raiz da pá',
+        'Delaminação de ~120 mm na região da raiz detectada no ultrassom de recebimento.', current_date - 5,
+        'Recebimento planta Camaçari', 2, '00000000-0000-4000-8000-000000000002');
+update public.ncs set opened_at = now() - interval '5 days' where id = '60000000-0000-4000-8000-000000000001';
+update public.eight_d_steps s
+   set due_at = n.opened_at + make_interval(hours => d.deadline_hours)
+  from public.ncs n, public.eight_d_disciplines d
+ where s.nc_id = n.id and d.code = s.discipline and n.id = '60000000-0000-4000-8000-000000000001';
+
+insert into public.nc_items (nc_id, supplier_id, sn_or_lot, quantity, created_by) values
+  ('60000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-00000000000a', 'BLD-2026-0412', 1, '00000000-0000-4000-8000-000000000002'),
+  ('60000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-00000000000a', 'BLD-2026-0415', 1, '00000000-0000-4000-8000-000000000002');
+
+update public.eight_d_steps set status = 'approved', current_version = 1, submitted_at = now() - interval '4 days',
+       reviewed_at = now() - interval '4 days', reviewed_by = '00000000-0000-4000-8000-000000000002',
+       content = case discipline
+         when 'D0' then '{"emergency_actions":"Bloqueio das pás em estoque e no pátio.","notes":""}'::jsonb
+         when 'D1' then '{"leader":"Ana Fornecedor A","members":[{"name":"Ana Fornecedor A","function":"Qualidade","company":"Fornecedor A"},{"name":"João Processo","function":"Engenharia de processo","company":"Fornecedor A"}]}'::jsonb
+         else '{"what":"Delaminação na raiz","where":"Região da raiz, lado sucção","when":"Recebimento, lote 2026-04","who":"Inspeção de recebimento GW","how_many":"2 pás","how_detected":"Ultrassom phased array"}'::jsonb
+       end
+ where nc_id = '60000000-0000-4000-8000-000000000001' and discipline in ('D0', 'D1', 'D2');
+insert into public.eight_d_step_versions (step_id, nc_id, supplier_id, discipline, version, content, submitted_by, submitted_at,
+                                          decision, reviewed_by, reviewed_at, created_by)
+select id, nc_id, supplier_id, discipline, 1, content, '00000000-0000-4000-8000-0000000000a1', now() - interval '4 days',
+       'approved', '00000000-0000-4000-8000-000000000002', now() - interval '4 days', '00000000-0000-4000-8000-0000000000a1'
+  from public.eight_d_steps where nc_id = '60000000-0000-4000-8000-000000000001' and discipline in ('D0', 'D1', 'D2');
+
+insert into public.containment_actions (nc_id, supplier_id, location_code, sn_or_lot, qty_checked, qty_ok, qty_nok, action_taken, responsible, done_on, created_by) values
+  ('60000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-00000000000a', 'supplier', 'Lote 2026-04', 6, 5, 1, 'Ultrassom 100% das pás em estoque', 'Ana', current_date - 3, '00000000-0000-4000-8000-0000000000a1'),
+  ('60000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-00000000000a', 'gw_stock', 'BLD-2026-0412 / 0415', 2, 0, 2, 'Segregadas e identificadas em vermelho', 'Sérgio', current_date - 4, '00000000-0000-4000-8000-0000000000a1');
+
+update public.eight_d_steps set status = 'submitted', current_version = 1, submitted_at = now() - interval '2 days',
+       content = '{"summary":"Estoque no fornecedor e na GW verificado 100%; trânsito sem peças do lote.","all_stock_covered":true}'::jsonb
+ where nc_id = '60000000-0000-4000-8000-000000000001' and discipline = 'D3';
+insert into public.eight_d_step_versions (step_id, nc_id, supplier_id, discipline, version, content, submitted_by, submitted_at, created_by)
+select id, nc_id, supplier_id, discipline, 1, content, '00000000-0000-4000-8000-0000000000a1', now() - interval '2 days', '00000000-0000-4000-8000-0000000000a1'
+  from public.eight_d_steps where nc_id = '60000000-0000-4000-8000-000000000001' and discipline = 'D3';
+
+update public.eight_d_steps set status = 'draft',
+       content = '{"occurrence_root_cause":"Tempo de infusão abaixo do especificado após troca de resina.","non_detection_root_cause":""}'::jsonb
+ where nc_id = '60000000-0000-4000-8000-000000000001' and discipline = 'D4';
+insert into public.rca_tools (eight_d_step_id, nc_id, supplier_id, tool_type, content, created_by)
+select id, nc_id, supplier_id, 'ishikawa',
+       '{"method":["Tempo de infusão reduzido"],"machine":["Bomba de vácuo com vazamento"],"material":["Lote novo de resina"],"manpower":[],"measurement":[],"environment":["Temperatura baixa no galpão"]}'::jsonb,
+       '00000000-0000-4000-8000-0000000000a1'
+  from public.eight_d_steps where nc_id = '60000000-0000-4000-8000-000000000001' and discipline = 'D4';
+
+insert into public.nc_costs (nc_id, supplier_id, cost_type_code, description, quantity, unit_amount, chargeable, created_by) values
+  ('60000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-00000000000a', 'tests', 'Ultrassom adicional (2 pás)', 2, 3500, true, '00000000-0000-4000-8000-000000000002'),
+  ('60000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-00000000000a', 'hours', 'Horas internas de engenharia (não cobrar)', 16, 180, false, '00000000-0000-4000-8000-000000000002');
+
+insert into public.nc_comments (nc_id, supplier_id, body, internal, created_by) values
+  ('60000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-00000000000a', 'Favor enviar laudo do ultrassom das 6 pás em estoque.', false, '00000000-0000-4000-8000-000000000002'),
+  ('60000000-0000-4000-8000-000000000001', '10000000-0000-4000-8000-00000000000a', 'Considerar embarque controlado se D4 atrasar.', true, '00000000-0000-4000-8000-000000000002');
+
+-- NC 2: NC simples no fornecedor B
+insert into public.ncs (id, supplier_id, component_id, type, origin_code, severity_code, failure_mode_code, title, description,
+                        disposition_code, disposition_notes, created_by)
+values ('60000000-0000-4000-8000-000000000002', '10000000-0000-4000-8000-00000000000b', '30000000-0000-4000-8000-000000000004',
+        'simple', 'supplier_inspection', 'minor', 'porosity', 'Porosidade superficial na carcaça',
+        'Porosidade superficial fora do padrão visual em 1 carcaça (face do flange).', 'rework',
+        'Retrabalho conforme procedimento de reparo de fundidos aprovado.', '00000000-0000-4000-8000-000000000003');
+
+-- NC 3: 8D crítica, aberta há 3 dias, sem resposta (D0–D3 vencidas)
+insert into public.ncs (id, supplier_id, component_id, type, origin_code, severity_code, failure_mode_code, title, description,
+                        customer_affected, created_by)
+values ('60000000-0000-4000-8000-000000000003', '10000000-0000-4000-8000-00000000000a', '30000000-0000-4000-8000-000000000002',
+        '8d', 'field_customer', 'critical', 'crack', 'Trinca na longarina em campo',
+        'Trinca longitudinal na longarina detectada em inspeção de campo (parque eólico).', true, '00000000-0000-4000-8000-000000000002');
+update public.ncs set opened_at = now() - interval '3 days' where id = '60000000-0000-4000-8000-000000000003';
+update public.eight_d_steps s
+   set due_at = n.opened_at + make_interval(hours => d.deadline_hours)
+  from public.ncs n, public.eight_d_disciplines d
+ where s.nc_id = n.id and d.code = s.discipline and n.id = '60000000-0000-4000-8000-000000000003';
