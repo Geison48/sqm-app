@@ -1,0 +1,17 @@
+<!-- Template bilíngue: o idioma vem de user_metadata.language, definido no convite. -->
+<div style="font-family: Arial, Helvetica, sans-serif; max-width: 560px; margin: 0 auto; color: #171717;">
+  <h2 style="margin-bottom: 4px;">SQM App</h2>
+  {{ if eq .Data.language "en" }}
+  <p>Hello{{ if .Data.full_name }} {{ .Data.full_name }}{{ end }},</p>
+  <p>You have been invited to the SQM App, the supplier quality management system.</p>
+  <p>Click the button below to set your password and access the system:</p>
+  <p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite" style="display: inline-block; padding: 10px 18px; background: #171717; color: #ffffff; text-decoration: none; border-radius: 6px;">Accept invitation</a></p>
+  <p style="color: #737373; font-size: 13px;">This link expires in 24 hours. If you were not expecting this invitation, ignore this email.</p>
+  {{ else }}
+  <p>Olá{{ if .Data.full_name }} {{ .Data.full_name }}{{ end }},</p>
+  <p>Você foi convidado(a) para o SQM App, o sistema de gestão da qualidade de fornecedores.</p>
+  <p>Clique no botão abaixo para definir sua senha e acessar o sistema:</p>
+  <p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite" style="display: inline-block; padding: 10px 18px; background: #171717; color: #ffffff; text-decoration: none; border-radius: 6px;">Aceitar convite</a></p>
+  <p style="color: #737373; font-size: 13px;">Este link expira em 24 horas. Se você não esperava este convite, ignore este e-mail.</p>
+  {{ end }}
+</div>

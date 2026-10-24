@@ -1,0 +1,112 @@
+{
+  "common": {
+    "appName": "SQM App",
+    "appTagline": "Gestão da qualidade de fornecedores",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "loading": "Carregando…",
+    "required": "Campo obrigatório",
+    "genericError": "Algo deu errado. Tente novamente.",
+    "noAccessError": "Você não tem permissão para esta ação.",
+    "comingSoon": "Em breve"
+  },
+  "roles": {
+    "sqe": "SQE",
+    "sqm": "SQM",
+    "supplier": "Fornecedor"
+  },
+  "languages": {
+    "label": "Idioma",
+    "pt-BR": "Português",
+    "en": "English"
+  },
+  "auth": {
+    "loginTitle": "Entrar",
+    "loginSubtitle": "Use sua conta para acessar o SQM App.",
+    "email": "E-mail",
+    "password": "Senha",
+    "signIn": "Entrar",
+    "signingIn": "Entrando…",
+    "signInMicrosoft": "Entrar com Microsoft",
+    "or": "ou",
+    "forgotPassword": "Esqueci minha senha",
+    "invalidCredentials": "E-mail ou senha inválidos.",
+    "forgotTitle": "Redefinir senha",
+    "forgotSubtitle": "Informe seu e-mail. Se ele estiver cadastrado, você receberá um link para definir uma nova senha.",
+    "sendResetLink": "Enviar link",
+    "resetLinkSent": "Se o e-mail estiver cadastrado, o link foi enviado. Confira sua caixa de entrada.",
+    "backToLogin": "Voltar para o login",
+    "setPasswordTitle": "Defina sua senha",
+    "setPasswordSubtitle": "Crie uma senha para acessar o SQM App.",
+    "newPassword": "Nova senha",
+    "confirmPassword": "Confirme a senha",
+    "passwordRules": "Mínimo de 8 caracteres, com letras e números.",
+    "passwordMismatch": "As senhas não conferem.",
+    "passwordWeak": "A senha precisa ter pelo menos 8 caracteres, com letras e números.",
+    "passwordSaved": "Senha definida com sucesso.",
+    "linkInvalid": "Este link é inválido ou expirou. Peça um novo convite ou redefina a senha.",
+    "unauthorizedTitle": "Acesso não autorizado",
+    "unauthorizedDescription": "Sua conta não tem acesso ao SQM App ou foi desativada. Fale com o SQM responsável para receber um convite.",
+    "signOut": "Sair"
+  },
+  "nav": {
+    "sectionMain": "Principal",
+    "sectionRecords": "Cadastros",
+    "sectionQuality": "Qualidade",
+    "sectionAdmin": "Administração",
+    "myTasks": "Minhas pendências",
+    "suppliers": "Fornecedores",
+    "mySupplier": "Minha empresa",
+    "components": "Componentes",
+    "standards": "Normas",
+    "audits": "Auditorias",
+    "inspections": "Inspeções",
+    "ncs": "Não conformidades / 8D",
+    "notifications": "Notificações",
+    "exports": "Exportações",
+    "users": "Usuários",
+    "settings": "Configurações"
+  },
+  "home": {
+    "title": "Minhas pendências",
+    "greeting": "Olá, {name}",
+    "emptyTitle": "Nenhuma pendência por enquanto",
+    "emptyDescription": "Quando houver NCs, ações do 8D, auditorias ou vencimentos com você, eles aparecerão aqui."
+  },
+  "users": {
+    "title": "Usuários",
+    "subtitle": "Convide SQEs, SQM e usuários de fornecedores.",
+    "subtitleSqe": "Convide usuários dos fornecedores.",
+    "invite": "Convidar usuário",
+    "inviteTitle": "Convidar usuário",
+    "inviteDescription": "A pessoa receberá um e-mail para definir a senha no primeiro acesso.",
+    "fullName": "Nome completo",
+    "email": "E-mail",
+    "role": "Perfil",
+    "supplier": "Fornecedor",
+    "selectSupplier": "Selecione o fornecedor",
+    "language": "Idioma",
+    "status": "Situação",
+    "active": "Ativo",
+    "inactive": "Desativado",
+    "invitedAt": "Convidado em",
+    "sendInvite": "Enviar convite",
+    "sending": "Enviando…",
+    "inviteSent": "Convite enviado para {email}.",
+    "errorForbidden": "Você não pode convidar este perfil.",
+    "errorEmailExists": "Já existe um usuário com este e-mail.",
+    "errorSupplierRequired": "Selecione o fornecedor do usuário.",
+    "errorInvalidEmail": "E-mail inválido.",
+    "empty": "Nenhum usuário cadastrado."
+  },
+  "pwa": {
+    "description": "Gestão da qualidade de fornecedores: auditorias, inspeções e NC/8D."
+  },
+  "ui": {
+    "close": "Fechar",
+    "toggleSidebar": "Abrir/fechar menu",
+    "sidebar": "Menu",
+    "sidebarDescription": "Menu de navegação"
+  }
+}

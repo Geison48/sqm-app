@@ -1,0 +1,112 @@
+{
+  "common": {
+    "appName": "SQM App",
+    "appTagline": "Supplier quality management",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "loading": "Loading…",
+    "required": "Required field",
+    "genericError": "Something went wrong. Please try again.",
+    "noAccessError": "You are not allowed to do this.",
+    "comingSoon": "Coming soon"
+  },
+  "roles": {
+    "sqe": "SQE",
+    "sqm": "SQM",
+    "supplier": "Supplier"
+  },
+  "languages": {
+    "label": "Language",
+    "pt-BR": "Português",
+    "en": "English"
+  },
+  "auth": {
+    "loginTitle": "Sign in",
+    "loginSubtitle": "Use your account to access the SQM App.",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in…",
+    "signInMicrosoft": "Sign in with Microsoft",
+    "or": "or",
+    "forgotPassword": "Forgot my password",
+    "invalidCredentials": "Invalid email or password.",
+    "forgotTitle": "Reset password",
+    "forgotSubtitle": "Enter your email. If it is registered, you will receive a link to set a new password.",
+    "sendResetLink": "Send link",
+    "resetLinkSent": "If the email is registered, the link has been sent. Check your inbox.",
+    "backToLogin": "Back to sign in",
+    "setPasswordTitle": "Set your password",
+    "setPasswordSubtitle": "Create a password to access the SQM App.",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "passwordRules": "At least 8 characters, with letters and numbers.",
+    "passwordMismatch": "Passwords do not match.",
+    "passwordWeak": "The password must have at least 8 characters, with letters and numbers.",
+    "passwordSaved": "Password set successfully.",
+    "linkInvalid": "This link is invalid or has expired. Ask for a new invitation or reset your password.",
+    "unauthorizedTitle": "Access not authorized",
+    "unauthorizedDescription": "Your account does not have access to the SQM App or has been deactivated. Contact the responsible SQM to receive an invitation.",
+    "signOut": "Sign out"
+  },
+  "nav": {
+    "sectionMain": "Main",
+    "sectionRecords": "Master data",
+    "sectionQuality": "Quality",
+    "sectionAdmin": "Administration",
+    "myTasks": "My tasks",
+    "suppliers": "Suppliers",
+    "mySupplier": "My company",
+    "components": "Components",
+    "standards": "Standards",
+    "audits": "Audits",
+    "inspections": "Inspections",
+    "ncs": "Nonconformities / 8D",
+    "notifications": "Notifications",
+    "exports": "Exports",
+    "users": "Users",
+    "settings": "Settings"
+  },
+  "home": {
+    "title": "My tasks",
+    "greeting": "Hello, {name}",
+    "emptyTitle": "No pending items yet",
+    "emptyDescription": "When there are NCs, 8D actions, audits or expiring items assigned to you, they will show up here."
+  },
+  "users": {
+    "title": "Users",
+    "subtitle": "Invite SQEs, SQM and supplier users.",
+    "subtitleSqe": "Invite supplier users.",
+    "invite": "Invite user",
+    "inviteTitle": "Invite user",
+    "inviteDescription": "The person will receive an email to set their password on first access.",
+    "fullName": "Full name",
+    "email": "Email",
+    "role": "Role",
+    "supplier": "Supplier",
+    "selectSupplier": "Select the supplier",
+    "language": "Language",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Deactivated",
+    "invitedAt": "Invited on",
+    "sendInvite": "Send invitation",
+    "sending": "Sending…",
+    "inviteSent": "Invitation sent to {email}.",
+    "errorForbidden": "You cannot invite this role.",
+    "errorEmailExists": "A user with this email already exists.",
+    "errorSupplierRequired": "Select the user's supplier.",
+    "errorInvalidEmail": "Invalid email.",
+    "empty": "No users yet."
+  },
+  "pwa": {
+    "description": "Supplier quality management: audits, inspections and NC/8D."
+  },
+  "ui": {
+    "close": "Close",
+    "toggleSidebar": "Toggle menu",
+    "sidebar": "Menu",
+    "sidebarDescription": "Navigation menu"
+  }
+}
