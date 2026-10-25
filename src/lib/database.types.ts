@@ -1551,14 +1551,14 @@ isOneToOne: false
                   ]
                 },"users": {
                   Row: {
-                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"email": string,"email_notifications": boolean,"full_name": string,"id": string,"invited_at": string | null,"invited_by": string | null,"language": Database["public"]['Enums']["app_language"],"role": Database["public"]['Enums']["app_role"],"supplier_id": string | null,"updated_at": string,"updated_by": string | null
+                    "cancel_reason": string | null,"cancelled_at": string | null,"cancelled_by": string | null,"created_at": string,"created_by": string | null,"email": string,"email_notifications": boolean,"full_name": string,"id": string,"invited_at": string | null,"invited_by": string | null,"language": Database["public"]['Enums']["app_language"],"password_set_at": string | null,"role": Database["public"]['Enums']["app_role"],"supplier_id": string | null,"updated_at": string,"updated_by": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"email": string,"email_notifications"?: boolean,"full_name": string,"id": string,"invited_at"?: string | null,"invited_by"?: string | null,"language"?: Database["public"]['Enums']["app_language"],"role": Database["public"]['Enums']["app_role"],"supplier_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"email": string,"email_notifications"?: boolean,"full_name": string,"id": string,"invited_at"?: string | null,"invited_by"?: string | null,"language"?: Database["public"]['Enums']["app_language"],"password_set_at"?: string | null,"role": Database["public"]['Enums']["app_role"],"supplier_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Update: {
-                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"email"?: string,"email_notifications"?: boolean,"full_name"?: string,"id"?: string,"invited_at"?: string | null,"invited_by"?: string | null,"language"?: Database["public"]['Enums']["app_language"],"role"?: Database["public"]['Enums']["app_role"],"supplier_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null
+                    "cancel_reason"?: string | null,"cancelled_at"?: string | null,"cancelled_by"?: string | null,"created_at"?: string,"created_by"?: string | null,"email"?: string,"email_notifications"?: boolean,"full_name"?: string,"id"?: string,"invited_at"?: string | null,"invited_by"?: string | null,"language"?: Database["public"]['Enums']["app_language"],"password_set_at"?: string | null,"role"?: Database["public"]['Enums']["app_role"],"supplier_id"?: string | null,"updated_at"?: string,"updated_by"?: string | null
                   }
                   Relationships: [
                     {
@@ -1744,10 +1744,16 @@ isOneToOne: false
 "mark_email_result":
 { Args: { "p_error"?: string,"p_id": string,"p_ok": boolean }; Returns: undefined
                            },
+"mark_password_set":
+{ Args: Record<PropertyKey, never>; Returns: undefined
+                           },
 "my_pending_items":
 { Args: Record<PropertyKey, never>; Returns: {
               "days_left": number,"detail": string,"due_at": string,"due_on": string,"entity_id": string,"entity_table": string,"grp": string,"kind": string,"link": string,"ref": string,"responsible_sqe_id": string,"supplier_id": string,"supplier_name": string
             }[]
+                           },
+"needs_password":
+{ Args: Record<PropertyKey, never>; Returns: boolean
                            },
 "new_template_version":
 { Args: { "p_template_id": string }; Returns: string

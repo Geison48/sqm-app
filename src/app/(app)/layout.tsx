@@ -4,11 +4,16 @@ import { AppSidebar } from "@/components/app/app-sidebar";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { NotificationBell } from "@/components/app/notification-bell";
 import { SyncStatus } from "@/components/offline/sync-status";
+import { redirect } from "next/navigation";
 import { requireProfile } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { navigationFor } from "@/lib/navigation";
 
 export default async function AppLayout({ children }: LayoutProps<"/">) {
   const profile = await requireProfile();
+  // Entrou pelo link do convite e ainda não definiu senha: primeiro a senha.
+  const { data: needsPassword } = await (await createClient()).rpc("needs_password");
+  if (needsPassword) redirect("/auth/set-password");
   const t = await getTranslations("roles");
 
   return (

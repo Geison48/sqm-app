@@ -121,3 +121,18 @@ Mudanças futuras no banco virão como novos arquivos de migration (o guia de ca
 | E-mail de convite não chega | Veja a caixa de spam; o envio padrão do Supabase tem limite por hora (configure SMTP) |
 | Avisos do app não chegam por e-mail | Falta `RESEND_API_KEY`/`EMAIL_FROM` (Parte 6) ou o `3-segredos.sql` |
 | Site da Vercel dá erro ao abrir | Confira as 5 variáveis da Parte 4 e faça **Redeploy** |
+
+---
+
+## Atualizações do banco (projeto que já está no ar)
+
+Quando uma versão nova do app trouxer mudanças no banco, aparece um arquivo novo em `deploy/atualizacoes/`.
+O `1-banco.sql` é **só para projeto novo**; num projeto que já existe, use as atualizações:
+
+1. Abra o arquivo novo em `deploy/atualizacoes/` no GitHub e copie (**Copy raw file**).
+2. **SQL Editor → New query**, cole e clique em **Run** (se aparecer o aviso de RLS, escolha **Run without RLS**).
+3. Deve aparecer **Atualização ... aplicada com sucesso**. Se aparecer **"já aplicada: nada a fazer"**, ela já tinha sido rodada: tudo certo.
+
+| Atualização | O que muda | Quem precisa rodar |
+|---|---|---|
+| `20261025000800_needs_password.sql` | Quem entrou pelo link do convite sem escolher senha é levado a "Definir senha" | Projetos criados antes de 25/10/2026 |

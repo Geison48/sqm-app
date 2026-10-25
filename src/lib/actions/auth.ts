@@ -37,6 +37,8 @@ export async function signInWithPassword(_: FormState, formData: FormData): Prom
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
   if (error) return { error: "auth.invalidCredentials", email };
 
+  // Entrou com senha: não precisa passar por "Definir senha".
+  await supabase.rpc("mark_password_set");
   await applyProfileLocale();
   redirect("/");
 }
@@ -86,6 +88,7 @@ export async function setPassword(_: FormState, formData: FormData): Promise<For
   const { error } = await supabase.auth.updateUser({ password: parsed.data });
   if (error) return { error: error.code === "weak_password" ? "auth.passwordWeak" : "auth.linkInvalid" };
 
+  await supabase.rpc("mark_password_set");
   await applyProfileLocale();
   redirect("/");
 }

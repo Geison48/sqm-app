@@ -1,8 +1,9 @@
 // Gera os arquivos de deploy sem linha de comando (painel do Supabase):
 //   deploy/1-banco.sql            todas as migrations, em ordem (cole no SQL Editor)
 //   deploy/2-funcao-notifications.ts  a Edge Function num arquivo só (cole no editor de funções)
+//   deploy/atualizacoes/<migration>.sql  cada migration sozinha, para um banco que JÁ existe
 // Rode depois de mudar migrations ou a função:  npm run build:deploy
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { build } from "esbuild";
 
 const root = new URL("../", import.meta.url);
@@ -34,6 +35,32 @@ parts.push(
   "",
 );
 writeFileSync(new URL("deploy/1-banco.sql", root), parts.join("\n"));
+
+// Atualizações: cada migration num arquivo, para colar no SQL Editor de um banco
+// já criado. Rodar de novo uma que já foi aplicada é bloqueado pelo registro.
+mkdirSync(new URL("deploy/atualizacoes/", root), { recursive: true });
+for (const f of files) {
+  const version = f.split("_")[0];
+  const name = f.replace(/^\d+_/, "").replace(/\.sql$/, "");
+  writeFileSync(new URL(`deploy/atualizacoes/${f}`, root), [
+    `-- SQM App — atualização ${version} (${name}). Gerado por \`npm run build:deploy\`.`,
+    "-- Cole tudo no SQL Editor e clique em Run. Se já foi aplicada, para com aviso e não muda nada.",
+    "do $$ begin",
+    "  if exists (select 1 from pg_namespace where nspname = 'supabase_migrations')",
+    `     and exists (select 1 from supabase_migrations.schema_migrations where version = '${version}') then`,
+    `    raise exception 'Atualização ${version} já aplicada: nada a fazer.';`,
+    "  end if;",
+    "end $$;",
+    "",
+    readFileSync(new URL(f, migDir), "utf8").trim(),
+    "",
+    "create schema if not exists supabase_migrations;",
+    "create table if not exists supabase_migrations.schema_migrations (version text primary key, statements text[], name text);",
+    `insert into supabase_migrations.schema_migrations (version, name) values ('${version}', '${name}') on conflict (version) do nothing;`,
+    `select 'Atualização ${version} aplicada com sucesso' as resultado;`,
+    "",
+  ].join("\n"));
+}
 
 const result = await build({
   entryPoints: [new URL("supabase/functions/notifications/index.ts", root).pathname],
