@@ -287,21 +287,22 @@ ${footer}`;
 
 // supabase/functions/notifications/index.ts
 var SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-var SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 var SITE_URL = Deno.env.get("SITE_URL") ?? "http://localhost:3000";
 var EMAIL_FROM = Deno.env.get("EMAIL_FROM") ?? "SQM App <noreply@sqm.local>";
 var RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 var MAILPIT_URL = Deno.env.get("MAILPIT_URL") ?? (SUPABASE_URL.startsWith("http://kong") ? "http://inbucket:8025" : void 0);
-var ACCEPTED = [SERVICE_KEY, Deno.env.get("SUPABASE_SECRET_KEY"), Deno.env.get("SUPABASE_INTERNAL_SECRET_KEY")].filter(Boolean);
-async function rpc(name, body = {}) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`, {
-    method: "POST",
-    headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify(body)
-  });
-  if (!res.ok) throw new Error(`${name}: ${res.status} ${await res.text()}`);
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
+var Unauthorized = class extends Error {
+};
+function rpcFor(key) {
+  const headers = { apikey: key, "Content-Type": "application/json" };
+  if (!key.startsWith("sb_")) headers.Authorization = `Bearer ${key}`;
+  return async function rpc(name, body = {}) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`, { method: "POST", headers, body: JSON.stringify(body) });
+    if (res.status === 401 || res.status === 403) throw new Unauthorized(`${name}: ${res.status} ${await res.text()}`);
+    if (!res.ok) throw new Error(`${name}: ${res.status} ${await res.text()}`);
+    const text = await res.text();
+    return text ? JSON.parse(text) : null;
+  };
 }
 function parseFrom(from) {
   const m = from.match(/^(.*)<(.+)>$/);
@@ -334,7 +335,8 @@ async function deliver(to, mail) {
   }
   throw new Error("no_email_transport: configure RESEND_API_KEY");
 }
-async function drain() {
+async function drain(rpc) {
+  if (!RESEND_API_KEY && !MAILPIT_URL) return { sent: 0, failed: 0, waiting: "no_email_transport" };
   let sent = 0;
   let failed = 0;
   for (let round = 0; round < 20; round++) {
@@ -355,16 +357,16 @@ async function drain() {
   return { sent, failed };
 }
 Deno.serve(async (req) => {
-  const token = req.headers.get("Authorization")?.replace(/^Bearer\s+/i, "");
-  if (!token || !ACCEPTED.includes(token)) {
-    return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401 });
-  }
+  const token = req.headers.get("Authorization")?.replace(/^Bearer\s+/i, "").trim();
+  if (!token) return Response.json({ error: "unauthorized" }, { status: 401 });
+  const rpc = rpcFor(token);
   const { task } = await req.json().catch(() => ({ task: "send" }));
   try {
     const daily = task === "daily" ? await rpc("run_daily_jobs") : null;
-    const result = await drain();
+    const result = await drain(rpc);
     return Response.json({ daily, ...result });
   } catch (e) {
+    if (e instanceof Unauthorized) return Response.json({ error: "unauthorized", detail: e.message }, { status: 401 });
     console.error(e);
     return Response.json({ error: String(e) }, { status: 500 });
   }

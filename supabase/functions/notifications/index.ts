@@ -6,26 +6,30 @@ import messages from "../_shared/messages.json" with { type: "json" };
 import { renderEmail, type Messages, type OutboxRow } from "../_shared/render.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const SITE_URL = Deno.env.get("SITE_URL") ?? "http://localhost:3000";
 const EMAIL_FROM = Deno.env.get("EMAIL_FROM") ?? "SQM App <noreply@sqm.local>";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 // Local: o Mailpit do Supabase CLI responde em http://inbucket:8025 dentro da rede Docker.
 const MAILPIT_URL = Deno.env.get("MAILPIT_URL") ?? (SUPABASE_URL.startsWith("http://kong") ? "http://inbucket:8025" : undefined);
 
-// Chaves aceitas: a service_role (JWT) e a secret key do projeto.
-const ACCEPTED = [SERVICE_KEY, Deno.env.get("SUPABASE_SECRET_KEY"), Deno.env.get("SUPABASE_INTERNAL_SECRET_KEY")].filter(Boolean);
+// A chave que chega no Authorization (a do Vault, enviada pelo pg_cron) é usada
+// para falar com o banco: as funções da rotina só aceitam a chave de serviço, então
+// é o próprio banco que barra chamadas de fora. Vale a service_role (JWT) ou a
+// secret key nova (sb_secret_...), que vai só no cabeçalho apikey.
+class Unauthorized extends Error {}
 
-async function rpc<T>(name: string, body: Record<string, unknown> = {}): Promise<T> {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`, {
-    method: "POST",
-    headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}`, "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`${name}: ${res.status} ${await res.text()}`);
-  const text = await res.text();
-  return (text ? JSON.parse(text) : null) as T;
+function rpcFor(key: string) {
+  const headers: Record<string, string> = { apikey: key, "Content-Type": "application/json" };
+  if (!key.startsWith("sb_")) headers.Authorization = `Bearer ${key}`;
+  return async function rpc<T>(name: string, body: Record<string, unknown> = {}): Promise<T> {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${name}`, { method: "POST", headers, body: JSON.stringify(body) });
+    if (res.status === 401 || res.status === 403) throw new Unauthorized(`${name}: ${res.status} ${await res.text()}`);
+    if (!res.ok) throw new Error(`${name}: ${res.status} ${await res.text()}`);
+    const text = await res.text();
+    return (text ? JSON.parse(text) : null) as T;
+  };
 }
+type Rpc = ReturnType<typeof rpcFor>;
 
 function parseFrom(from: string) {
   const m = from.match(/^(.*)<(.+)>$/);
@@ -59,7 +63,10 @@ async function deliver(to: { email: string; name: string | null }, mail: { subje
 
 type Row = OutboxRow & { id: string; recipient_email: string };
 
-async function drain() {
+async function drain(rpc: Rpc) {
+  // Sem forma de envio (Resend ainda não configurado): os e-mails esperam na fila,
+  // sem gastar tentativas, e saem quando a chave for cadastrada.
+  if (!RESEND_API_KEY && !MAILPIT_URL) return { sent: 0, failed: 0, waiting: "no_email_transport" };
   let sent = 0;
   let failed = 0;
   for (let round = 0; round < 20; round++) {
@@ -81,16 +88,16 @@ async function drain() {
 }
 
 Deno.serve(async (req) => {
-  const token = req.headers.get("Authorization")?.replace(/^Bearer\s+/i, "");
-  if (!token || !ACCEPTED.includes(token)) {
-    return new Response(JSON.stringify({ error: "unauthorized" }), { status: 401 });
-  }
+  const token = req.headers.get("Authorization")?.replace(/^Bearer\s+/i, "").trim();
+  if (!token) return Response.json({ error: "unauthorized" }, { status: 401 });
+  const rpc = rpcFor(token);
   const { task } = await req.json().catch(() => ({ task: "send" }));
   try {
     const daily = task === "daily" ? await rpc("run_daily_jobs") : null;
-    const result = await drain();
+    const result = await drain(rpc);
     return Response.json({ daily, ...result });
   } catch (e) {
+    if (e instanceof Unauthorized) return Response.json({ error: "unauthorized", detail: e.message }, { status: 401 });
     console.error(e);
     return Response.json({ error: String(e) }, { status: 500 });
   }
